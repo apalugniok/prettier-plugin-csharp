@@ -1,0 +1,11 @@
+{
+  "name": "prettier-csharp-plugin",
+  "version": "1.0.0",
+  "description": "Prettier plugin providing support for the C# language",
+  "main": "index.js",
+  "author": "Andrew Palugniok",
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^2.0.5"
+  }
+}
