@@ -1,4 +1,7 @@
-node_modules/
 bin/
 obj/
 .idea/
+*.log
+.DS_Store
+node_modules
+dist

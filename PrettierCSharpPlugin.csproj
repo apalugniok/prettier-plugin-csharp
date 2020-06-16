@@ -5,4 +5,22 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0-1.final" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0-1.final" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="dist\**" />
+      <Compile Remove="Example.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="dist\**" />
+    </ItemGroup>
+
 </Project>
