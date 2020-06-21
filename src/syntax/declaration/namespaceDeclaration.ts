@@ -1,18 +1,17 @@
 ﻿import { doc, Printer } from 'prettier';
-import { NameNode, SyntaxNode } from '../syntaxNode';
+import { DeclarationNode, NameNode, SyntaxNode } from '../syntaxNode';
 import concat = doc.builders.concat;
 import hardline = doc.builders.hardline;
 import indent = doc.builders.indent;
-import { UsingDirectiveNode } from '../usingDirective';
-import { ExternAliasDirectiveNode } from '../externAliasDirective';
 import join = doc.builders.join;
 import Doc = doc.builders.Doc;
+import { ExternAliasDirectiveNode, UsingDirectiveNode } from "../directive";
 
 export type NamespaceDeclarationNode = {
   name: NameNode;
   usings: Array<UsingDirectiveNode>;
   externs: Array<ExternAliasDirectiveNode>;
-  members: Array<SyntaxNode>;
+  members: Array<DeclarationNode>;
 } & SyntaxNode;
 
 export const namespaceDeclarationPrinter: Printer['print'] = (

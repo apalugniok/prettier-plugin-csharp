@@ -2,7 +2,7 @@ import { Parser, SupportLanguage } from 'prettier';
 
 import { parse } from './parse';
 import { printNode } from './print';
-import { SyntaxNode } from "./syntax/syntaxNode";
+import { SyntaxNode } from './syntax/syntaxNode';
 
 export const languages: Array<SupportLanguage> = [
   {
@@ -13,7 +13,7 @@ export const languages: Array<SupportLanguage> = [
 ];
 
 export const parsers: { [key in string]: Parser } = {
-  'csharp': {
+  csharp: {
     parse,
     astFormat: 'roslyn-csharp',
     locStart: (node: SyntaxNode) => node.start,

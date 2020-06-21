@@ -11,7 +11,7 @@ import group = doc.builders.group;
 import line = doc.builders.line;
 import indent = doc.builders.indent;
 
-export type ClassDeclarationNode = {
+export type StructDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
   name: string;
@@ -21,7 +21,7 @@ export type ClassDeclarationNode = {
   members: Array<DeclarationNode>;
 } & SyntaxNode;
 
-export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
+export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     bases,
     constraintClauses,
@@ -29,22 +29,22 @@ export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
     modifiers,
     name,
     typeParameters,
-  }: ClassDeclarationNode = path.getValue();
+  }: StructDeclarationNode = path.getValue();
 
   return concat([
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
-    'class',
+    'struct',
     ' ',
     name,
     typeParameters != null ? path.call(print, 'typeParameters') : '',
     bases != null ? concat([' ', path.call(print, 'bases')]) : '',
     constraintClauses.length !== 0
       ? group(
-          indent(
-            concat([line, join(line, path.map(print, 'constraintClauses'))])
-          )
-        )
+      indent(
+        concat([line, join(line, path.map(print, 'constraintClauses'))])
+      )
+      )
       : '',
     hardline,
     '{',

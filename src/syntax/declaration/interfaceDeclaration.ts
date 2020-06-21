@@ -1,17 +1,17 @@
-﻿import { doc, Printer } from 'prettier';
-import { DeclarationNode, SyntaxNode } from '../syntaxNode';
+﻿import { AttributeListNode } from './attribute';
 import { TypeParameterListNode } from './parameter';
-import concat = doc.builders.concat;
-import hardline = doc.builders.hardline;
-import join = doc.builders.join;
-import { AttributeListNode } from './attribute';
-import { BaseListNode } from './baseType';
 import { TypeParameterConstraintClauseNode } from './typeParameterConstraint';
-import group = doc.builders.group;
-import line = doc.builders.line;
+import { doc, Printer } from 'prettier';
 import indent = doc.builders.indent;
+import line = doc.builders.line;
+import { DeclarationNode, NameNode, SyntaxNode } from '../syntaxNode';
+import concat = doc.builders.concat;
+import join = doc.builders.join;
+import hardline = doc.builders.hardline;
+import { BaseListNode } from './baseType';
+import group = doc.builders.group;
 
-export type ClassDeclarationNode = {
+export type InterfaceDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
   name: string;
@@ -21,7 +21,11 @@ export type ClassDeclarationNode = {
   members: Array<DeclarationNode>;
 } & SyntaxNode;
 
-export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
+export const interfaceDeclarationPrinter: Printer['print'] = (
+  path,
+  _,
+  print
+) => {
   const {
     bases,
     constraintClauses,
@@ -29,16 +33,16 @@ export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
     modifiers,
     name,
     typeParameters,
-  }: ClassDeclarationNode = path.getValue();
+  }: InterfaceDeclarationNode = path.getValue();
 
   return concat([
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
-    'class',
+    'interface',
     ' ',
     name,
     typeParameters != null ? path.call(print, 'typeParameters') : '',
-    bases != null ? concat([' ', path.call(print, 'bases')]) : '',
+    bases != null ? path.call(print, 'bases') : '',
     constraintClauses.length !== 0
       ? group(
           indent(
@@ -54,4 +58,16 @@ export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
     hardline,
     '}',
   ]);
+};
+
+export type ExplicitInterfaceSpecifierNode = {
+  name: NameNode;
+} & SyntaxNode;
+
+export const explicitInterfaceSpecifierPrinter: Printer['print'] = (
+  path,
+  _,
+  print
+) => {
+  return concat([path.call(print, 'name'), '.']);
 };

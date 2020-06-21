@@ -1,25 +1,73 @@
 ﻿import { Printer } from 'prettier';
 import { SyntaxNode, SyntaxNodeType } from './syntax/syntaxNode';
-import { externAliasDirectivePrinter } from "./syntax/externAliasDirective";
-import { genericNamePrinter } from "./syntax/expression/genericName";
-import { namespaceDeclarationPrinter } from "./syntax/declaration/namespaceDeclaration";
-import { aliasQualifiedNamePrinter } from "./syntax/expression/aliasQualifiedName";
-import { classDeclarationPrinter } from "./syntax/declaration/classDeclaration";
-import { identifierNamePrinter } from "./syntax/expression/identifierName";
-import { compilationUnitPrinter } from "./syntax/compilationUnit";
-import { usingDirectivePrinter } from "./syntax/usingDirective";
-import { typeArgumentListPrinter } from "./syntax/expression/typeArgumentList";
-import { qualifiedNamePrinter } from "./syntax/expression/qualifiedName";
-import { predefinedTypePrinter } from "./syntax/expression/predefinedType";
-import { nameEqualsPrinter } from "./syntax/expression/nameEquals";
-import { attributeArgumentPrinter } from "./syntax/attribute/attributeArgument";
-import { attributePrinter } from "./syntax/attribute/attribute";
-import { attributeArgumentListPrinter } from "./syntax/attribute/attributeArgumentList";
-import { attributeListPrinter } from "./syntax/attribute/attributeList";
-import { attributeTargetSpecifierPrinter } from "./syntax/attribute/attributeTargetSpecifier";
-import { typeParameterListPrinter } from "./syntax/declaration/typeParameterList";
-import { typeParameterPrinter } from "./syntax/declaration/typeParameter";
 
+import { predefinedTypePrinter } from './syntax/expression/predefinedType';
+import { nameEqualsPrinter } from './syntax/expression/nameEquals';
+import { nameColonPrinter } from './syntax/expression/nameColon';
+import {
+  attributeArgumentListPrinter,
+  attributeArgumentPrinter,
+  attributeListPrinter,
+  attributePrinter,
+  attributeTargetSpecifierPrinter,
+} from './syntax/declaration/attribute';
+import {
+  baseListPrinter,
+  simpleBaseTypePrinter,
+} from './syntax/declaration/baseType';
+import {
+  aliasQualifiedNamePrinter,
+  genericNamePrinter,
+  identifierNamePrinter,
+  qualifiedNamePrinter,
+} from './syntax/expression/name';
+import { namespaceDeclarationPrinter } from './syntax/declaration/namespaceDeclaration';
+import { classDeclarationPrinter } from './syntax/declaration/classDeclaration';
+import { compilationUnitPrinter } from './syntax/compilationUnit';
+import { typeArgumentListPrinter } from './syntax/expression/argument';
+import {
+  externAliasDirectivePrinter,
+  usingDirectivePrinter,
+} from './syntax/directive';
+import {
+  classOrStructConstraintPrinter,
+  constructorConstraintPrinter,
+  typeConstraintPrinter,
+  typeParameterConstraintClausePrinter,
+} from './syntax/declaration/typeParameterConstraint';
+import {
+  enumDeclarationPrinter,
+  enumMemberDeclarationPrinter,
+} from './syntax/declaration/enumDeclaration';
+import {
+  equalsValueClausePrinter,
+  variableDeclarationPrinter,
+  variableDeclaratorPrinter,
+} from './syntax/declaration/variableDeclaration';
+import {
+  argumentPrinter,
+  bracketedArgumentListPrinter,
+} from './syntax/expression/argument';
+import { literalExpressionPrinter } from './syntax/expression/literal';
+import {
+  explicitInterfaceSpecifierPrinter,
+  interfaceDeclarationPrinter
+} from './syntax/declaration/interfaceDeclaration';
+import { eventFieldDeclarationPrinter, fieldDeclarationPrinter } from "./syntax/declaration/fieldDeclaration";
+import { arrowExpressionClausePrinter } from "./syntax/expression/arrowExpressionClause";
+import {
+  bracketedParameterListPrinter,
+  parameterListPrinter,
+  parameterPrinter, typeParameterListPrinter,
+  typeParameterPrinter
+} from "./syntax/declaration/parameter";
+import {
+  accessorDeclarationPrinter, accessorListPrinter, eventDeclarationPrinter,
+  indexerDeclarationPrinter,
+  propertyDeclarationPrinter
+} from "./syntax/declaration/propertyDeclaration";
+import { blockPrinter } from "./syntax/statement/block";
+import { structDeclarationPrinter } from "./syntax/declaration/structDeclaration";
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -39,12 +87,46 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   AttributeArgumentList: attributeArgumentListPrinter,
   AttributeList: attributeListPrinter,
   AttributeTargetSpecifier: attributeTargetSpecifierPrinter,
-  TypeParameterList: typeParameterListPrinter,
+  NameColon: nameColonPrinter,
+  SimpleBaseType: simpleBaseTypePrinter,
+  BaseList: baseListPrinter,
+  TypeParameterConstraintClause: typeParameterConstraintClausePrinter,
+  TypeConstraint: typeConstraintPrinter,
+  ConstructorConstraint: constructorConstraintPrinter,
+  ClassOrStructConstraint: classOrStructConstraintPrinter,
+  EnumDeclaration: enumDeclarationPrinter,
+  EnumMemberDeclaration: enumMemberDeclarationPrinter,
+  VariableDeclaration: variableDeclarationPrinter,
+  VariableDeclarator: variableDeclaratorPrinter,
+  BracketedArgumentList: bracketedArgumentListPrinter,
+  Argument: argumentPrinter,
+  LiteralExpression: literalExpressionPrinter,
+  EqualsValueClause: equalsValueClausePrinter,
+  InterfaceDeclaration: interfaceDeclarationPrinter,
+  FieldDeclaration: fieldDeclarationPrinter,
+  EventFieldDeclaration: eventFieldDeclarationPrinter,
+  ExplicitInterfaceSpecifier: explicitInterfaceSpecifierPrinter,
+  ArrowExpressionClause: arrowExpressionClausePrinter,
+  Parameter: parameterPrinter,
+  ParameterList: parameterListPrinter,
+  BracketedParameterList: bracketedParameterListPrinter,
   TypeParameter: typeParameterPrinter,
+  TypeParameterList: typeParameterListPrinter,
+  PropertyDeclaration: propertyDeclarationPrinter,
+  EventDeclaration: eventDeclarationPrinter,
+  IndexerDeclaration: indexerDeclarationPrinter,
+  AccessorDeclaration: accessorDeclarationPrinter,
+  AccessorList: accessorListPrinter,
+  Block: blockPrinter,
+  StructDeclaration: structDeclarationPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
-  const node: SyntaxNode = path.getValue();
+  const node: SyntaxNode | null = path.getValue();
+  
+  if (node == null) {
+    return  '';
+  }
 
   return printersByType[node.type](path, options, print);
 };

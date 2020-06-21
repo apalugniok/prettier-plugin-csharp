@@ -1,13 +1,17 @@
-const { code, formatCSharpWithPrettier } = require('./helpers/testHelpers');
+﻿const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
 
-describe('Using Directive', () => {
-  it('should format a simple directive', () => {
+describe('Field Declaration', () => {
+  it('should format a single field', () => {
     const input = code`
-      using   System   
-          ;
+      class Irrelevant {
+        int foo;
+      }
     `;
     const expectedFormattedCode = code`
-      using System;
+      class Irrelevant
+      {
+          int foo;
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -15,13 +19,17 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an aliased directive', () => {
+  it('should format a field with modifiers', () => {
     const input = code`
-      using  Alias = System   
-          ;
+      class Irrelevant {
+        public static int foo;
+      }
     `;
     const expectedFormattedCode = code`
-      using Alias = System;
+      class Irrelevant
+      {
+          public static int foo;
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -29,13 +37,18 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a static directive', () => {
+  it('should format a field with multiple declarations', () => {
     const input = code`
-      using  static System   
-          ;
+      class Irrelevant {
+        int foo   , 
+        bar;
+      }
     `;
     const expectedFormattedCode = code`
-      using static System;
+      class Irrelevant
+      {
+          int foo, bar;
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -43,13 +56,17 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a directive with a qualified name', () => {
+  it('should format a field with an initializer', () => {
     const input = code`
-      using   System . Math  
-          ;
+      class Irrelevant {
+        int foo   = "test"  ;
+      }
     `;
     const expectedFormattedCode = code`
-      using System.Math;
+      class Irrelevant
+      {
+          int foo = "test";
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -57,13 +74,19 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a directive with an alias qualified name', () => {
+  it('should format a field with an attribute list', () => {
     const input = code`
-      using  global::   System   
-          ;
+      class Irrelevant {
+      [Bar]
+        int foo;
+      }
     `;
     const expectedFormattedCode = code`
-      using global::System;
+      class Irrelevant
+      {
+          [Bar]
+          int foo;
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -71,29 +94,21 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a directive with generic arguments', () => {
+  it('should format a field with multiple attribute lists', () => {
     const input = code`
-      using  MyClass 
-        <int, string>   
-          ;
+      class Irrelevant {
+      [Bar1]
+            [Bar2]
+        int foo;
+      }
     `;
     const expectedFormattedCode = code`
-      using MyClass<int, string>;
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-  
-  it('should format multiple directives', () => {
-    const input = code`
-      using  System ;
-      using System.IO;
-    `;
-    const expectedFormattedCode = code`
-      using System;
-      using System.IO;
+      class Irrelevant
+      {
+          [Bar1]
+          [Bar2]
+          int foo;
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
@@ -101,18 +116,23 @@ describe('Using Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a directive with multiple syntax features', () => {
+  it('should format fixed buffer fields', () => {
     const input = code`
-      using static Alias 
-      = global::System.Foo<int, string>   
-          ;
+      struct Irrelevant
+      {
+        public 
+        unsafe   fixed int   Foo[1];
+      }
     `;
     const expectedFormattedCode = code`
-      using static Alias = global::System.Foo<int, string>;
+      struct Irrelevant
+      {
+          public unsafe fixed int Foo[1];
+      }
     `;
 
     const actualFormattedCode = formatCSharpWithPrettier(input);
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-});
+})

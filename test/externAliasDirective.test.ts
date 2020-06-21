@@ -1,7 +1,7 @@
 ﻿const { code, formatCSharpWithPrettier } = require('./helpers/testHelpers');
 
 describe('Extern Alias Directive', () => {
-  it('simple', () => {
+  it('should format an extern alias', () => {
     const input = code`
       extern
        alias   Foo   
@@ -16,7 +16,7 @@ describe('Extern Alias Directive', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   })
 
-  it('multiple', () => {
+  it('should format multiple extern aliases', () => {
     const input = code`
       extern
        alias   Foo   

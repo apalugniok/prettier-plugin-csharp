@@ -1,15 +1,14 @@
 ﻿import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { SyntaxNode } from './syntaxNode';
-import { UsingDirectiveNode } from './usingDirective';
-import { ExternAliasDirectiveNode } from './externAliasDirective';
+import { DeclarationNode, SyntaxNode } from './syntaxNode';
 import join = doc.builders.join;
 import hardline = doc.builders.hardline;
+import { ExternAliasDirectiveNode, UsingDirectiveNode } from "./directive";
 
 export type CompilationUnitNode = {
   externs: Array<ExternAliasDirectiveNode>;
   usings: Array<UsingDirectiveNode>;
-  members: Array<SyntaxNode>;
+  members: Array<DeclarationNode>;
 } & SyntaxNode;
 
 export const compilationUnitPrinter: Printer['print'] = (path, _, print) => {

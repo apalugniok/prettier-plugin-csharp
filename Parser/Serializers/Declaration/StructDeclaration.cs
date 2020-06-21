@@ -5,9 +5,9 @@ using PrettierCSharpPlugin.Parser.Utils;
 
 namespace PrettierCSharpPlugin.Parser.Serializers.Declaration
 {
-    public class ClassDeclarationSerializer: SyntaxNodeSerializer<ClassDeclarationSyntax>
+    public class StructDeclarationSerializer: SyntaxNodeSerializer<StructDeclarationSyntax>
     {
-        protected override void WriteObjectProperties(Utf8JsonWriter writer, ClassDeclarationSyntax value, JsonSerializerOptions options)
+        protected override void WriteObjectProperties(Utf8JsonWriter writer, StructDeclarationSyntax value, JsonSerializerOptions options)
         {
             writer.WriteSerializedValue("attributeLists", value.AttributeLists, options);
             writer.WriteSerializedValue("modifiers", value.Modifiers.Select(m => m.ValueText), options);
