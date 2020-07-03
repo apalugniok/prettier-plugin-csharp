@@ -16,6 +16,30 @@ export const typeArgumentListPrinter: Printer['print'] = (path, _, print) => {
   return concat(['<', join(', ', path.map(print, 'arguments')), '>']);
 };
 
+export type ArgumentListNode = {
+  arguments: Array<ArgumentNode>;
+};
+
+export const argumentListPrinter: Printer['print'] = (
+  path,
+  _,
+  print
+) => {
+  return group(
+    concat([
+      '(',
+      indent(
+        concat([
+          softline,
+          join(concat([',', line]), path.map(print, 'arguments')),
+        ])
+      ),
+      softline,
+      ')',
+    ])
+  );
+};
+
 export type BracketedArgumentListNode = {
   arguments: Array<ArgumentNode>;
 };

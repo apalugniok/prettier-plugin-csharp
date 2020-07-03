@@ -1,6 +1,9 @@
 ﻿using global::System;
+
 using AliasToMyClass = NameSpace1.Foo.MyClass;
+
 using UsingAlias;
+
 namespace NameSpace1.Foo
 {
     public static class MyClass
@@ -8,6 +11,7 @@ namespace NameSpace1.Foo
         public static int Baz { get; set; } = 1;
     }
 }
+
 namespace NameSpace2
 {
     class MyClass<T, U>
@@ -15,7 +19,9 @@ namespace NameSpace2
         where U : class?, new(), NameSpace3.MainClass
     {
         public static int Baz { get {} set => 3; } = 1;
+
         private string Bar => "foo";
+
         int reallyReallyLongFieldNameToCauseALineBreakToHappen;
         int Foo
         {
@@ -23,10 +29,13 @@ namespace NameSpace2
             set {}
         }
     }
+
     enum Foo
     {
         A = 1,
+
         B = 2,
+
         C
     }
 }

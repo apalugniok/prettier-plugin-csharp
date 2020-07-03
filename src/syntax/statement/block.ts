@@ -1,4 +1,4 @@
-﻿import { StatementNode, SyntaxNode } from '../syntaxNode';
+﻿import { StatementNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { doc, Printer } from 'prettier';
 import hardline = doc.builders.hardline;

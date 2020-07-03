@@ -4,13 +4,13 @@ describe('Property Declaration', () => {
   it('should format a property with an arrow expression', () => {
     const input = code`
       class Irrelevant {
-        int Foo => 1;
+        public int Foo => 1;
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          int Foo => 1;
+          public int Foo => 1;
       }
     `;
 

@@ -15,6 +15,7 @@ import { BracketedParameterListNode } from './parameter';
 
 export type PropertyDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
+  leadingEmptyLine: boolean;
   modifiers: Array<string>;
   name: string;
   propertyType: TypeNode;
@@ -33,12 +34,14 @@ export const propertyDeclarationPrinter: Printer['print'] = (
     accessors,
     expressionBody,
     initializer,
+    leadingEmptyLine,
     modifiers,
     name,
   }: PropertyDeclarationNode = path.getValue();
 
   return group(
     concat([
+      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
       join(' ', [...modifiers, '']),
       path.call(print, 'propertyType'),
@@ -47,7 +50,7 @@ export const propertyDeclarationPrinter: Printer['print'] = (
       name,
       accessors != null ? concat([line, path.call(print, 'accessors')]) : '',
       expressionBody != null
-        ? concat([line, path.call(print, 'expressionBody')])
+        ? concat([' ', path.call(print, 'expressionBody')])
         : '',
       initializer != null
         ? concat([line, path.call(print, 'initializer')])
@@ -59,6 +62,7 @@ export const propertyDeclarationPrinter: Printer['print'] = (
 
 export type EventDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
+  leadingEmptyLine: boolean;
   modifiers: Array<string>;
   name: string;
   propertyType: TypeNode;
@@ -67,10 +71,11 @@ export type EventDeclarationNode = {
 } & DeclarationNode;
 
 export const eventDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { accessors, modifiers, name }: EventDeclarationNode = path.getValue();
+  const { accessors, leadingEmptyLine, modifiers, name }: EventDeclarationNode = path.getValue();
 
   return group(
     concat([
+      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
       join(' ', [...modifiers, '']),
       'event',
@@ -89,6 +94,7 @@ export const eventDeclarationPrinter: Printer['print'] = (path, _, print) => {
 export type IndexerDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
+  leadingEmptyLine: boolean;
   parameters: BracketedParameterListNode;
   propertyType: TypeNode;
   accessors: AccessorListNode | null;
@@ -96,10 +102,11 @@ export type IndexerDeclarationNode = {
 } & DeclarationNode;
 
 export const indexerDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { modifiers }: IndexerDeclarationNode = path.getValue();
+  const { leadingEmptyLine, modifiers }: IndexerDeclarationNode = path.getValue();
 
   return group(
     concat([
+      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
       join(' ', [...modifiers, '']),
       path.call(print, 'propertyType'),

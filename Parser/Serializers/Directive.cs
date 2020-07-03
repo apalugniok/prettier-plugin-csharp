@@ -8,6 +8,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers
     {
         protected override void WriteObjectProperties(Utf8JsonWriter writer, UsingDirectiveSyntax value, JsonSerializerOptions options)
         {
+            writer.WriteWhitespaceDetails(value);
             writer.WriteBoolean("static", value.StaticKeyword.Value != null);
             writer.WriteSerializedValueOrNull("alias", value.Alias, options);
             writer.WriteSerializedValue("name", value.Name, options);

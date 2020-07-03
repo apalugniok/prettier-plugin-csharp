@@ -9,13 +9,15 @@ import hardline = doc.builders.hardline;
 export type FieldDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   declaration: VariableDeclarationNode;
+  leadingEmptyLine: boolean;
   modifiers: Array<string>;
 } & DeclarationNode;
 
 export const fieldDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { modifiers }: FieldDeclarationNode = path.getValue();
+  const { leadingEmptyLine, modifiers }: FieldDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     path.call(print, 'declaration'),
@@ -25,13 +27,22 @@ export const fieldDeclarationPrinter: Printer['print'] = (path, _, print) => {
 export type EventFieldDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   declaration: VariableDeclarationNode;
+  leadingEmptyLine: boolean;
   modifiers: Array<string>;
 } & DeclarationNode;
 
-export const eventFieldDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { modifiers }: EventFieldDeclarationNode = path.getValue();
+export const eventFieldDeclarationPrinter: Printer['print'] = (
+  path,
+  _,
+  print
+) => {
+  const {
+    leadingEmptyLine,
+    modifiers,
+  }: EventFieldDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     'event',

@@ -10,8 +10,8 @@ import { TypeParameterConstraintClauseNode } from './typeParameterConstraint';
 import group = doc.builders.group;
 import line = doc.builders.line;
 import indent = doc.builders.indent;
-
 export type ClassDeclarationNode = {
+  leadingEmptyLine: boolean
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
   name: string;
@@ -25,6 +25,7 @@ export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     bases,
     constraintClauses,
+    leadingEmptyLine,
     members,
     modifiers,
     name,
@@ -32,6 +33,7 @@ export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
   }: ClassDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     'class',

@@ -15,6 +15,7 @@ export type InterfaceDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
   name: string;
+  leadingEmptyLine: boolean;
   typeParameters: TypeParameterListNode | null;
   bases: BaseListNode | null;
   constraintClauses: Array<TypeParameterConstraintClauseNode>;
@@ -29,6 +30,7 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
   const {
     bases,
     constraintClauses,
+    leadingEmptyLine,
     members,
     modifiers,
     name,
@@ -36,6 +38,7 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
   }: InterfaceDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     'interface',

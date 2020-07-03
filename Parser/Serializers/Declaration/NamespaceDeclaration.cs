@@ -8,6 +8,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers.Declaration
     {
         protected override void WriteObjectProperties(Utf8JsonWriter writer, NamespaceDeclarationSyntax value, JsonSerializerOptions options)
         {
+            writer.WriteWhitespaceDetails(value);
             writer.WriteSerializedValue("name", value.Name, options);
             writer.WriteSerializedValue("usings", value.Usings, options);
             writer.WriteSerializedValue("externs", value.Externs, options);

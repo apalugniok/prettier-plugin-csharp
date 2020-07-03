@@ -9,6 +9,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers.Declaration
     {
         protected override void WriteObjectProperties(Utf8JsonWriter writer, FieldDeclarationSyntax value, JsonSerializerOptions options)
         {
+            writer.WriteWhitespaceDetails(value);
             writer.WriteSerializedValue("attributeLists", value.AttributeLists, options);
             writer.WriteSerializedValue("declaration", value.Declaration, options);
             writer.WriteSerializedValue("modifiers", value.Modifiers.Select(m => m.ValueText), options);
@@ -19,6 +20,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers.Declaration
     {
         protected override void WriteObjectProperties(Utf8JsonWriter writer, EventFieldDeclarationSyntax value, JsonSerializerOptions options)
         {
+            writer.WriteWhitespaceDetails(value);
             writer.WriteSerializedValue("attributeLists", value.AttributeLists, options);
             writer.WriteSerializedValue("declaration", value.Declaration, options);
             writer.WriteSerializedValue("modifiers", value.Modifiers.Select(m => m.ValueText), options);

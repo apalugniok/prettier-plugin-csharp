@@ -115,4 +115,40 @@ describe('Using Directive', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should preserve leading empty lines', () => {
+    const input = code`
+      using System; 
+      
+         using   System.IO;
+    `;
+    const expectedFormattedCode = code`
+      using System;
+      
+      using System.IO;
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should truncate multiple empty lines to a single empty line', () => {
+    const input = code`
+      using System; 
+      
+      
+      
+         using   System.IO;
+    `;
+    const expectedFormattedCode = code`
+      using System;
+      
+      using System.IO;
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

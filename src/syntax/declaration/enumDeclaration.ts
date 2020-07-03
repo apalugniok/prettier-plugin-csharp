@@ -7,10 +7,10 @@ import join = doc.builders.join;
 import hardline = doc.builders.hardline;
 import line = doc.builders.line;
 import group = doc.builders.group;
-import { EqualsValueClauseNode } from "./variableDeclaration";
+import { EqualsValueClauseNode } from './variableDeclaration';
 
 export type EnumDeclarationNode = {
-  type: 'EnumDeclaration';
+  leadingEmptyLine: boolean;
   attributeLists: Array<AttributeListNode>;
   modifiers: Array<string>;
   name: string;
@@ -18,9 +18,15 @@ export type EnumDeclarationNode = {
 } & DeclarationNode;
 
 export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { members, modifiers, name }: EnumDeclarationNode = path.getValue();
+  const {
+    leadingEmptyLine,
+    members,
+    modifiers,
+    name,
+  }: EnumDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     'enum',
@@ -29,7 +35,12 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
     hardline,
     '{',
     members.length !== 0
-      ? indent(concat([hardline, join(concat([',', hardline]), path.map(print, 'members'))]))
+      ? indent(
+          concat([
+            hardline,
+            join(concat([',', hardline]), path.map(print, 'members')),
+          ])
+        )
       : '',
     hardline,
     '}',
@@ -37,6 +48,7 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
 };
 
 export type EnumMemberDeclarationNode = {
+  leadingEmptyLine: boolean;
   attributeLists: Array<AttributeListNode>;
   name: string;
   equalsValue: EqualsValueClauseNode | null;
@@ -47,9 +59,14 @@ export const enumMemberDeclarationPrinter: Printer['print'] = (
   _,
   print
 ) => {
-  const { name, equalsValue }: EnumMemberDeclarationNode = path.getValue();
+  const {
+    equalsValue,
+    leadingEmptyLine,
+    name,
+  }: EnumMemberDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     group(join(line, [...path.map(print, 'attributeLists'), ''])),
     name,
     equalsValue != null ? concat([' ', path.call(print, 'equalsValue')]) : '',

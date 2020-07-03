@@ -244,4 +244,28 @@ describe('Class Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should preserve leading empty lines', () => {
+    const input = code`
+      class Foo {
+       
+      }
+      
+      class Bar {
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Foo
+      {
+      }
+      
+      class Bar
+      {
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

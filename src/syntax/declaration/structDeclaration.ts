@@ -13,6 +13,7 @@ import indent = doc.builders.indent;
 
 export type StructDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
+  leadingEmptyLine: boolean;
   modifiers: Array<string>;
   name: string;
   typeParameters: TypeParameterListNode | null;
@@ -25,6 +26,7 @@ export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     bases,
     constraintClauses,
+    leadingEmptyLine,
     members,
     modifiers,
     name,
@@ -32,6 +34,7 @@ export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
   }: StructDeclarationNode = path.getValue();
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
     join(' ', [...modifiers, '']),
     'struct',
@@ -41,10 +44,10 @@ export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
     bases != null ? concat([' ', path.call(print, 'bases')]) : '',
     constraintClauses.length !== 0
       ? group(
-      indent(
-        concat([line, join(line, path.map(print, 'constraintClauses'))])
-      )
-      )
+          indent(
+            concat([line, join(line, path.map(print, 'constraintClauses'))])
+          )
+        )
       : '',
     hardline,
     '{',

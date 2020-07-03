@@ -8,6 +8,7 @@ import Doc = doc.builders.Doc;
 import { ExternAliasDirectiveNode, UsingDirectiveNode } from "../directive";
 
 export type NamespaceDeclarationNode = {
+  leadingEmptyLine: boolean;
   name: NameNode;
   usings: Array<UsingDirectiveNode>;
   externs: Array<ExternAliasDirectiveNode>;
@@ -20,6 +21,7 @@ export const namespaceDeclarationPrinter: Printer['print'] = (
   print
 ) => {
   const {
+    leadingEmptyLine,
     usings,
     externs,
     members,
@@ -40,6 +42,7 @@ export const namespaceDeclarationPrinter: Printer['print'] = (
   }
 
   return concat([
+    leadingEmptyLine ? hardline : '',
     'namespace',
     ' ',
     path.call(print, 'name'),

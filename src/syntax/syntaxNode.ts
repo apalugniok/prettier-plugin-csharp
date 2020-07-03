@@ -27,7 +27,9 @@
   | 'AccessorList'
   | 'AccessorDeclaration'
   | 'ExplicitInterfaceSpecifier'
-  | 'ArrowExpressionClause';
+  | 'ArrowExpressionClause'
+  | 'ArgumentList'
+  | 'ConstructorInitializer';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -41,7 +43,10 @@ export type DeclarationNodeType =
   | 'PropertyDeclaration'
   | 'EventDeclaration'
   | 'IndexerDeclaration'
-  | 'StructDeclaration';
+  | 'StructDeclaration'
+  | 'MethodDeclaration'
+  | 'ConstructorDeclaration'
+  | 'DestructorDeclaration';
 
 export type ExpressionNodeType = TypeNodeType | 'LiteralExpression';
 

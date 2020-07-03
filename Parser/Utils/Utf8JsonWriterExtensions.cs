@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace PrettierCSharpPlugin.Parser.Utils
 {
@@ -40,6 +43,14 @@ namespace PrettierCSharpPlugin.Parser.Utils
             {
                 JsonSerializer.Serialize(writer, (dynamic) value, options);
             }
+        }
+        
+        public static void WriteWhitespaceDetails<T>(this Utf8JsonWriter writer, T value) where T: SyntaxNode
+        {
+            writer.WriteBoolean(
+                "leadingEmptyLine",
+                value.GetLeadingTrivia().Any(trivia => trivia.IsKind(SyntaxKind.EndOfLineTrivia))
+            );
         }
     }
 }

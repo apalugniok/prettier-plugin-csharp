@@ -135,4 +135,29 @@ describe('Field Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should preserve leading empty lines', () => {
+    const input = code`
+      class Irrelevant
+      {
+        public int foo;
+        
+        public 
+        
+        string bar;
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          public int foo;
+      
+          public string bar;
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 })

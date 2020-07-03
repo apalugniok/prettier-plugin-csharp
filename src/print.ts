@@ -24,7 +24,7 @@ import {
 import { namespaceDeclarationPrinter } from './syntax/declaration/namespaceDeclaration';
 import { classDeclarationPrinter } from './syntax/declaration/classDeclaration';
 import { compilationUnitPrinter } from './syntax/compilationUnit';
-import { typeArgumentListPrinter } from './syntax/expression/argument';
+import { argumentListPrinter, typeArgumentListPrinter } from './syntax/expression/argument';
 import {
   externAliasDirectivePrinter,
   usingDirectivePrinter,
@@ -68,6 +68,11 @@ import {
 } from "./syntax/declaration/propertyDeclaration";
 import { blockPrinter } from "./syntax/statement/block";
 import { structDeclarationPrinter } from "./syntax/declaration/structDeclaration";
+import {
+  constructorDeclarationPrinter, constructorInitializerPrinter,
+  destructorDeclarationPrinter,
+  methodDeclarationPrinter
+} from "./syntax/declaration/methodDeclaration";
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -119,6 +124,11 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   AccessorList: accessorListPrinter,
   Block: blockPrinter,
   StructDeclaration: structDeclarationPrinter,
+  ArgumentList: argumentListPrinter,
+  MethodDeclaration: methodDeclarationPrinter,
+  ConstructorDeclaration: constructorDeclarationPrinter,
+  DestructorDeclaration: destructorDeclarationPrinter,
+  ConstructorInitializer: constructorInitializerPrinter
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
