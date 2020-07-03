@@ -3,6 +3,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import line = doc.builders.line;
 import indent = doc.builders.indent;
+import group = doc.builders.group;
 
 export type ArrowExpressionClauseNode = {
   expression: ExpressionNode;
@@ -11,4 +12,4 @@ export const arrowExpressionClausePrinter: Printer['print'] = (
   path,
   _,
   print
-) => concat(['=>', indent(concat([line, path.call(print, 'expression')]))]);
+) => group(concat(['=>', indent(concat([line, path.call(print, 'expression')]))]));
