@@ -5,8 +5,10 @@ import concat = doc.builders.concat;
 import group = doc.builders.group;
 import line = doc.builders.line;
 import indent = doc.builders.indent;
+import { SyntaxToken } from '../syntaxToken';
 
 export type BaseListNode = {
+  colonToken: SyntaxToken;
   types: TypeNode;
 } & SyntaxNode;
 
@@ -22,9 +24,8 @@ export const baseListPrinter: Printer['print'] = (path, _, print) => {
 };
 
 export type SimpleBaseTypeNode = {
-  baseType: TypeNode;
+  type: TypeNode;
 } & SyntaxNode;
 
-export const simpleBaseTypePrinter: Printer['print'] = (path, _, print) => {
-  return path.call(print, 'baseType');
-};
+export const simpleBaseTypePrinter: Printer['print'] = (path, _, print) =>
+  path.call(print, 'type');

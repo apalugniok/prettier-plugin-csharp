@@ -11,7 +11,7 @@ describe('Method Declaration', () => {
       class Irrelevant
       {
           public int Foo()
-          {}
+          { }
       }
     `;
 
@@ -50,7 +50,7 @@ describe('Method Declaration', () => {
       class Irrelevant
       {
           public int Foo<T>()
-          {}
+          { }
       }
     `;
 
@@ -72,7 +72,7 @@ describe('Method Declaration', () => {
           public int Foo<TValue, TArgument>()
               where TValue : class, new()
               where TArgument : class, new()
-          {}
+          { }
       }
     `;
 

@@ -8,10 +8,13 @@ import group = doc.builders.group;
 import indent = doc.builders.indent;
 import softline = doc.builders.softline;
 import line = doc.builders.line;
+import { SyntaxToken } from '../syntaxToken';
 
 export type AttributeListNode = {
-  target: AttributeTargetSpecifierNode | null;
   attributes: Array<AttributeNode>;
+  closeBracketToken: SyntaxToken;
+  openBracketToken: SyntaxToken;
+  target: AttributeTargetSpecifierNode | null;
 } & SyntaxNode;
 
 export const attributeListPrinter: Printer['print'] = (path, _, print) => {
@@ -26,18 +29,19 @@ export const attributeListPrinter: Printer['print'] = (path, _, print) => {
 };
 
 export type AttributeTargetSpecifierNode = {
-  target: string;
+  colonToken: SyntaxToken;
+  identifier: SyntaxToken;
 } & SyntaxNode;
 
 export const attributeTargetSpecifierPrinter: Printer['print'] = (path) => {
-  const { target }: AttributeTargetSpecifierNode = path.getValue();
+  const { identifier }: AttributeTargetSpecifierNode = path.getValue();
 
-  return `${target}:`;
+  return `${identifier.text}:`;
 };
 
 export type AttributeNode = {
   name: NameNode;
-  arguments: AttributeArgumentListNode | null;
+  argumentList: AttributeArgumentListNode | null;
 } & SyntaxNode;
 
 export const attributePrinter: Printer['print'] = (path, _, print) => {
@@ -45,12 +49,14 @@ export const attributePrinter: Printer['print'] = (path, _, print) => {
 
   return concat([
     path.call(print, 'name'),
-    node.arguments != null ? path.call(print, 'arguments') : '',
+    node.argumentList != null ? path.call(print, 'argumentList') : '',
   ]);
 };
 
 export type AttributeArgumentListNode = {
   arguments: Array<AttributeArgumentNode>;
+  closeParenToken: SyntaxToken;
+  openParenToken: SyntaxToken;
 } & SyntaxNode;
 
 export const attributeArgumentListPrinter: Printer['print'] = (

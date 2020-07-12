@@ -1,4 +1,4 @@
-const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
+const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
 describe('Class Declaration', () => {
   it('should format an empty declaration', () => {
@@ -237,30 +237,6 @@ describe('Class Declaration', () => {
       {
           int bar;
           public int Bar { get; }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should preserve leading empty lines', () => {
-    const input = code`
-      class Foo {
-       
-      }
-      
-      class Bar {
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Foo
-      {
-      }
-      
-      class Bar
-      {
       }
     `;
 

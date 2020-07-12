@@ -13,7 +13,7 @@ namespace PrettierCSharpPlugin.Parser
         {
             var text = Console.In.ReadToEnd();
             var tree = CSharpSyntaxTree.ParseText(text);
-  
+
             await JsonSerializer.SerializeAsync(
                 Console.OpenStandardOutput(),
                 (CompilationUnitSyntax) await tree.GetRootAsync(),

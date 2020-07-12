@@ -1,12 +1,13 @@
 ﻿import { SyntaxNode } from '../syntaxNode';
 import { Printer } from 'prettier';
+import { SyntaxToken } from '../syntaxToken';
 
 export type LiteralExpressionNode = {
-  value: string;
+  token: SyntaxToken;
 } & SyntaxNode;
 
 export const literalExpressionPrinter: Printer['print'] = (path) => {
-  const { value }: LiteralExpressionNode = path.getValue();
+  const { token }: LiteralExpressionNode = path.getValue();
 
-  return value;
+  return token.text;
 };

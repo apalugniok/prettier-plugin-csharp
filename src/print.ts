@@ -1,6 +1,5 @@
 ﻿import { Printer } from 'prettier';
 import { SyntaxNode, SyntaxNodeType } from './syntax/syntaxNode';
-
 import { predefinedTypePrinter } from './syntax/expression/predefinedType';
 import { nameEqualsPrinter } from './syntax/expression/nameEquals';
 import { nameColonPrinter } from './syntax/expression/nameColon';
@@ -24,7 +23,10 @@ import {
 import { namespaceDeclarationPrinter } from './syntax/declaration/namespaceDeclaration';
 import { classDeclarationPrinter } from './syntax/declaration/classDeclaration';
 import { compilationUnitPrinter } from './syntax/compilationUnit';
-import { argumentListPrinter, typeArgumentListPrinter } from './syntax/expression/argument';
+import {
+  argumentListPrinter,
+  typeArgumentListPrinter,
+} from './syntax/expression/argument';
 import {
   externAliasDirectivePrinter,
   usingDirectivePrinter,
@@ -51,28 +53,35 @@ import {
 import { literalExpressionPrinter } from './syntax/expression/literal';
 import {
   explicitInterfaceSpecifierPrinter,
-  interfaceDeclarationPrinter
+  interfaceDeclarationPrinter,
 } from './syntax/declaration/interfaceDeclaration';
-import { eventFieldDeclarationPrinter, fieldDeclarationPrinter } from "./syntax/declaration/fieldDeclaration";
-import { arrowExpressionClausePrinter } from "./syntax/expression/arrowExpressionClause";
+import {
+  eventFieldDeclarationPrinter,
+  fieldDeclarationPrinter,
+} from './syntax/declaration/fieldDeclaration';
+import { arrowExpressionClausePrinter } from './syntax/expression/arrowExpressionClause';
 import {
   bracketedParameterListPrinter,
   parameterListPrinter,
-  parameterPrinter, typeParameterListPrinter,
-  typeParameterPrinter
-} from "./syntax/declaration/parameter";
+  parameterPrinter,
+  typeParameterListPrinter,
+  typeParameterPrinter,
+} from './syntax/declaration/parameter';
 import {
-  accessorDeclarationPrinter, accessorListPrinter, eventDeclarationPrinter,
+  accessorDeclarationPrinter,
+  accessorListPrinter,
+  eventDeclarationPrinter,
   indexerDeclarationPrinter,
-  propertyDeclarationPrinter
-} from "./syntax/declaration/propertyDeclaration";
-import { blockPrinter } from "./syntax/statement/block";
-import { structDeclarationPrinter } from "./syntax/declaration/structDeclaration";
+  propertyDeclarationPrinter,
+} from './syntax/declaration/propertyDeclaration';
+import { blockPrinter } from './syntax/statement/block';
+import { structDeclarationPrinter } from './syntax/declaration/structDeclaration';
 import {
-  constructorDeclarationPrinter, constructorInitializerPrinter,
+  constructorDeclarationPrinter,
+  constructorInitializerPrinter,
   destructorDeclarationPrinter,
-  methodDeclarationPrinter
-} from "./syntax/declaration/methodDeclaration";
+  methodDeclarationPrinter,
+} from './syntax/declaration/methodDeclaration';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -128,15 +137,16 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   MethodDeclaration: methodDeclarationPrinter,
   ConstructorDeclaration: constructorDeclarationPrinter,
   DestructorDeclaration: destructorDeclarationPrinter,
-  ConstructorInitializer: constructorInitializerPrinter
+  ConstructorInitializer: constructorInitializerPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
   const node: SyntaxNode | null = path.getValue();
-  
+
+  console.log(node?.nodeType);
   if (node == null) {
-    return  '';
+    return '';
   }
 
-  return printersByType[node.type](path, options, print);
+  return printersByType[node.nodeType](path, options, print);
 };

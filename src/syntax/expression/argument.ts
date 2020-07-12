@@ -7,24 +7,24 @@ import indent = doc.builders.indent;
 import line = doc.builders.line;
 import softline = doc.builders.softline;
 import group = doc.builders.group;
+import { SyntaxToken } from '../syntaxToken';
 
 export type TypeArgumentListNode = {
   arguments: Array<TypeNode>;
+  greaterThanToken: SyntaxToken;
+  lessThanToken: SyntaxToken;
 } & SyntaxNode;
 
-export const typeArgumentListPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['<', join(', ', path.map(print, 'arguments')), '>']);
-};
+export const typeArgumentListPrinter: Printer['print'] = (path, _, print) =>
+  concat(['<', join(', ', path.map(print, 'arguments')), '>']);
 
 export type ArgumentListNode = {
   arguments: Array<ArgumentNode>;
+  closeParenToken: SyntaxToken;
+  openParenToken: SyntaxToken;
 };
 
-export const argumentListPrinter: Printer['print'] = (
-  path,
-  _,
-  print
-) => {
+export const argumentListPrinter: Printer['print'] = (path, _, print) => {
   return group(
     concat([
       '(',
@@ -42,6 +42,8 @@ export const argumentListPrinter: Printer['print'] = (
 
 export type BracketedArgumentListNode = {
   arguments: Array<ArgumentNode>;
+  closeBracketToken: SyntaxToken;
+  openBracketToken: SyntaxToken;
 };
 
 export const bracketedArgumentListPrinter: Printer['print'] = (
@@ -65,17 +67,18 @@ export const bracketedArgumentListPrinter: Printer['print'] = (
 };
 
 export type ArgumentNode = {
-  nameColon: NameColonNode | null;
   expression: ExpressionNode;
-  referenceKind: string;
+  nameColon: NameColonNode | null;
+  refKindKeyword: SyntaxToken;
+  refOrOutKeyword: SyntaxToken;
 } & SyntaxNode;
 
 export const argumentPrinter: Printer['print'] = (path, _, print) => {
-  const { nameColon, referenceKind }: ArgumentNode = path.getValue();
+  const { nameColon, refOrOutKeyword }: ArgumentNode = path.getValue();
 
   return concat([
     nameColon != null ? concat([path.call(print, 'nameColon'), ' ']) : '',
-    referenceKind !== '' ? concat([referenceKind, ' ']) : '', //todo no ref or out keyword is it empty or null
+    refOrOutKeyword.text !== '' ? concat([refOrOutKeyword.text, ' ']) : '',
     path.call(print, 'expression'),
   ]);
 };

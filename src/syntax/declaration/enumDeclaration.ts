@@ -8,30 +8,37 @@ import hardline = doc.builders.hardline;
 import line = doc.builders.line;
 import group = doc.builders.group;
 import { EqualsValueClauseNode } from './variableDeclaration';
+import { SyntaxToken } from '../syntaxToken';
+import { BaseListNode } from './baseType';
 
 export type EnumDeclarationNode = {
-  leadingEmptyLine: boolean;
   attributeLists: Array<AttributeListNode>;
-  modifiers: Array<string>;
-  name: string;
+  baseList: BaseListNode | null;
+  closeBraceToken: SyntaxToken;
+  enumKeyword: SyntaxToken;
+  identifier: SyntaxToken;
   members: Array<EnumMemberDeclarationNode>;
+  modifiers: Array<SyntaxToken>;
+  openBraceToken: SyntaxToken;
+  semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
 } & DeclarationNode;
 
+//todo add tests
 export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
-    leadingEmptyLine,
+    baseList,
+    identifier,
     members,
     modifiers,
-    name,
   }: EnumDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers, '']),
+    join(' ', [...modifiers.map((token) => token.text), '']),
     'enum',
     ' ',
-    name,
+    identifier.text,
+    baseList != null ? path.call(print, 'baseList') : '',
     hardline,
     '{',
     members.length !== 0
@@ -48,10 +55,10 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
 };
 
 export type EnumMemberDeclarationNode = {
-  leadingEmptyLine: boolean;
   attributeLists: Array<AttributeListNode>;
-  name: string;
   equalsValue: EqualsValueClauseNode | null;
+  identifier: SyntaxToken;
+  modifiers: Array<SyntaxToken>; // Enum members cannot have access modifiers
 } & DeclarationNode;
 
 export const enumMemberDeclarationPrinter: Printer['print'] = (
@@ -61,14 +68,12 @@ export const enumMemberDeclarationPrinter: Printer['print'] = (
 ) => {
   const {
     equalsValue,
-    leadingEmptyLine,
-    name,
+    identifier,
   }: EnumMemberDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     group(join(line, [...path.map(print, 'attributeLists'), ''])),
-    name,
+    identifier.text,
     equalsValue != null ? concat([' ', path.call(print, 'equalsValue')]) : '',
   ]);
 };

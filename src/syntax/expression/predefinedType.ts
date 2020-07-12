@@ -1,12 +1,13 @@
 ﻿import { Printer } from 'prettier';
-import { SyntaxNode } from "../syntaxNode";
+import { SyntaxNode } from '../syntaxNode';
+import { SyntaxToken } from '../syntaxToken';
 
 export type PredefinedTypeNode = {
-  value: string;
+  keyword: SyntaxToken;
 } & SyntaxNode;
 
 export const predefinedTypePrinter: Printer['print'] = (path) => {
-  const node: PredefinedTypeNode = path.getValue();
+  const { keyword }: PredefinedTypeNode = path.getValue();
 
-  return node.value;
+  return keyword.text;
 };

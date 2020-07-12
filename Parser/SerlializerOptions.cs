@@ -1,7 +1,5 @@
-﻿using System;
-using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using PrettierCSharpPlugin.Parser.Serializers;
 
 namespace PrettierCSharpPlugin.Parser
 {
@@ -10,22 +8,9 @@ namespace PrettierCSharpPlugin.Parser
         {
             var options = new JsonSerializerOptions();
 
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
-            {
-                if (!typeof(JsonConverter).IsAssignableFrom(type))
-                {
-                    continue;
-                }
-
-                var serializer = (JsonConverter) type
-                    .GetConstructor(new Type[] { })
-                    ?.Invoke(new object[] { });
-
-                if (serializer != null)
-                {
-                    options.Converters.Add(serializer);
-                }
-            }
+            options.Converters.Add(new SyntaxNodeSerializer());
+            options.Converters.Add(new SyntaxTokenSerializer());
+            options.Converters.Add(new SyntaxTriviaSerializer());
 
             return options;
         }

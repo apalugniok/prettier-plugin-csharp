@@ -1,9 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace PrettierCSharpPlugin.Parser.Utils
 {
@@ -25,8 +22,8 @@ namespace PrettierCSharpPlugin.Parser.Utils
                 writer.WriteNull(propertyName);
             }
         }
-        
-        public static void WriteSerializedValue<T>(
+
+        private static void WriteSerializedValue<T>(
             this Utf8JsonWriter writer,
             string propertyName,
             T value,
@@ -34,8 +31,8 @@ namespace PrettierCSharpPlugin.Parser.Utils
         )
         {
             writer.WritePropertyName(propertyName);
-            
-            if (typeof(IEnumerable).IsAssignableFrom(typeof(T)))
+
+            if (typeof(IEnumerable<dynamic>).IsAssignableFrom(typeof(T)))
             {
                 JsonSerializer.Serialize(writer, (IEnumerable<dynamic>) value, options);
             }
@@ -43,14 +40,6 @@ namespace PrettierCSharpPlugin.Parser.Utils
             {
                 JsonSerializer.Serialize(writer, (dynamic) value, options);
             }
-        }
-        
-        public static void WriteWhitespaceDetails<T>(this Utf8JsonWriter writer, T value) where T: SyntaxNode
-        {
-            writer.WriteBoolean(
-                "leadingEmptyLine",
-                value.GetLeadingTrivia().Any(trivia => trivia.IsKind(SyntaxKind.EndOfLineTrivia))
-            );
         }
     }
 }

@@ -5,30 +5,32 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import join = doc.builders.join;
 import hardline = doc.builders.hardline;
+import { SyntaxToken } from '../syntaxToken';
 
 export type FieldDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   declaration: VariableDeclarationNode;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
+  modifiers: Array<SyntaxToken>;
+  semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
 export const fieldDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { leadingEmptyLine, modifiers }: FieldDeclarationNode = path.getValue();
+  const { modifiers }: FieldDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers, '']),
+    join(' ', [...modifiers.map((token) => token.text), '']),
     path.call(print, 'declaration'),
+    ';',
   ]);
 };
 
 export type EventFieldDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
+  eventKeyword: SyntaxToken;
   declaration: VariableDeclarationNode;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
+  modifiers: Array<SyntaxToken>;
+  semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
 export const eventFieldDeclarationPrinter: Printer['print'] = (
@@ -36,17 +38,14 @@ export const eventFieldDeclarationPrinter: Printer['print'] = (
   _,
   print
 ) => {
-  const {
-    leadingEmptyLine,
-    modifiers,
-  }: EventFieldDeclarationNode = path.getValue();
+  const { modifiers }: EventFieldDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers, '']),
+    join(' ', [...modifiers.map((token) => token.text), '']),
     'event',
     ' ',
     path.call(print, 'declaration'),
+    ';',
   ]);
 };

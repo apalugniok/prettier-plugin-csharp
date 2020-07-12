@@ -10,16 +10,20 @@ import join = doc.builders.join;
 import hardline = doc.builders.hardline;
 import { BaseListNode } from './baseType';
 import group = doc.builders.group;
+import { SyntaxToken } from '../syntaxToken';
 
 export type InterfaceDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
-  modifiers: Array<string>;
-  name: string;
-  leadingEmptyLine: boolean;
-  typeParameters: TypeParameterListNode | null;
-  bases: BaseListNode | null;
+  baseList: BaseListNode | null;
+  closeBraceToken: SyntaxToken;
   constraintClauses: Array<TypeParameterConstraintClauseNode>;
+  identifier: SyntaxToken;
+  keyword: SyntaxToken;
   members: Array<DeclarationNode>;
+  modifiers: Array<SyntaxToken>;
+  openBraceToken: SyntaxToken;
+  semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
+  typeParameterList: TypeParameterListNode | null;
 } & SyntaxNode;
 
 export const interfaceDeclarationPrinter: Printer['print'] = (
@@ -28,24 +32,22 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
   print
 ) => {
   const {
-    bases,
+    baseList,
     constraintClauses,
-    leadingEmptyLine,
     members,
     modifiers,
-    name,
-    typeParameters,
+    identifier,
+    typeParameterList,
   }: InterfaceDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers, '']),
+    join(' ', [...modifiers.map((token) => token.text), '']),
     'interface',
     ' ',
-    name,
-    typeParameters != null ? path.call(print, 'typeParameters') : '',
-    bases != null ? path.call(print, 'bases') : '',
+    identifier.text,
+    typeParameterList != null ? path.call(print, 'typeParameterList') : '',
+    baseList != null ? path.call(print, 'baseList') : '',
     constraintClauses.length !== 0
       ? group(
           indent(

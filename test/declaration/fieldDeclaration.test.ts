@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
+﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
 describe('Field Declaration', () => {
   it('should format a single field', () => {
@@ -59,13 +59,13 @@ describe('Field Declaration', () => {
   it('should format a field with an initializer', () => {
     const input = code`
       class Irrelevant {
-        int foo   = "test"  ;
+        string foo   = "test"  ;
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          int foo = "test";
+          string foo = "test";
       }
     `;
 
@@ -135,29 +135,4 @@ describe('Field Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-
-  it('should preserve leading empty lines', () => {
-    const input = code`
-      class Irrelevant
-      {
-        public int foo;
-        
-        public 
-        
-        string bar;
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          public int foo;
-      
-          public string bar;
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-})
+});

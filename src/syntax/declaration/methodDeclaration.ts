@@ -13,39 +13,40 @@ import hardline = doc.builders.hardline;
 import indent = doc.builders.indent;
 import line = doc.builders.line;
 import group = doc.builders.group;
+import { SyntaxToken } from '../syntaxToken';
 
 export type MethodDeclarationNode = {
+  arity: number;
   attributeLists: Array<AttributeListNode>;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
-  name: string;
-  body: BlockNode | ArrowExpressionClauseNode | null;
-  typeParameters: TypeParameterListNode;
+  body: BlockNode | null;
   constraintClauses: Array<TypeParameterConstraintClauseNode>;
-  parameters: ParameterListNode;
+  explicitInterfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  expressionBody: ArrowExpressionClauseNode | null;
+  identifier: SyntaxToken;
+  modifiers: Array<SyntaxToken>;
+  parameterList: ParameterListNode;
   returnType: TypeNode;
-  interfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  typeParameterList: TypeParameterListNode;
 } & DeclarationNode;
 
 export const methodDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     constraintClauses,
     body,
-    leadingEmptyLine,
+    expressionBody,
+    identifier,
     modifiers,
-    name,
   }: MethodDeclarationNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers, '']),
+    join(' ', [...modifiers.map((token) => token.text), '']),
     path.call(print, 'returnType'),
     ' ',
-    path.call(print, 'interfaceSpecifier'),
-    name,
-    path.call(print, 'typeParameters'),
-    path.call(print, 'parameters'),
+    path.call(print, 'explicitInterfaceSpecifier'),
+    identifier.text,
+    path.call(print, 'typeParameterList'),
+    path.call(print, 'parameterList'),
     constraintClauses.length !== 0
       ? group(
           indent(
@@ -53,21 +54,23 @@ export const methodDeclarationPrinter: Printer['print'] = (path, _, print) => {
           )
         )
       : '',
-    body != null
-      ? body.type === 'Block'
-        ? concat([hardline, path.call(print, 'body')])
-        : concat([' ', path.call(print, 'body')])
-      : ';',
+    body != null ? concat([line, path.call(print, 'body')]) : '',
+    expressionBody != null
+      ? concat([' ', path.call(print, 'expressionBody'), ';'])
+      : '',
+    body == null && expressionBody == null ? ';' : '',
   ]);
 };
 
 export type ConstructorDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
-  name: string;
-  body: BlockNode | ArrowExpressionClauseNode | null;
+  body: BlockNode | null;
+  expressionBody: ArrowExpressionClauseNode | null;
+  identifier: SyntaxToken;
   initializer: ConstructorInitializerNode | null;
+  modifiers: Array<SyntaxToken>;
+  parameterList: ParameterListNode;
+  semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
 export const constructorDeclarationPrinter: Printer['print'] = (
@@ -80,11 +83,14 @@ export const constructorDeclarationPrinter: Printer['print'] = (
 
 export type DestructorDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
+  body: BlockNode | null;
+  expressionBody: ArrowExpressionClauseNode | null;
+  identifier: SyntaxToken;
   leadingEmptyLine: boolean;
-  modifiers: Array<string>;
-  name: string;
-  body: BlockNode | ArrowExpressionClauseNode | null;
-  parameters: ParameterListNode;
+  modifiers: Array<SyntaxToken>;
+  parameterList: ParameterListNode;
+  semicolonToken: SyntaxToken;
+  tildeToken: SyntaxToken;
 } & DeclarationNode;
 
 export const destructorDeclarationPrinter: Printer['print'] = (
@@ -96,8 +102,9 @@ export const destructorDeclarationPrinter: Printer['print'] = (
 };
 
 export type ConstructorInitializerNode = {
-  arguments: ArgumentListNode;
-  keyword: string;
+  argumentList: ArgumentListNode;
+  colonToken: SyntaxToken;
+  thisOrBaseKeyword: SyntaxToken;
 } & SyntaxNode;
 
 export const constructorInitializerPrinter: Printer['print'] = (

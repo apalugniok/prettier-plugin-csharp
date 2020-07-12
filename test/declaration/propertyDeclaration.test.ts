@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
+﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
 describe('Property Declaration', () => {
   it('should format a property with an arrow expression', () => {
@@ -111,7 +111,7 @@ describe('Property Declaration', () => {
       class Irrelevant
       {
           int foo;
-          int Foo { get => foo; set {} }
+          int Foo { get => foo; set { } }
       }
     `;
 
@@ -137,7 +137,7 @@ describe('Property Declaration', () => {
           int Foo
           {
               get => reallyReallyLongFieldNameToCauseALineBreakToHappen;
-              set {}
+              set { }
           }
       }
     `;
@@ -162,7 +162,7 @@ describe('Property Declaration', () => {
           int ReallyReallyReallyLongFieldNameToCauseALineBreakToHappen
           {
               get => 1;
-              set {}
+              set { }
           }
       }
     `;
@@ -171,7 +171,7 @@ describe('Property Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-  
+
   it('should format an auto-property with accessor bodies', () => {
     const input = code`
       class Irrelevant {
@@ -186,7 +186,7 @@ describe('Property Declaration', () => {
       class Irrelevant
       {
           int foo;
-          int Foo { get => foo; set {} }
+          int Foo { get => foo; set { } }
       }
     `;
 
@@ -194,7 +194,7 @@ describe('Property Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-  
+
   it('should format an indexer property', () => {
     const input = code`
       class Irrelevant
@@ -208,7 +208,7 @@ describe('Property Declaration', () => {
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          public int this[int i] {}
+          public int this[int i] { }
       }
     `;
 
@@ -231,7 +231,7 @@ describe('Property Declaration', () => {
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          event EventHandler Foo { add {} remove {} }
+          event EventHandler Foo { add { } remove { } }
       }
     `;
 
@@ -239,6 +239,6 @@ describe('Property Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-  
-  //todo 
-})
+
+  //todo
+});

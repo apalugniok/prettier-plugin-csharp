@@ -1,23 +1,23 @@
 ﻿import { doc, Printer } from 'prettier';
-import { NameNode, SyntaxNode } from "./syntaxNode";
+import { NameNode, SyntaxNode } from './syntaxNode';
 import concat = doc.builders.concat;
-import { NameEqualsNode } from "./expression/nameEquals";
-import hardline = doc.builders.hardline;
+import { NameEqualsNode } from './expression/nameEquals';
+import { SyntaxToken } from './syntaxToken';
 
 export type UsingDirectiveNode = {
-  leadingEmptyLine: boolean;
-  static: boolean;
   alias: NameEqualsNode | null;
   name: NameNode;
+  semicolonToken: SyntaxToken;
+  staticKeyword: SyntaxToken;
+  usingKeyword: SyntaxToken;
 } & SyntaxNode;
 
 export const usingDirectivePrinter: Printer['print'] = (path, _, print) => {
-  const { alias, leadingEmptyLine, static: staticKeyword }: UsingDirectiveNode = path.getValue();
+  const { alias, staticKeyword }: UsingDirectiveNode = path.getValue();
 
   return concat([
-    leadingEmptyLine ? hardline : '',
     'using ',
-    staticKeyword ? 'static ' : '',
+    staticKeyword.text !== '' ? 'static ' : '',
     alias != null ? concat([path.call(print, 'alias'), ' ']) : '',
     path.call(print, 'name'),
     ';',
@@ -25,11 +25,14 @@ export const usingDirectivePrinter: Printer['print'] = (path, _, print) => {
 };
 
 export type ExternAliasDirectiveNode = {
-  name: string;
+  aliasKeyword: SyntaxToken;
+  externKeyword: SyntaxToken;
+  identifier: SyntaxToken;
+  semicolonToken: SyntaxToken;
 } & NameNode;
 
 export const externAliasDirectivePrinter: Printer['print'] = (path) => {
-  const { name }: ExternAliasDirectiveNode = path.getValue();
+  const { identifier }: ExternAliasDirectiveNode = path.getValue();
 
-  return concat(['extern ', 'alias ', name, ';']);
+  return concat(['extern ', 'alias ', identifier.text, ';']);
 };

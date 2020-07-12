@@ -5,10 +5,14 @@ import concat = doc.builders.concat;
 import line = doc.builders.line;
 import join = doc.builders.join;
 import group = doc.builders.group;
+import { SyntaxToken } from '../syntaxToken';
+import { IdentifierNameNode } from '../expression/name';
 
 export type TypeParameterConstraintClauseNode = {
-  name: string;
+  colonToken: SyntaxToken;
   constraints: Array<TypeParameterConstraint>;
+  name: IdentifierNameNode;
+  whereKeyword: SyntaxToken;
 } & SyntaxNode;
 
 export const typeParameterConstraintClausePrinter: Printer['print'] = (
@@ -16,13 +20,14 @@ export const typeParameterConstraintClausePrinter: Printer['print'] = (
   _,
   print
 ) => {
-  const { name } : TypeParameterConstraintClauseNode = path.getValue();
-  
+  const node: TypeParameterConstraintClauseNode = path.getValue();
+
+  console.log(node);
   return group(
     concat([
       'where',
       ' ',
-      name,
+      path.call(print, 'name'),
       ' ',
       ':',
       indent(
@@ -33,7 +38,7 @@ export const typeParameterConstraintClausePrinter: Printer['print'] = (
       ),
     ])
   );
-}
+};
 
 export type TypeParameterConstraint =
   | TypeConstraintNode
@@ -41,30 +46,30 @@ export type TypeParameterConstraint =
   | ConstructorConstraintNode;
 
 export type ConstructorConstraintNode = {
-  constraint: string;
+  closeParenToken: SyntaxToken;
+  newKeyword: SyntaxToken;
+  openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const constructorConstraintPrinter: Printer['print'] = (path) => {
-  const { constraint }: ConstructorConstraintNode = path.getValue();
-
-  return constraint;
-};
+export const constructorConstraintPrinter: Printer['print'] = (path) => 'new()';
 
 export type ClassOrStructConstraintNode = {
-  constraint: string;
+  classOrStructKeyword: SyntaxToken;
+  questionToken: SyntaxToken;
 } & SyntaxNode;
 
-export const classOrStructConstraintPrinter: Printer['print'] = (
-  path
-) => {
-  const { constraint }: ClassOrStructConstraintNode = path.getValue();
+export const classOrStructConstraintPrinter: Printer['print'] = (path) => {
+  const {
+    classOrStructKeyword,
+    questionToken,
+  }: ClassOrStructConstraintNode = path.getValue();
 
-  return constraint;
+  return `${classOrStructKeyword.text}${questionToken.text}`;
 };
 
 export type TypeConstraintNode = {
-  constraint: TypeNode;
+  type: TypeNode;
 } & SyntaxNode;
 
 export const typeConstraintPrinter: Printer['print'] = (path, _, print) =>
-  path.call(print, 'constraint');
+  path.call(print, 'type');

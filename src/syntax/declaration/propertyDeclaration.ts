@@ -12,17 +12,18 @@ import group = doc.builders.group;
 import indent = doc.builders.indent;
 import hardline = doc.builders.hardline;
 import { BracketedParameterListNode } from './parameter';
+import { SyntaxToken } from '../syntaxToken';
 
 export type PropertyDeclarationNode = {
+  accessorList: AccessorListNode | null;
   attributeLists: Array<AttributeListNode>;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
-  name: string;
-  propertyType: TypeNode;
-  accessors: AccessorListNode | null;
+  explicitInterfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
   expressionBody: ArrowExpressionClauseNode | null;
+  identifier: SyntaxToken;
   initializer: EqualsValueClauseNode | null;
-  interfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  modifiers: Array<SyntaxToken>;
+  semicolonToken: SyntaxToken;
+  type: TypeNode;
 } & DeclarationNode;
 
 export const propertyDeclarationPrinter: Printer['print'] = (
@@ -31,24 +32,24 @@ export const propertyDeclarationPrinter: Printer['print'] = (
   print
 ) => {
   const {
-    accessors,
+    accessorList,
     expressionBody,
     initializer,
-    leadingEmptyLine,
     modifiers,
-    name,
+    identifier,
   }: PropertyDeclarationNode = path.getValue();
 
   return group(
     concat([
-      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers, '']),
-      path.call(print, 'propertyType'),
+      join(' ', [...modifiers.map((token) => token.text), '']),
+      path.call(print, 'type'),
       ' ',
-      path.call(print, 'interfaceSpecifier'),
-      name,
-      accessors != null ? concat([line, path.call(print, 'accessors')]) : '',
+      path.call(print, 'explicitInterfaceSpecifier'),
+      identifier.text,
+      accessorList != null
+        ? concat([line, path.call(print, 'accessorList')])
+        : '',
       expressionBody != null
         ? concat([' ', path.call(print, 'expressionBody')])
         : '',
@@ -61,67 +62,75 @@ export const propertyDeclarationPrinter: Printer['print'] = (
 };
 
 export type EventDeclarationNode = {
+  accessorList: AccessorListNode | null;
   attributeLists: Array<AttributeListNode>;
-  leadingEmptyLine: boolean;
-  modifiers: Array<string>;
-  name: string;
-  propertyType: TypeNode;
-  accessors: AccessorListNode | null;
-  interfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  eventKeyword: SyntaxToken;
+  explicitInterfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  identifier: SyntaxToken;
+  modifiers: Array<SyntaxToken>;
+  semicolonToken: SyntaxToken;
+  type: TypeNode;
 } & DeclarationNode;
 
 export const eventDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { accessors, leadingEmptyLine, modifiers, name }: EventDeclarationNode = path.getValue();
+  const {
+    accessorList,
+    identifier,
+    modifiers,
+  }: EventDeclarationNode = path.getValue();
 
   return group(
     concat([
-      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers, '']),
+      join(' ', [...modifiers.map((token) => token.text), '']),
       'event',
       ' ',
-      path.call(print, 'propertyType'),
+      path.call(print, 'type'),
       ' ',
-      path.call(print, 'interfaceSpecifier'),
-      name,
+      path.call(print, 'explicitInterfaceSpecifier'),
+      identifier.text,
       line,
-      path.call(print, 'accessors'),
-      accessors == null ? ';' : '',
+      path.call(print, 'accessorList'),
+      accessorList == null ? ';' : '',
     ])
   );
 };
 
 export type IndexerDeclarationNode = {
+  accessorList: AccessorListNode | null;
   attributeLists: Array<AttributeListNode>;
-  modifiers: Array<string>;
-  leadingEmptyLine: boolean;
-  parameters: BracketedParameterListNode;
-  propertyType: TypeNode;
-  accessors: AccessorListNode | null;
-  interfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  explicitInterfaceSpecifier: ExplicitInterfaceSpecifierNode | null;
+  expressionBody: ArrowExpressionClauseNode | null;
+  modifiers: Array<SyntaxToken>;
+  parameterList: BracketedParameterListNode;
+  semicolonToken: SyntaxToken;
+  thisKeyword: SyntaxToken;
+  type: TypeNode;
 } & DeclarationNode;
 
 export const indexerDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { leadingEmptyLine, modifiers }: IndexerDeclarationNode = path.getValue();
+  const { modifiers }: IndexerDeclarationNode = path.getValue();
 
   return group(
     concat([
-      leadingEmptyLine ? hardline : '',
       join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers, '']),
-      path.call(print, 'propertyType'),
+      join(' ', [...modifiers.map((token) => token.text), '']),
+      path.call(print, 'type'),
       ' ',
-      path.call(print, 'interfaceSpecifier'),
+      path.call(print, 'explicitInterfaceSpecifier'),
       'this',
-      path.call(print, 'parameters'),
+      path.call(print, 'parameterList'),
       line,
-      path.call(print, 'accessors'),
+      path.call(print, 'accessorList'),
+      //todo arrow expression indexer
     ])
   );
 };
 
 export type AccessorListNode = {
   accessors: Array<AccessorDeclarationNode>;
+  closeBraceToken: SyntaxToken;
+  openBraceToken: SyntaxToken;
 } & SyntaxNode;
 
 export const accessorListPrinter: Printer['print'] = (path, _, print) => {
@@ -134,14 +143,16 @@ export const accessorListPrinter: Printer['print'] = (path, _, print) => {
         line,
         '}',
       ])
-    : '{}';
+    : '{ }';
 };
 
 export type AccessorDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
-  modifiers: Array<string>;
-  keyword: string;
-  body: BlockNode | ArrowExpressionClauseNode | null;
+  body: BlockNode | null;
+  expressionBody: ArrowExpressionClauseNode | null;
+  keyword: SyntaxToken;
+  modifiers: Array<SyntaxToken>;
+  semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
 export const accessorDeclarationPrinter: Printer['print'] = (
@@ -149,17 +160,26 @@ export const accessorDeclarationPrinter: Printer['print'] = (
   _,
   print
 ) => {
-  const { body, modifiers, keyword }: AccessorDeclarationNode = path.getValue();
+  const {
+    body,
+    expressionBody,
+    modifiers,
+    keyword,
+    semicolonToken,
+  }: AccessorDeclarationNode = path.getValue();
 
   return group(
     concat([
       join(line, [...path.map(print, 'attributeLists'), '']),
       group(
         concat([
-          join(' ', [...modifiers, '']),
-          keyword,
+          join(' ', [...modifiers.map((token) => token.text), '']),
+          keyword.text,
           body != null ? concat([line, path.call(print, 'body')]) : '',
-          body?.type !== 'Block' ? ';' : '',
+          expressionBody != null
+            ? concat([line, path.call(print, 'expressionBody')])
+            : '',
+          semicolonToken.text,
         ])
       ),
     ])

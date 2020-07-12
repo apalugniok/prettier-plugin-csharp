@@ -3,12 +3,14 @@ import concat = doc.builders.concat;
 import { DeclarationNode, SyntaxNode } from './syntaxNode';
 import join = doc.builders.join;
 import hardline = doc.builders.hardline;
-import { ExternAliasDirectiveNode, UsingDirectiveNode } from "./directive";
+import { ExternAliasDirectiveNode, UsingDirectiveNode } from './directive';
+import { SyntaxToken } from './syntaxToken';
 
 export type CompilationUnitNode = {
+  endOfFileToken: SyntaxToken;
   externs: Array<ExternAliasDirectiveNode>;
-  usings: Array<UsingDirectiveNode>;
   members: Array<DeclarationNode>;
+  usings: Array<UsingDirectiveNode>;
 } & SyntaxNode;
 
 export const compilationUnitPrinter: Printer['print'] = (path, _, print) => {

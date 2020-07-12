@@ -52,7 +52,7 @@ export type ExpressionNodeType = TypeNodeType | 'LiteralExpression';
 
 export type TypeNodeType = NameNodeType | 'PredefinedType';
 
-export type StatementNodeType = | 'Block'
+export type StatementNodeType = 'Block';
 
 export type NameNodeType =
   | 'AliasQualifiedName'
@@ -68,27 +68,27 @@ export type AttributeNodeTypes =
   | 'AttributeTargetSpecifier';
 
 export type SyntaxNode = {
-  type: SyntaxNodeType;
+  nodeType: SyntaxNodeType;
   start: number;
   end: number;
 };
 
 export type DeclarationNode = {
-  type: DeclarationNodeType;
+  nodeType: DeclarationNodeType;
 } & SyntaxNode;
 
 export type ExpressionNode = {
-  type: ExpressionNodeType;
+  nodeType: ExpressionNodeType;
 } & SyntaxNode;
 
 export type TypeNode = {
-  type: TypeNodeType;
+  nodeType: TypeNodeType;
 } & SyntaxNode;
 
 export type StatementNode = {
-  type: StatementNodeType
+  nodeType: StatementNodeType;
 } & SyntaxNode;
 
 export type NameNode = {
-  type: NameNodeType;
+  nodeType: NameNodeType;
 } & TypeNodeType;
