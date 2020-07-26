@@ -10,6 +10,10 @@ import group = doc.builders.group;
 import { EqualsValueClauseNode } from './variableDeclaration';
 import { SyntaxToken } from '../syntaxToken';
 import { BaseListNode } from './baseType';
+import {
+  printAttributeLists,
+  printModifiers,
+} from '../../helpers/printerHelpers';
 
 export type EnumDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
@@ -33,8 +37,8 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
   }: EnumDeclarationNode = path.getValue();
 
   return concat([
-    join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers.map((token) => token.text), '']),
+    printAttributeLists(path, print),
+    printModifiers(modifiers),
     'enum',
     ' ',
     identifier.text,

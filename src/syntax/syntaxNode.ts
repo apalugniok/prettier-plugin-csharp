@@ -46,7 +46,10 @@ export type DeclarationNodeType =
   | 'StructDeclaration'
   | 'MethodDeclaration'
   | 'ConstructorDeclaration'
-  | 'DestructorDeclaration';
+  | 'DestructorDeclaration'
+  | 'OperatorDeclaration'
+  | 'ConversionOperatorDeclaration'
+  | 'DelegateDeclaration';
 
 export type ExpressionNodeType = TypeNodeType | 'LiteralExpression';
 

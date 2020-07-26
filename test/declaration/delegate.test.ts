@@ -1,17 +1,17 @@
 ﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
-describe('Method Declaration', () => {
-  it('should format a block method', () => {
+describe('Delegate Declaration', () => {
+  it('should format a delegate declaration', () => {
     const input = code`
       class Irrelevant {
-        public   int Foo(){  }
+        public 
+        delegate int Delegate (int  foo) ;
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          public int Foo()
-          { }
+          public delegate int Delegate(int foo);
       }
     `;
 
@@ -20,17 +20,17 @@ describe('Method Declaration', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an abstract method', () => {
+  it('should format a generic delegate declaration', () => {
     const input = code`
       class Irrelevant {
         public 
-          abstract int Foo();
+        delegate T Delegate<T> (T  foo, int bar) ;
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          public abstract int Foo();
+          public delegate T Delegate<T>(T foo, int bar);
       }
     `;
 
@@ -39,40 +39,17 @@ describe('Method Declaration', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a generic method', () => {
+  it('should format a generic delegate declaration with type constraints', () => {
     const input = code`
       class Irrelevant {
         public 
-           int Foo<T>() {}
+        delegate T Delegate<T> (T  foo, int bar) where T: new();
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          public int Foo<T>()
-          { }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should format a generic method with type constraints', () => {
-    const input = code`
-      class Irrelevant {
-        public 
-           int Foo<TValue, TArgument>() where TValue: class, new() where TArgument:class,new() {}
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          public int Foo<TValue, TArgument>()
-              where TValue : class, new()
-              where TArgument : class, new()
-          { }
+          public delegate T Delegate<T>(T foo, int bar) where T : new();
       }
     `;
 

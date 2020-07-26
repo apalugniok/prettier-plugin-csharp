@@ -11,35 +11,39 @@ import group = doc.builders.group;
 import line = doc.builders.line;
 import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntaxToken';
+import {
+  printAttributeLists,
+  printModifiers,
+} from '../../helpers/printerHelpers';
 
-export type ClassDeclarationNode = {
+export type StructDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
   baseList: BaseListNode | null;
   closeBraceToken: SyntaxToken;
   constraintClauses: Array<TypeParameterConstraintClauseNode>;
   identifier: SyntaxToken;
   keyword: SyntaxToken;
-  modifiers: Array<SyntaxToken>;
   members: Array<DeclarationNode>;
+  modifiers: Array<SyntaxToken>;
   openBraceToken: SyntaxToken;
   semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
   typeParameterList: TypeParameterListNode | null;
 } & SyntaxNode;
 
-export const classDeclarationPrinter: Printer['print'] = (path, _, print) => {
+export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     baseList,
     constraintClauses,
-    identifier,
     members,
     modifiers,
+    identifier,
     typeParameterList,
-  }: ClassDeclarationNode = path.getValue();
+  }: StructDeclarationNode = path.getValue();
 
   return concat([
-    join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers.map((token) => token.text), '']),
-    'class',
+    printAttributeLists(path, print),
+    printModifiers(modifiers),
+    'struct',
     ' ',
     identifier.text,
     typeParameterList != null ? path.call(print, 'typeParameterList') : '',

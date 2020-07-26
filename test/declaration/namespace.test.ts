@@ -16,7 +16,7 @@ describe('Namespace Declaration', () => {
     const actualFormattedCode = formatCSharpWithPrettier(input);
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  })
+  });
 
   it('should format a declaration with a using directive', () => {
     const input = code`
@@ -34,7 +34,7 @@ describe('Namespace Declaration', () => {
     const actualFormattedCode = formatCSharpWithPrettier(input);
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  })
+  });
 
   it('should format a declaration with an extern alias directive', () => {
     const input = code`
@@ -53,5 +53,5 @@ describe('Namespace Declaration', () => {
     const actualFormattedCode = formatCSharpWithPrettier(input);
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  })
-})
+  });
+});

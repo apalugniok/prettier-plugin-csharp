@@ -1,7 +1,6 @@
 ﻿import { DeclarationNode, SyntaxNode, TypeNode } from '../syntaxNode';
 import { AttributeListNode } from './attribute';
 import { EqualsValueClauseNode } from './variableDeclaration';
-import { ExplicitInterfaceSpecifierNode } from './interfaceDeclaration';
 import { ArrowExpressionClauseNode } from '../expression/arrowExpressionClause';
 import { BlockNode } from '../statement/block';
 import { doc, Printer } from 'prettier';
@@ -10,9 +9,13 @@ import line = doc.builders.line;
 import join = doc.builders.join;
 import group = doc.builders.group;
 import indent = doc.builders.indent;
-import hardline = doc.builders.hardline;
 import { BracketedParameterListNode } from './parameter';
 import { SyntaxToken } from '../syntaxToken';
+import {
+  printAttributeLists,
+  printModifiers,
+} from '../../helpers/printerHelpers';
+import { ExplicitInterfaceSpecifierNode } from './interface';
 
 export type PropertyDeclarationNode = {
   accessorList: AccessorListNode | null;
@@ -41,8 +44,8 @@ export const propertyDeclarationPrinter: Printer['print'] = (
 
   return group(
     concat([
-      join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers.map((token) => token.text), '']),
+      printAttributeLists(path, print),
+      printModifiers(modifiers),
       path.call(print, 'type'),
       ' ',
       path.call(print, 'explicitInterfaceSpecifier'),
@@ -81,8 +84,8 @@ export const eventDeclarationPrinter: Printer['print'] = (path, _, print) => {
 
   return group(
     concat([
-      join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers.map((token) => token.text), '']),
+      printAttributeLists(path, print),
+      printModifiers(modifiers),
       'event',
       ' ',
       path.call(print, 'type'),
@@ -113,8 +116,8 @@ export const indexerDeclarationPrinter: Printer['print'] = (path, _, print) => {
 
   return group(
     concat([
-      join(hardline, [...path.map(print, 'attributeLists'), '']),
-      join(' ', [...modifiers.map((token) => token.text), '']),
+      printAttributeLists(path, print),
+      printModifiers(modifiers),
       path.call(print, 'type'),
       ' ',
       path.call(print, 'explicitInterfaceSpecifier'),
@@ -173,7 +176,7 @@ export const accessorDeclarationPrinter: Printer['print'] = (
       join(line, [...path.map(print, 'attributeLists'), '']),
       group(
         concat([
-          join(' ', [...modifiers.map((token) => token.text), '']),
+          printModifiers(modifiers),
           keyword.text,
           body != null ? concat([line, path.call(print, 'body')]) : '',
           expressionBody != null

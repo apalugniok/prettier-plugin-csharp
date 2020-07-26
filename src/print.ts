@@ -20,8 +20,6 @@ import {
   identifierNamePrinter,
   qualifiedNamePrinter,
 } from './syntax/expression/name';
-import { namespaceDeclarationPrinter } from './syntax/declaration/namespaceDeclaration';
-import { classDeclarationPrinter } from './syntax/declaration/classDeclaration';
 import { compilationUnitPrinter } from './syntax/compilationUnit';
 import {
   argumentListPrinter,
@@ -38,10 +36,6 @@ import {
   typeParameterConstraintClausePrinter,
 } from './syntax/declaration/typeParameterConstraint';
 import {
-  enumDeclarationPrinter,
-  enumMemberDeclarationPrinter,
-} from './syntax/declaration/enumDeclaration';
-import {
   equalsValueClausePrinter,
   variableDeclarationPrinter,
   variableDeclaratorPrinter,
@@ -51,14 +45,6 @@ import {
   bracketedArgumentListPrinter,
 } from './syntax/expression/argument';
 import { literalExpressionPrinter } from './syntax/expression/literal';
-import {
-  explicitInterfaceSpecifierPrinter,
-  interfaceDeclarationPrinter,
-} from './syntax/declaration/interfaceDeclaration';
-import {
-  eventFieldDeclarationPrinter,
-  fieldDeclarationPrinter,
-} from './syntax/declaration/fieldDeclaration';
 import { arrowExpressionClausePrinter } from './syntax/expression/arrowExpressionClause';
 import {
   bracketedParameterListPrinter,
@@ -67,21 +53,38 @@ import {
   typeParameterListPrinter,
   typeParameterPrinter,
 } from './syntax/declaration/parameter';
+import { blockPrinter } from './syntax/statement/block';
 import {
   accessorDeclarationPrinter,
   accessorListPrinter,
   eventDeclarationPrinter,
   indexerDeclarationPrinter,
   propertyDeclarationPrinter,
-} from './syntax/declaration/propertyDeclaration';
-import { blockPrinter } from './syntax/statement/block';
-import { structDeclarationPrinter } from './syntax/declaration/structDeclaration';
+} from './syntax/declaration/property';
+import {
+  explicitInterfaceSpecifierPrinter,
+  interfaceDeclarationPrinter,
+} from './syntax/declaration/interface';
+import {
+  eventFieldDeclarationPrinter,
+  fieldDeclarationPrinter,
+} from './syntax/declaration/field';
+import { namespaceDeclarationPrinter } from './syntax/declaration/namespace';
+import { classDeclarationPrinter } from './syntax/declaration/class';
 import {
   constructorDeclarationPrinter,
   constructorInitializerPrinter,
+  conversionOperatorDeclarationPrinter,
   destructorDeclarationPrinter,
   methodDeclarationPrinter,
-} from './syntax/declaration/methodDeclaration';
+  operatorDeclarationPrinter,
+} from './syntax/declaration/method';
+import {
+  enumDeclarationPrinter,
+  enumMemberDeclarationPrinter,
+} from './syntax/declaration/enum';
+import { delegateDeclarationPrinter } from './syntax/declaration/delegate';
+import { structDeclarationPrinter } from './syntax/declaration/struct';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -138,12 +141,14 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   ConstructorDeclaration: constructorDeclarationPrinter,
   DestructorDeclaration: destructorDeclarationPrinter,
   ConstructorInitializer: constructorInitializerPrinter,
+  OperatorDeclaration: operatorDeclarationPrinter,
+  ConversionOperatorDeclaration: conversionOperatorDeclarationPrinter,
+  DelegateDeclaration: delegateDeclarationPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
   const node: SyntaxNode | null = path.getValue();
 
-  console.log(node?.nodeType);
   if (node == null) {
     return '';
   }

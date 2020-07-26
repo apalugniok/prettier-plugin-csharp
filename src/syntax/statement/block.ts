@@ -6,6 +6,7 @@ import join = doc.builders.join;
 import concat = doc.builders.concat;
 import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntaxToken';
+import { printAttributeLists } from '../../helpers/printerHelpers';
 
 export type BlockNode = {
   attributeLists: Array<AttributeListNode>;
@@ -29,8 +30,5 @@ export const blockPrinter: Printer['print'] = (path, _, print) => {
         ])
       : '{ }';
 
-  return concat([
-    join(hardline, [...path.map(print, 'attributeLists'), '']),
-    block,
-  ]);
+  return concat([printAttributeLists(path, print), block]);
 };

@@ -11,6 +11,10 @@ import hardline = doc.builders.hardline;
 import { BaseListNode } from './baseType';
 import group = doc.builders.group;
 import { SyntaxToken } from '../syntaxToken';
+import {
+  printAttributeLists,
+  printModifiers,
+} from '../../helpers/printerHelpers';
 
 export type InterfaceDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
@@ -41,8 +45,8 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
   }: InterfaceDeclarationNode = path.getValue();
 
   return concat([
-    join(hardline, [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers.map((token) => token.text), '']),
+    printAttributeLists(path, print),
+    printModifiers(modifiers),
     'interface',
     ' ',
     identifier.text,

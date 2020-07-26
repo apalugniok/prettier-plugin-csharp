@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
+﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
 describe('Struct Declaration', () => {
   it('should format an empty declaration', () => {

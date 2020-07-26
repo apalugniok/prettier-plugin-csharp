@@ -9,6 +9,7 @@ import indent = doc.builders.indent;
 import group = doc.builders.group;
 import line = doc.builders.line;
 import { SyntaxToken } from '../syntaxToken';
+import { printModifiers } from '../../helpers/printerHelpers';
 
 export type ParameterListNode = {
   closeParenToken: SyntaxToken;
@@ -84,7 +85,7 @@ export const parameterPrinter: Printer['print'] = (path, _, print) => {
 
   return concat([
     join(' ', [...path.map(print, 'attributeLists'), '']),
-    join(' ', [...modifiers.map((token) => token.text), '']),
+    printModifiers(modifiers),
     path.call(print, 'type'),
     ' ',
     identifier.text,
