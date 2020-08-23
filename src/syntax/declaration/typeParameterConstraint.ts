@@ -20,9 +20,6 @@ export const typeParameterConstraintClausePrinter: Printer['print'] = (
   _,
   print
 ) => {
-  const node: TypeParameterConstraintClauseNode = path.getValue();
-
-  console.log(node);
   return group(
     concat([
       'where',

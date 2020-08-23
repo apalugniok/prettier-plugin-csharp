@@ -1,4 +1,6 @@
-﻿export type SyntaxNodeType =
+﻿import { ArrayRankSpecifierNode } from './expression/arrayType';
+
+export type SyntaxNodeType =
   | AttributeNodeTypes
   | ExpressionNodeType
   | DeclarationNodeType
@@ -29,7 +31,21 @@
   | 'ExplicitInterfaceSpecifier'
   | 'ArrowExpressionClause'
   | 'ArgumentList'
-  | 'ConstructorInitializer';
+  | 'ConstructorInitializer'
+  | 'ElseClause'
+  | 'CatchClause'
+  | 'CatchDeclaration'
+  | 'CatchFilterClause'
+  | 'FinallyClause'
+  | 'InterpolatedStringText'
+  | 'Interpolation'
+  | 'InterpolationAlignmentClause'
+  | 'InterpolationFormatClause'
+  | 'SingleVariableDesignation'
+  | 'DiscardDesignation'
+  | 'ParenthesizedVariableDesignation'
+  | 'ArrayRankSpecifier'
+  | 'OmittedArraySizeExpression';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -51,17 +67,39 @@ export type DeclarationNodeType =
   | 'ConversionOperatorDeclaration'
   | 'DelegateDeclaration';
 
-export type ExpressionNodeType = TypeNodeType | 'LiteralExpression';
+export type ExpressionNodeType =
+  | TypeNodeType
+  | 'LiteralExpression'
+  | 'ObjectCreationExpression'
+  | 'InitializerExpression'
+  | 'AssignmentExpression'
+  | 'InvocationExpression'
+  | 'MemberAccessExpression'
+  | 'ParenthesizedExpression'
+  | 'ThisExpression'
+  | 'BaseExpression'
+  | 'StackAllocArrayCreationExpression'
+  | 'ImplicitStackAllocArrayCreationExpression'
+  | 'InterpolatedStringExpression'
+  | 'DeclarationExpression';
 
-export type TypeNodeType = NameNodeType | 'PredefinedType';
+export type TypeNodeType = NameNodeType | 'PredefinedType' | 'ArrayType';
 
-export type StatementNodeType = 'Block';
+export type StatementNodeType =
+  | 'Block'
+  | 'IfStatement'
+  | 'TryStatement'
+  | 'LocalDeclarationStatement'
+  | 'ExpressionStatement';
 
-export type NameNodeType =
-  | 'AliasQualifiedName'
-  | 'QualifiedName'
-  | 'GenericName'
-  | 'IdentifierName';
+export const nameNodeTypes = [
+  'AliasQualifiedName',
+  'QualifiedName',
+  'GenericName',
+  'IdentifierName',
+] as const;
+
+export type NameNodeType = typeof nameNodeTypes[number];
 
 export type AttributeNodeTypes =
   | 'Attribute'

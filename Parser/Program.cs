@@ -11,7 +11,7 @@ namespace PrettierCSharpPlugin.Parser
     {
         public static async Task Main(string[] args)
         {
-            var text = Console.In.ReadToEnd();
+            var text = await Console.In.ReadToEndAsync();
             var tree = CSharpSyntaxTree.ParseText(text);
 
             await JsonSerializer.SerializeAsync(

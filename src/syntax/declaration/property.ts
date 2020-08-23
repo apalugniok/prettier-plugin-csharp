@@ -1,6 +1,6 @@
 ﻿import { DeclarationNode, SyntaxNode, TypeNode } from '../syntaxNode';
 import { AttributeListNode } from './attribute';
-import { EqualsValueClauseNode } from './variableDeclaration';
+import { EqualsValueClauseNode } from './variable';
 import { ArrowExpressionClauseNode } from '../expression/arrowExpressionClause';
 import { BlockNode } from '../statement/block';
 import { doc, Printer } from 'prettier';

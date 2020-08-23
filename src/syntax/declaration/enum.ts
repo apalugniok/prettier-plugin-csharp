@@ -7,7 +7,7 @@ import join = doc.builders.join;
 import hardline = doc.builders.hardline;
 import line = doc.builders.line;
 import group = doc.builders.group;
-import { EqualsValueClauseNode } from './variableDeclaration';
+import { EqualsValueClauseNode } from './variable';
 import { SyntaxToken } from '../syntaxToken';
 import { BaseListNode } from './baseType';
 import {
@@ -27,7 +27,6 @@ export type EnumDeclarationNode = {
   semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
 } & DeclarationNode;
 
-//todo add tests
 export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const {
     baseList,
@@ -50,6 +49,7 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
           concat([
             hardline,
             join(concat([',', hardline]), path.map(print, 'members')),
+            ',',
           ])
         )
       : '',

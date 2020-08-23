@@ -2,10 +2,21 @@
 
 describe('Field Declaration', () => {
   it('should format a single field', () => {
-    const {
-      code,
-      formatCSharpWithPrettier,
-    } = require('../helpers/testHelpers');
+    const input = code`
+      class Irrelevant {
+        int foo;
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          int foo;
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
   it('should format a field with modifiers', () => {

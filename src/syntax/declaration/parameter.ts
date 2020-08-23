@@ -3,7 +3,7 @@ import { SyntaxNode, TypeNode } from '../syntaxNode';
 import concat = doc.builders.concat;
 import { AttributeListNode } from './attribute';
 import join = doc.builders.join;
-import { EqualsValueClauseNode } from './variableDeclaration';
+import { EqualsValueClauseNode } from './variable';
 import softline = doc.builders.softline;
 import indent = doc.builders.indent;
 import group = doc.builders.group;

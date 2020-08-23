@@ -15,7 +15,7 @@ export type BaseListNode = {
 export const baseListPrinter: Printer['print'] = (path, _, print) => {
   return group(
     concat([
-      ':',
+      ' :',
       indent(
         concat([line, join(concat([',', line]), path.map(print, 'types'))])
       ),

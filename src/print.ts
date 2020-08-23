@@ -39,7 +39,7 @@ import {
   equalsValueClausePrinter,
   variableDeclarationPrinter,
   variableDeclaratorPrinter,
-} from './syntax/declaration/variableDeclaration';
+} from './syntax/declaration/variable';
 import {
   argumentPrinter,
   bracketedArgumentListPrinter,
@@ -85,6 +85,48 @@ import {
 } from './syntax/declaration/enum';
 import { delegateDeclarationPrinter } from './syntax/declaration/delegate';
 import { structDeclarationPrinter } from './syntax/declaration/struct';
+import { elseClausePrinter, ifStatementPrinter } from './syntax/statement/if';
+import {
+  catchClausePrinter,
+  catchDeclarationPrinter,
+  catchFilterClausePrinter,
+  finallyClausePrinter,
+  tryStatementPrinter,
+} from './syntax/statement/try';
+import { localDeclarationStatementPrinter } from './syntax/statement/declaration';
+import { objectCreationExpressionPrinter } from './syntax/expression/objectCreation';
+import { assignmentExpressionPrinter } from './syntax/expression/assignment';
+import { invocationExpressionPrinter } from './syntax/expression/invocation';
+import { memberAccessExpressionPrinter } from './syntax/expression/memberAccess';
+import { expressionStatementPrinter } from './syntax/statement/expression';
+import { initializerExpressionPrinter } from './syntax/expression/initializer';
+import {
+  baseExpressionPrinter,
+  thisExpressionPrinter,
+} from './syntax/expression/instance';
+import {
+  implicitStackAllocArrayCreationExpressionPrinter,
+  stackAllocArrayCreationExpressionPrinter,
+} from './syntax/expression/stackalloc';
+import {
+  interpolatedStringExpressionPrinter,
+  interpolatedStringTextPrinter,
+  interpolationAlignmentClausePrinter,
+  interpolationFormatClausePrinter,
+  interpolationPrinter,
+} from './syntax/expression/interpolatedString';
+import { parenthesizedExpressionPrinter } from './syntax/expression/parenthesized';
+import {
+  declarationExpressionPrinter,
+  discardDesignationPrinter,
+  parenthesizedVariableDesignationPrinter,
+  singleVariableDesignationPrinter,
+} from './syntax/expression/declaration';
+import {
+  arrayRankSpecifierPrinter,
+  arrayTypePrinter,
+  omittedArraySizeExpressionPrinter,
+} from './syntax/expression/arrayType';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -144,6 +186,37 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   OperatorDeclaration: operatorDeclarationPrinter,
   ConversionOperatorDeclaration: conversionOperatorDeclarationPrinter,
   DelegateDeclaration: delegateDeclarationPrinter,
+  IfStatement: ifStatementPrinter,
+  ElseClause: elseClausePrinter,
+  TryStatement: tryStatementPrinter,
+  CatchClause: catchClausePrinter,
+  CatchDeclaration: catchDeclarationPrinter,
+  CatchFilterClause: catchFilterClausePrinter,
+  FinallyClause: finallyClausePrinter,
+  LocalDeclarationStatement: localDeclarationStatementPrinter,
+  ObjectCreationExpression: objectCreationExpressionPrinter,
+  InitializerExpression: initializerExpressionPrinter,
+  AssignmentExpression: assignmentExpressionPrinter,
+  InvocationExpression: invocationExpressionPrinter,
+  MemberAccessExpression: memberAccessExpressionPrinter,
+  ExpressionStatement: expressionStatementPrinter,
+  ThisExpression: thisExpressionPrinter,
+  BaseExpression: baseExpressionPrinter,
+  ImplicitStackAllocArrayCreationExpression: implicitStackAllocArrayCreationExpressionPrinter,
+  InterpolatedStringExpression: interpolatedStringExpressionPrinter,
+  InterpolatedStringText: interpolatedStringTextPrinter,
+  Interpolation: interpolationPrinter,
+  InterpolationAlignmentClause: interpolationAlignmentClausePrinter,
+  InterpolationFormatClause: interpolationFormatClausePrinter,
+  ParenthesizedExpression: parenthesizedExpressionPrinter,
+  StackAllocArrayCreationExpression: stackAllocArrayCreationExpressionPrinter,
+  DeclarationExpression: declarationExpressionPrinter,
+  SingleVariableDesignation: singleVariableDesignationPrinter,
+  DiscardDesignation: discardDesignationPrinter,
+  ParenthesizedVariableDesignation: parenthesizedVariableDesignationPrinter,
+  ArrayType: arrayTypePrinter,
+  ArrayRankSpecifier: arrayRankSpecifierPrinter,
+  OmittedArraySizeExpression: omittedArraySizeExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

@@ -21,6 +21,5 @@ export const parse = (text: string) => {
   }
 
   const response = child.stdout.toString();
-  console.log(JSON.parse(response));
   return JSON.parse(response);
 };

@@ -44,7 +44,7 @@ export type BracketedArgumentListNode = {
   arguments: Array<ArgumentNode>;
   closeBracketToken: SyntaxToken;
   openBracketToken: SyntaxToken;
-};
+} & SyntaxNode;
 
 export const bracketedArgumentListPrinter: Printer['print'] = (
   path,

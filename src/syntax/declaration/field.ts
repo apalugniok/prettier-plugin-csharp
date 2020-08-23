@@ -1,6 +1,6 @@
 ﻿import { DeclarationNode } from '../syntaxNode';
 import { AttributeListNode } from './attribute';
-import { VariableDeclarationNode } from './variableDeclaration';
+import { VariableDeclarationNode } from './variable';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import { SyntaxToken } from '../syntaxToken';

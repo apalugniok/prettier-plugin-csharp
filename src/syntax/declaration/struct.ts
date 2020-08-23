@@ -47,7 +47,7 @@ export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
     ' ',
     identifier.text,
     typeParameterList != null ? path.call(print, 'typeParameterList') : '',
-    baseList != null ? concat([' ', path.call(print, 'baseList')]) : '',
+    baseList != null ? path.call(print, 'baseList') : '',
     constraintClauses.length !== 0
       ? group(
           indent(
