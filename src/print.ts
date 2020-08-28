@@ -116,17 +116,28 @@ import {
   interpolationPrinter,
 } from './syntax/expression/interpolatedString';
 import { parenthesizedExpressionPrinter } from './syntax/expression/parenthesized';
-import {
-  declarationExpressionPrinter,
-  discardDesignationPrinter,
-  parenthesizedVariableDesignationPrinter,
-  singleVariableDesignationPrinter,
-} from './syntax/expression/declaration';
+import { declarationExpressionPrinter } from './syntax/expression/declaration';
 import {
   arrayRankSpecifierPrinter,
   arrayTypePrinter,
   omittedArraySizeExpressionPrinter,
 } from './syntax/expression/arrayType';
+import {
+  discardDesignationPrinter,
+  parenthesizedVariableDesignationPrinter,
+  singleVariableDesignationPrinter,
+} from './syntax/other/designation';
+import { varPatternPrinter } from './syntax/pattern/var';
+import { discardPatternPrinter } from './syntax/pattern/discard';
+import { declarationPatternPrinter } from './syntax/pattern/declaration';
+import { constantPatternPrinter } from './syntax/pattern/constant';
+import {
+  positionalPatternClausePrinter,
+  propertyPatternClausePrinter,
+  recursivePatternPrinter,
+  subpatternPrinter,
+} from './syntax/pattern/recursive';
+import { isPatternExpressionPrinter } from './syntax/expression/isPattern';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -217,6 +228,15 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   ArrayType: arrayTypePrinter,
   ArrayRankSpecifier: arrayRankSpecifierPrinter,
   OmittedArraySizeExpression: omittedArraySizeExpressionPrinter,
+  VarPattern: varPatternPrinter,
+  DiscardPattern: discardPatternPrinter,
+  DeclarationPattern: declarationPatternPrinter,
+  ConstantPattern: constantPatternPrinter,
+  RecursivePattern: recursivePatternPrinter,
+  PositionalPatternClause: positionalPatternClausePrinter,
+  PropertyPatternClause: propertyPatternClausePrinter,
+  Subpattern: subpatternPrinter,
+  IsPatternExpression: isPatternExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
@@ -225,6 +245,7 @@ export const printNode: Printer['print'] = (path, options, print) => {
   if (node == null) {
     return '';
   }
+  console.log(node.nodeType);
 
   return printersByType[node.nodeType](path, options, print);
 };

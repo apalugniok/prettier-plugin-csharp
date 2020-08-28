@@ -5,6 +5,7 @@ export type SyntaxNodeType =
   | ExpressionNodeType
   | DeclarationNodeType
   | StatementNodeType
+  | PatternNodeType
   | 'CompilationUnit'
   | 'UsingDirective'
   | 'TypeArgumentList'
@@ -45,7 +46,10 @@ export type SyntaxNodeType =
   | 'DiscardDesignation'
   | 'ParenthesizedVariableDesignation'
   | 'ArrayRankSpecifier'
-  | 'OmittedArraySizeExpression';
+  | 'OmittedArraySizeExpression'
+  | 'PositionalPatternClause'
+  | 'Subpattern'
+  | 'PropertyPatternClause';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -81,7 +85,8 @@ export type ExpressionNodeType =
   | 'StackAllocArrayCreationExpression'
   | 'ImplicitStackAllocArrayCreationExpression'
   | 'InterpolatedStringExpression'
-  | 'DeclarationExpression';
+  | 'DeclarationExpression'
+  | 'IsPatternExpression';
 
 export type TypeNodeType = NameNodeType | 'PredefinedType' | 'ArrayType';
 
@@ -100,6 +105,13 @@ export const nameNodeTypes = [
 ] as const;
 
 export type NameNodeType = typeof nameNodeTypes[number];
+
+export type PatternNodeType =
+  | 'DiscardPattern'
+  | 'DeclarationPattern'
+  | 'VarPattern'
+  | 'RecursivePattern'
+  | 'ConstantPattern';
 
 export type AttributeNodeTypes =
   | 'Attribute'
@@ -133,3 +145,7 @@ export type StatementNode = {
 export type NameNode = {
   nodeType: NameNodeType;
 } & TypeNodeType;
+
+export type PatternNode = {
+  nodeType: PatternNodeType;
+} & SyntaxNode;
