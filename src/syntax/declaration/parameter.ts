@@ -73,7 +73,7 @@ export type ParameterNode = {
   default: EqualsValueClauseNode | null;
   identifier: SyntaxToken;
   modifiers: Array<SyntaxToken>;
-  type: TypeNode;
+  type: TypeNode | null;
 } & SyntaxNode;
 
 export const parameterPrinter: Printer['print'] = (path, _, print) => {
@@ -81,13 +81,13 @@ export const parameterPrinter: Printer['print'] = (path, _, print) => {
     default: defaultValue,
     modifiers,
     identifier,
+    type,
   }: ParameterNode = path.getValue();
 
   return concat([
     join(' ', [...path.map(print, 'attributeLists'), '']),
     printModifiers(modifiers),
-    path.call(print, 'type'),
-    ' ',
+    type != null ? concat([path.call(print, 'type'), ' ']) : '',
     identifier.text,
     defaultValue != null ? concat([' ', path.call(print, 'default')]) : '',
   ]);

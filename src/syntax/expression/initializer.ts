@@ -37,5 +37,5 @@ export const initializerExpressionPrinter: Printer['print'] = (
           '}',
         ])
       )
-    : '{}';
+    : ' {}';
 };

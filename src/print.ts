@@ -138,6 +138,14 @@ import {
   subpatternPrinter,
 } from './syntax/pattern/recursive';
 import { isPatternExpressionPrinter } from './syntax/expression/isPattern';
+import { castExpressionPrinter } from './syntax/expression/cast';
+import { throwExpressionPrinter } from './syntax/expression/throw';
+import { tupleExpressionPrinter } from './syntax/expression/tuple';
+import {
+  anonymousMethodExpressionPrinter,
+  parenthesizedLambdaExpressionPrinter,
+  simpleLambdaExpressionPrinter,
+} from './syntax/expression/anonymousFunction';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -237,6 +245,12 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   PropertyPatternClause: propertyPatternClausePrinter,
   Subpattern: subpatternPrinter,
   IsPatternExpression: isPatternExpressionPrinter,
+  CastExpression: castExpressionPrinter,
+  ThrowExpression: throwExpressionPrinter,
+  TupleExpression: tupleExpressionPrinter,
+  AnonymousMethodExpression: anonymousMethodExpressionPrinter,
+  SimpleLambdaExpression: simpleLambdaExpressionPrinter,
+  ParenthesizedLambdaExpression: parenthesizedLambdaExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

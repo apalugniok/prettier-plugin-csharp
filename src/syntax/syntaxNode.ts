@@ -86,7 +86,13 @@ export type ExpressionNodeType =
   | 'ImplicitStackAllocArrayCreationExpression'
   | 'InterpolatedStringExpression'
   | 'DeclarationExpression'
-  | 'IsPatternExpression';
+  | 'IsPatternExpression'
+  | 'CastExpression'
+  | 'ThrowExpression'
+  | 'TupleExpression'
+  | 'AnonymousMethodExpression'
+  | 'SimpleLambdaExpression'
+  | 'ParenthesizedLambdaExpression';
 
 export type TypeNodeType = NameNodeType | 'PredefinedType' | 'ArrayType';
 
