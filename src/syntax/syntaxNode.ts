@@ -1,11 +1,10 @@
-﻿import { ArrayRankSpecifierNode } from './expression/arrayType';
-
-export type SyntaxNodeType =
+﻿export type SyntaxNodeType =
   | AttributeNodeTypes
   | ExpressionNodeType
   | DeclarationNodeType
   | StatementNodeType
   | PatternNodeType
+  | QueryClauseNodeType
   | 'CompilationUnit'
   | 'UsingDirective'
   | 'TypeArgumentList'
@@ -49,7 +48,13 @@ export type SyntaxNodeType =
   | 'OmittedArraySizeExpression'
   | 'PositionalPatternClause'
   | 'Subpattern'
-  | 'PropertyPatternClause';
+  | 'PropertyPatternClause'
+  | 'QueryBody'
+  | 'QueryContinuation'
+  | 'JoinIntoClause'
+  | 'Ordering'
+  | 'SelectClause'
+  | 'GroupClause';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -92,7 +97,14 @@ export type ExpressionNodeType =
   | 'TupleExpression'
   | 'AnonymousMethodExpression'
   | 'SimpleLambdaExpression'
-  | 'ParenthesizedLambdaExpression';
+  | 'ParenthesizedLambdaExpression'
+  | 'QueryExpression'
+  | 'BinaryExpression'
+  | 'PrefixUnaryExpression'
+  | 'PostfixUnaryExpression'
+  | 'MakeRefExpression'
+  | 'RefTypeExpression'
+  | 'RefValueExpression';
 
 export type TypeNodeType = NameNodeType | 'PredefinedType' | 'ArrayType';
 
@@ -126,6 +138,13 @@ export type AttributeNodeTypes =
   | 'AttributeArgument'
   | 'AttributeTargetSpecifier';
 
+export type QueryClauseNodeType =
+  | 'FromClause'
+  | 'LetClause'
+  | 'JoinClause'
+  | 'WhereClause'
+  | 'OrderByClause';
+
 export type SyntaxNode = {
   nodeType: SyntaxNodeType;
   start: number;
@@ -154,4 +173,8 @@ export type NameNode = {
 
 export type PatternNode = {
   nodeType: PatternNodeType;
+} & SyntaxNode;
+
+export type QueryClauseNode = {
+  nodeType: QueryClauseNodeType;
 } & SyntaxNode;

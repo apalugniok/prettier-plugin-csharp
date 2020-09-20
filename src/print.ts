@@ -146,6 +146,30 @@ import {
   parenthesizedLambdaExpressionPrinter,
   simpleLambdaExpressionPrinter,
 } from './syntax/expression/anonymousFunction';
+import {
+  fromClausePrinter,
+  groupClausePrinter,
+  joinClausePrinter,
+  joinIntoClausePrinter,
+  letClausePrinter,
+  orderByClausePrinter,
+  orderingPrinter,
+  queryBodyPrinter,
+  queryContinuationPrinter,
+  queryExpressionPrinter,
+  selectClausePrinter,
+  whereClausePrinter,
+} from './syntax/expression/query';
+import { binaryExpressionPrinter } from './syntax/expression/binary';
+import {
+  postfixUnaryExpressionPrinter,
+  prefixUnaryExpressionPrinter,
+} from './syntax/expression/unary';
+import {
+  makeRefExpressionPrinter,
+  refTypeExpressionPrinter,
+  refValueExpressionPrinter,
+} from './syntax/expression/ref';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -251,6 +275,24 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   AnonymousMethodExpression: anonymousMethodExpressionPrinter,
   SimpleLambdaExpression: simpleLambdaExpressionPrinter,
   ParenthesizedLambdaExpression: parenthesizedLambdaExpressionPrinter,
+  QueryExpression: queryExpressionPrinter,
+  QueryBody: queryBodyPrinter,
+  QueryContinuation: queryContinuationPrinter,
+  FromClause: fromClausePrinter,
+  LetClause: letClausePrinter,
+  JoinClause: joinClausePrinter,
+  JoinIntoClause: joinIntoClausePrinter,
+  WhereClause: whereClausePrinter,
+  OrderByClause: orderByClausePrinter,
+  Ordering: orderingPrinter,
+  SelectClause: selectClausePrinter,
+  GroupClause: groupClausePrinter,
+  BinaryExpression: binaryExpressionPrinter,
+  PrefixUnaryExpression: prefixUnaryExpressionPrinter,
+  PostfixUnaryExpression: postfixUnaryExpressionPrinter,
+  RefTypeExpression: refTypeExpressionPrinter,
+  MakeRefExpression: makeRefExpressionPrinter,
+  RefValueExpression: refValueExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
