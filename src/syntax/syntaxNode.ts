@@ -54,7 +54,8 @@
   | 'JoinIntoClause'
   | 'Ordering'
   | 'SelectClause'
-  | 'GroupClause';
+  | 'GroupClause'
+  | 'TupleElement';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -104,9 +105,21 @@ export type ExpressionNodeType =
   | 'PostfixUnaryExpression'
   | 'MakeRefExpression'
   | 'RefTypeExpression'
-  | 'RefValueExpression';
+  | 'RefValueExpression'
+  | 'CheckedExpression'
+  | 'ConditionalAccessExpression'
+  | 'MemberBindingExpression'
+  | 'DefaultExpression';
 
-export type TypeNodeType = NameNodeType | 'PredefinedType' | 'ArrayType';
+export type TypeNodeType =
+  | NameNodeType
+  | 'PredefinedType'
+  | 'ArrayType'
+  | 'RefType'
+  | 'PointerType'
+  | 'NullableType'
+  | 'TupleType'
+  | 'OmittedTypeArgument';
 
 export type StatementNodeType =
   | 'Block'

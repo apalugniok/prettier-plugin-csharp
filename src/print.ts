@@ -1,6 +1,5 @@
 ﻿import { Printer } from 'prettier';
 import { SyntaxNode, SyntaxNodeType } from './syntax/syntaxNode';
-import { predefinedTypePrinter } from './syntax/expression/predefinedType';
 import { nameEqualsPrinter } from './syntax/expression/nameEquals';
 import { nameColonPrinter } from './syntax/expression/nameColon';
 import {
@@ -118,11 +117,6 @@ import {
 import { parenthesizedExpressionPrinter } from './syntax/expression/parenthesized';
 import { declarationExpressionPrinter } from './syntax/expression/declaration';
 import {
-  arrayRankSpecifierPrinter,
-  arrayTypePrinter,
-  omittedArraySizeExpressionPrinter,
-} from './syntax/expression/arrayType';
-import {
   discardDesignationPrinter,
   parenthesizedVariableDesignationPrinter,
   singleVariableDesignationPrinter,
@@ -170,6 +164,22 @@ import {
   refTypeExpressionPrinter,
   refValueExpressionPrinter,
 } from './syntax/expression/ref';
+import {
+  arrayRankSpecifierPrinter,
+  arrayTypePrinter,
+  nullableTypePrinter,
+  omittedArraySizeExpressionPrinter,
+  omittedTypeArgumentPrinter,
+  pointerTypePrinter,
+  predefinedTypePrinter,
+  refTypePrinter,
+  tupleElementPrinter,
+  tupleTypePrinter,
+} from './syntax/expression/type';
+import { checkedExpressionPrinter } from './syntax/expression/checked';
+import { conditionalAccessExpressionPrinter } from './syntax/expression/conditionalAccess';
+import { memberBindingExpressionPrinter } from './syntax/expression/memberBinding';
+import { defaultExpressionPrinter } from './syntax/expression/default';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -293,6 +303,16 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   RefTypeExpression: refTypeExpressionPrinter,
   MakeRefExpression: makeRefExpressionPrinter,
   RefValueExpression: refValueExpressionPrinter,
+  PointerType: pointerTypePrinter,
+  NullableType: nullableTypePrinter,
+  TupleType: tupleTypePrinter,
+  OmittedTypeArgument: omittedTypeArgumentPrinter,
+  RefType: refTypePrinter,
+  TupleElement: tupleElementPrinter,
+  CheckedExpression: checkedExpressionPrinter,
+  ConditionalAccessExpression: conditionalAccessExpressionPrinter,
+  MemberBindingExpression: memberBindingExpressionPrinter,
+  DefaultExpression: defaultExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

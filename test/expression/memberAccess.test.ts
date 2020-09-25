@@ -57,4 +57,38 @@ describe('Member Access Expression', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should format a chained optional and normal accesses using new lines ', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          foo.PropertyA.PropertyB?.PropertyA?.PropertyA.PropertyB?.PropertyA.PropertyA.PropertyB.PropertyA?.PropertyA?.PropertyB?.PropertyA;
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              foo.PropertyA
+                  .PropertyB
+                  ?.PropertyA
+                  ?.PropertyA
+                  .PropertyB
+                  ?.PropertyA
+                  .PropertyA
+                  .PropertyB
+                  .PropertyA
+                  ?.PropertyA
+                  ?.PropertyB
+                  ?.PropertyA;
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });
