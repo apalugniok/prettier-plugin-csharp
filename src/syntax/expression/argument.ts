@@ -74,10 +74,10 @@ export type ArgumentNode = {
 } & SyntaxNode;
 
 export const argumentPrinter: Printer['print'] = (path, _, print) => {
-  const { nameColon, refOrOutKeyword }: ArgumentNode = path.getValue();
+  const { refOrOutKeyword }: ArgumentNode = path.getValue();
 
   return concat([
-    nameColon != null ? concat([path.call(print, 'nameColon'), ' ']) : '',
+    path.call(print, 'nameColon'),
     refOrOutKeyword.text !== '' ? concat([refOrOutKeyword.text, ' ']) : '',
     path.call(print, 'expression'),
   ]);

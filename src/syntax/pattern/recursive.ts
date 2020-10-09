@@ -68,9 +68,5 @@ export type SubpatternNode = {
 export const subpatternPrinter: Printer['print'] = (path, _, print) => {
   const { nameColon }: SubpatternNode = path.getValue();
 
-  return concat([
-    path.call(print, 'nameColon'),
-    nameColon != null ? ' ' : '',
-    path.call(print, 'pattern'),
-  ]);
+  return concat([path.call(print, 'nameColon'), path.call(print, 'pattern')]);
 };

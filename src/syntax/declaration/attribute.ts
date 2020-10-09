@@ -84,15 +84,9 @@ export type AttributeArgumentNode = {
   expression: ExpressionNode;
 } & SyntaxNode;
 
-export const attributeArgumentPrinter: Printer['print'] = (path, _, print) => {
-  const { nameColon, nameEquals }: AttributeArgumentNode = path.getValue();
-
-  const argumentNameSpecifier =
-    nameColon != null
-      ? concat([path.call(print, 'nameColon'), ' '])
-      : nameEquals != null
-      ? concat([path.call(print, 'nameEquals'), ' '])
-      : '';
-
-  return concat([argumentNameSpecifier, path.call(print, 'expression')]);
-};
+export const attributeArgumentPrinter: Printer['print'] = (path, _, print) =>
+  concat([
+    path.call(print, 'nameColon'),
+    path.call(print, 'nameEquals'),
+    path.call(print, 'expression'),
+  ]);

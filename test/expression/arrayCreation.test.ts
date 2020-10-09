@@ -1,11 +1,11 @@
 ﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
 
-describe('Member Access Expression', () => {
-  it('should format a member access expression', () => {
+describe('Array Creation Expression', () => {
+  it('should format an array creation expression', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
-          foo.Bar;
+          new int[] {1, 2};
         }
       }
     `;
@@ -14,7 +14,7 @@ describe('Member Access Expression', () => {
       {
           void Irrelevant()
           {
-              foo.Bar;
+              new int[] { 1, 2 };
           }
       }
     `;
@@ -24,11 +24,11 @@ describe('Member Access Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format chained member access expressions', () => {
+  it('should format a long array creation expression using new lines', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
-          foo.Bar.Foo();
+          new string[] {"reallyLongLongStringToCauseLineLengthToBeExceeded", "reallyLongLongStringToCauseLineLengthToBeExceeded"};
         }
       }
     `;
@@ -37,7 +37,36 @@ describe('Member Access Expression', () => {
       {
           void Irrelevant()
           {
-              foo.Bar.Foo();
+              new string[]
+              {
+                  "reallyLongLongStringToCauseLineLengthToBeExceeded",
+                  "reallyLongLongStringToCauseLineLengthToBeExceeded",
+              };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+});
+
+describe('Implicit Array Creation Expression', () => {
+  it('should format an implicit array creation expression', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          new[] {1, 2};
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              new[] { 1, 2 };
           }
       }
     `;
@@ -47,11 +76,11 @@ describe('Member Access Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a chained accesses using new lines ', () => {
+  it('should format a two dimensional implicit array creation expression', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
-          foo.PropertyA.PropertyB.PropertyA.PropertyA.PropertyB.PropertyA.PropertyA.PropertyB.PropertyA.PropertyA.PropertyB.PropertyA;
+          new[,] {{1},{2}};
         }
       }
     `;
@@ -60,52 +89,7 @@ describe('Member Access Expression', () => {
       {
           void Irrelevant()
           {
-              foo.PropertyA
-                  .PropertyB
-                  .PropertyA
-                  .PropertyA
-                  .PropertyB
-                  .PropertyA
-                  .PropertyA
-                  .PropertyB
-                  .PropertyA
-                  .PropertyA
-                  .PropertyB
-                  .PropertyA;
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should format a chained optional and normal accesses using new lines ', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant() {
-          foo.PropertyA.PropertyB?.PropertyA?.PropertyA.PropertyB?.PropertyA.PropertyA.PropertyB.PropertyA?.PropertyA?.PropertyB?.PropertyA;
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              foo.PropertyA
-                  .PropertyB
-                  ?.PropertyA
-                  ?.PropertyA
-                  .PropertyB
-                  ?.PropertyA
-                  .PropertyA
-                  .PropertyB
-                  .PropertyA
-                  ?.PropertyA
-                  ?.PropertyB
-                  ?.PropertyA;
+              new[,] {{ 1 }, { 2 }};
           }
       }
     `;

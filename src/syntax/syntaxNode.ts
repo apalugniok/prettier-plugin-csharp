@@ -55,7 +55,10 @@
   | 'Ordering'
   | 'SelectClause'
   | 'GroupClause'
-  | 'TupleElement';
+  | 'TupleElement'
+  | 'SwitchExpressionArm'
+  | 'WhenClause'
+  | 'AnonymousObjectMemberDeclarator';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -109,7 +112,18 @@ export type ExpressionNodeType =
   | 'CheckedExpression'
   | 'ConditionalAccessExpression'
   | 'MemberBindingExpression'
-  | 'DefaultExpression';
+  | 'DefaultExpression'
+  | 'TypeOfExpression'
+  | 'ElementBindingExpression'
+  | 'SizeOfExpression'
+  | 'SwitchExpression'
+  | 'ElementAccessExpression'
+  | 'RangeExpression'
+  | 'ImplicitElementAccess'
+  | 'AnonymousObjectCreationExpression'
+  | 'ArrayCreationExpression'
+  | 'ImplicitArrayCreationExpression'
+  | 'ConditionalExpression';
 
 export type TypeNodeType =
   | NameNodeType

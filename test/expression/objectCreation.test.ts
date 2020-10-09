@@ -159,3 +159,101 @@ describe('Object Creation Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 });
+
+describe('Anonymous Object Creation Expression', () => {
+  it('should format an anonymous object creation', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          new {Foo};
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              new { Foo };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an empty anonymous object creation', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          new {};
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              new {};
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an anonymous object creation with initializers', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          new {Foo = 1, Bar = bar};
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              new { Foo = 1, Bar = bar };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an anonymous object creation with long initializers using new lines', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          new {ReallyLongLongPropertyNameToBreakTheLineLengthLimit = 1, Bar = bar};
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              new
+              {
+                  ReallyLongLongPropertyNameToBreakTheLineLengthLimit = 1,
+                  Bar = bar,
+              };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+});

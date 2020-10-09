@@ -93,7 +93,11 @@ import {
   tryStatementPrinter,
 } from './syntax/statement/try';
 import { localDeclarationStatementPrinter } from './syntax/statement/declaration';
-import { objectCreationExpressionPrinter } from './syntax/expression/objectCreation';
+import {
+  anonymousObjectCreationExpressionPrinter,
+  anonymousObjectMemberDeclaratorSyntax,
+  objectCreationExpressionPrinter,
+} from './syntax/expression/objectCreation';
 import { assignmentExpressionPrinter } from './syntax/expression/assignment';
 import { invocationExpressionPrinter } from './syntax/expression/invocation';
 import { memberAccessExpressionPrinter } from './syntax/expression/memberAccess';
@@ -180,6 +184,24 @@ import { checkedExpressionPrinter } from './syntax/expression/checked';
 import { conditionalAccessExpressionPrinter } from './syntax/expression/conditionalAccess';
 import { memberBindingExpressionPrinter } from './syntax/expression/memberBinding';
 import { defaultExpressionPrinter } from './syntax/expression/default';
+import { typeOfExpressionPrinter } from './syntax/expression/typeOf';
+import { elementBindingExpressionPrinter } from './syntax/expression/elementBinding';
+import { sizeOfExpressionPrinter } from './syntax/expression/sizeOf';
+import {
+  switchExpressionArmPrinter,
+  switchExpressionPrinter,
+  whenClausePrinter,
+} from './syntax/expression/switch';
+import {
+  elementAccessExpressionPrinter,
+  implicitElementAccessPrinter,
+} from './syntax/expression/elementAccess';
+import { rangeExpressionPrinter } from './syntax/expression/range';
+import {
+  arrayCreationExpressionPrinter,
+  implicitArrayCreationExpressionPrinter,
+} from './syntax/expression/arrayCreation';
+import { conditionalExpressionPrinter } from './syntax/expression/conditional';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -313,6 +335,20 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   ConditionalAccessExpression: conditionalAccessExpressionPrinter,
   MemberBindingExpression: memberBindingExpressionPrinter,
   DefaultExpression: defaultExpressionPrinter,
+  TypeOfExpression: typeOfExpressionPrinter,
+  ElementBindingExpression: elementBindingExpressionPrinter,
+  SizeOfExpression: sizeOfExpressionPrinter,
+  SwitchExpression: switchExpressionPrinter,
+  SwitchExpressionArm: switchExpressionArmPrinter,
+  WhenClause: whenClausePrinter,
+  ElementAccessExpression: elementAccessExpressionPrinter,
+  RangeExpression: rangeExpressionPrinter,
+  ImplicitElementAccess: implicitElementAccessPrinter,
+  AnonymousObjectMemberDeclarator: anonymousObjectMemberDeclaratorSyntax,
+  AnonymousObjectCreationExpression: anonymousObjectCreationExpressionPrinter,
+  ArrayCreationExpression: arrayCreationExpressionPrinter,
+  ImplicitArrayCreationExpression: implicitArrayCreationExpressionPrinter,
+  ConditionalExpression: conditionalExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

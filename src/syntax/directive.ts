@@ -18,7 +18,7 @@ export const usingDirectivePrinter: Printer['print'] = (path, _, print) => {
   return concat([
     'using ',
     staticKeyword.text !== '' ? 'static ' : '',
-    alias != null ? concat([path.call(print, 'alias'), ' ']) : '',
+    path.call(print, 'alias'),
     path.call(print, 'name'),
     ';',
   ]);

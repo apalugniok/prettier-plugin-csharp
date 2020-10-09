@@ -10,4 +10,4 @@ export type NameColonNode = {
 } & SyntaxNode;
 
 export const nameColonPrinter: Printer['print'] = (path, _, print) =>
-  concat([path.call(print, 'name'), ':']);
+  concat([path.call(print, 'name'), ': ']);
