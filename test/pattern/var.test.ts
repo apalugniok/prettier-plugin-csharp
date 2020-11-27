@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
+﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
 describe('Var Pattern', () => {
   it('should format a var pattern', () => {

@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
+﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
 describe('For Statement', () => {
   it('should format a for statement with a declaration', () => {

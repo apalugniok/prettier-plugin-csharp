@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
+﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
 describe('Object Creation Expression', () => {
   it('should format an object creation', () => {

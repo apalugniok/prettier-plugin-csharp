@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require('../helpers/testHelpers');
+﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
 describe('Lock Statement', () => {
   it('should format a lock statement', () => {

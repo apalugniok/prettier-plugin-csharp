@@ -1,4 +1,4 @@
-const { code, formatCSharpWithPrettier } = require('./helpers/testHelpers');
+import { code, formatCSharpWithPrettier } from './helpers/testHelpers';
 
 describe('Using Directive', () => {
   it('should format a simple directive', () => {

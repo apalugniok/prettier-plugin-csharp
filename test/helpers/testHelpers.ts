@@ -1,4 +1,4 @@
-﻿const { format } = require('prettier');
+﻿import { format } from 'prettier';
 
 export const code = (strings: TemplateStringsArray) => {
   const rawString = strings.raw[0];
@@ -15,6 +15,7 @@ export const code = (strings: TemplateStringsArray) => {
 
 export const formatCSharpWithPrettier = (text: string) =>
   format(text, {
+    //@ts-ignore
     parser: 'csharp',
     plugins: ['.'],
   });
