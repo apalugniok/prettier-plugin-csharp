@@ -5,7 +5,7 @@ import { ArrowExpressionClauseNode } from '../expression/arrowExpressionClause';
 import { ParameterListNode, TypeParameterListNode } from './parameter';
 import { TypeParameterConstraintClauseNode } from './typeParameterConstraint';
 import { ArgumentListNode } from '../expression/argument';
-import { doc, FastPath, Printer } from 'prettier';
+import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import join = doc.builders.join;
 import indent = doc.builders.indent;
@@ -14,22 +14,10 @@ import group = doc.builders.group;
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printMethodBody,
   printModifiers,
 } from '../../helpers/printerHelpers';
-import Doc = doc.builders.Doc;
 import { ExplicitInterfaceSpecifierNode } from './interface';
-
-const printMethodBody = (
-  path: FastPath,
-  print: (path: FastPath) => Doc,
-  body: BlockNode | null,
-  expressionBody: ArrowExpressionClauseNode | null
-): Doc =>
-  body != null
-    ? concat([line, path.call(print, 'body')])
-    : expressionBody != null
-    ? concat([' ', path.call(print, 'expressionBody'), ';'])
-    : '';
 
 export type MethodDeclarationNode = {
   arity: number;

@@ -1,4 +1,4 @@
-﻿const { code, formatCSharpWithPrettier } = require("../helpers/testHelpers");
+﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
 describe('Attribute List', () => {
   it('should format a single attribute list', () => {
@@ -125,7 +125,7 @@ describe('Attribute List', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
-  
+
   it('should format multiple attribute lists', () => {
     const input = code`
       [Foo] [Bar]

@@ -58,7 +58,11 @@
   | 'TupleElement'
   | 'SwitchExpressionArm'
   | 'WhenClause'
-  | 'AnonymousObjectMemberDeclarator';
+  | 'AnonymousObjectMemberDeclarator'
+  | 'SwitchSection'
+  | 'CasePatternSwitchLabel'
+  | 'CaseSwitchLabel'
+  | 'DefaultSwitchLabel';
 
 export type DeclarationNodeType =
   | 'NamespaceDeclaration'
@@ -140,7 +144,21 @@ export type StatementNodeType =
   | 'IfStatement'
   | 'TryStatement'
   | 'LocalDeclarationStatement'
-  | 'ExpressionStatement';
+  | 'ExpressionStatement'
+  | 'LabeledStatement'
+  | 'UnsafeStatement'
+  | 'GotoStatement'
+  | 'LockStatement'
+  | 'BreakStatement'
+  | 'ContinueStatement'
+  | 'ReturnStatement'
+  | 'SwitchStatement'
+  | 'LocalFunctionStatement'
+  | 'ThrowStatement'
+  | 'YieldStatement'
+  | 'WhileStatement'
+  | 'DoStatement'
+  | 'ForStatement';
 
 export const nameNodeTypes = [
   'AliasQualifiedName',

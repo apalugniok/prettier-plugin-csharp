@@ -7,6 +7,8 @@ import { printAttributeLists } from '../../helpers/printerHelpers';
 import group = doc.builders.group;
 import line = doc.builders.line;
 import hardline = doc.builders.hardline;
+import softline = doc.builders.softline;
+import indent = doc.builders.indent;
 
 export type IfStatementNode = {
   attributeLists: Array<AttributeListNode>;
@@ -25,9 +27,14 @@ export const ifStatementPrinter: Printer['print'] = (path, _, print) => {
     printAttributeLists(path, print),
     'if',
     ' ',
-    '(',
-    path.call(print, 'condition'),
-    ')',
+    group(
+      concat([
+        '(',
+        indent(concat([softline, path.call(print, 'condition')])),
+        softline,
+        ')',
+      ])
+    ),
     group(
       concat([
         statement.nodeType === 'Block' ? hardline : line,

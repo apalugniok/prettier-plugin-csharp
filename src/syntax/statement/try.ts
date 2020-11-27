@@ -46,15 +46,13 @@ export const catchClausePrinter: Printer['print'] = (path, _, print) => {
   const { declaration, filter }: CatchClauseNode = path.getValue();
 
   return concat([
-    group(
-      concat([
-        'catch',
-        declaration != null ? ' ' : '',
-        path.call(print, 'declaration'),
-        filter != null ? ' ' : '',
-        path.call(print, 'filter'),
-      ])
-    ),
+    concat([
+      'catch',
+      declaration != null ? ' ' : '',
+      path.call(print, 'declaration'),
+      filter != null ? ' ' : '',
+      path.call(print, 'filter'),
+    ]),
     hardline,
     path.call(print, 'block'),
   ]);
@@ -70,7 +68,16 @@ export type CatchDeclarationNode = {
 export const catchDeclarationPrinter: Printer['print'] = (path, _, print) => {
   const { identifier }: CatchDeclarationNode = path.getValue();
 
-  return concat(['(', path.call(print, 'type'), ' ', identifier.text, ')']);
+  return group(
+    concat([
+      '(',
+      indent(
+        concat([softline, path.call(print, 'type'), ' ', identifier.text])
+      ),
+      softline,
+      ')',
+    ])
+  );
 };
 
 export type CatchFilterClauseNode = {
@@ -84,10 +91,14 @@ export const catchFilterClausePrinter: Printer['print'] = (path, _, print) => {
   return concat([
     'when',
     ' ',
-    '(',
-    indent(concat([softline, path.call(print, 'filterExpression')])),
-    softline,
-    ')',
+    group(
+      concat([
+        '(',
+        indent(concat([softline, path.call(print, 'filterExpression')])),
+        softline,
+        ')',
+      ])
+    ),
   ]);
 };
 

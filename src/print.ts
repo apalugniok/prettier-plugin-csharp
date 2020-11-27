@@ -202,6 +202,26 @@ import {
   implicitArrayCreationExpressionPrinter,
 } from './syntax/expression/arrayCreation';
 import { conditionalExpressionPrinter } from './syntax/expression/conditional';
+import { labeledStatementPrinter } from './syntax/statement/labeled';
+import { unsafeStatementPrinter } from './syntax/statement/unsafe';
+import { gotoStatementPrinter } from './syntax/statement/goto';
+import { lockStatementPrinter } from './syntax/statement/lock';
+import { breakStatementPrinter } from './syntax/statement/break';
+import { continueStatementPrinter } from './syntax/statement/continue';
+import { returnStatementPrinter } from './syntax/statement/return';
+import {
+  casePatternSwitchLabelPrinter,
+  caseSwitchLabelPrinter,
+  defaultSwitchLabelPrinter,
+  switchSectionPrinter,
+  switchStatementPrinter,
+} from './syntax/statement/switch';
+import { localFunctionStatementPrinter } from './syntax/statement/localFunction';
+import { throwStatementPrinter } from './syntax/statement/throw';
+import { yieldStatementPrinter } from './syntax/statement/yield';
+import { whileStatementPrinter } from './syntax/statement/while';
+import { doStatementPrinter } from './syntax/statement/do';
+import { forStatementPrinter } from './syntax/statement/for';
 
 const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   CompilationUnit: compilationUnitPrinter,
@@ -349,6 +369,24 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   ArrayCreationExpression: arrayCreationExpressionPrinter,
   ImplicitArrayCreationExpression: implicitArrayCreationExpressionPrinter,
   ConditionalExpression: conditionalExpressionPrinter,
+  LabeledStatement: labeledStatementPrinter,
+  UnsafeStatement: unsafeStatementPrinter,
+  GotoStatement: gotoStatementPrinter,
+  LockStatement: lockStatementPrinter,
+  BreakStatement: breakStatementPrinter,
+  ContinueStatement: continueStatementPrinter,
+  ReturnStatement: returnStatementPrinter,
+  SwitchSection: switchSectionPrinter,
+  SwitchStatement: switchStatementPrinter,
+  DefaultSwitchLabel: defaultSwitchLabelPrinter,
+  CaseSwitchLabel: caseSwitchLabelPrinter,
+  CasePatternSwitchLabel: casePatternSwitchLabelPrinter,
+  LocalFunctionStatement: localFunctionStatementPrinter,
+  ThrowStatement: throwStatementPrinter,
+  YieldStatement: yieldStatementPrinter,
+  WhileStatement: whileStatementPrinter,
+  DoStatement: doStatementPrinter,
+  ForStatement: forStatementPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

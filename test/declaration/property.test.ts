@@ -240,5 +240,28 @@ describe('Property Declaration', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
+  it('should format an unsafe property', () => {
+    const input = code`
+      class Irrelevant
+      {
+          unsafe 
+          int Foo { add {
+       } remove {
+          }  
+          }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          unsafe int Foo { add { } remove { } }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
   //todo
 });

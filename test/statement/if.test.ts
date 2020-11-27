@@ -108,4 +108,33 @@ describe('If Statement', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should use a new line for the condition if it exceeds the line length limit', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+        [Foo]
+          if (reallyReallyReallyLongVariableToCauseTheLineLenghtLimitToBeDefinitelyExceeded) {
+          }
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              [Foo]
+              if (
+                  reallyReallyReallyLongVariableToCauseTheLineLenghtLimitToBeDefinitelyExceeded
+              )
+              { }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });
