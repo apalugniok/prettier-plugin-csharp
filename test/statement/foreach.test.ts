@@ -1,13 +1,13 @@
 ﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
-describe('For Statement', () => {
-  it('should format a for statement with a declaration', () => {
+describe('ForEach Statement', () => {
+  it('should format a foreach statement', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant()
         {
-          for (int i = 1; i < 0; i++){
-          j++;
+          foreach (int i in List){
+          i++;
           }
         }
       }
@@ -17,9 +17,9 @@ describe('For Statement', () => {
       {
           void Irrelevant()
           {
-              for (int i = 1; i < 0; i++)
+              foreach (int i in List)
               {
-                  j++;
+                  i++;
               }
           }
       }
@@ -30,13 +30,13 @@ describe('For Statement', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an empty for statement', () => {
+  it('should format an await foreach statement', () => {
     const input = code`
       class Irrelevant {
-        void Irrelevant()
+        async Task Irrelevant()
         {
-          for (int i = 1; i < 0; i++){
-          
+          await foreach (int i in List){
+          i++;
           }
         }
       }
@@ -44,37 +44,11 @@ describe('For Statement', () => {
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          void Irrelevant()
+          async Task Irrelevant()
           {
-              for (int i = 1; i < 0; i++)
-              { }
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should wrap a single statement for loop in a block', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant()
-        {
-          for (int i =1; i < 0; i++)
-          j++;
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              for (int i = 1; i < 0; i++)
+              await foreach (int i in List)
               {
-                  j++;
+                  i++;
               }
           }
       }
@@ -85,13 +59,13 @@ describe('For Statement', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should use new line when the declaration is too long', () => {
+  it('should wrap a single statement foreach loop in a block', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant()
         {
-          for (int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++)
-          j++;
+          foreach (int i in List)
+          i++;
         }
       }
     `;
@@ -100,75 +74,9 @@ describe('For Statement', () => {
       {
           void Irrelevant()
           {
-              for (
-                  int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++
-              )
+              foreach (int i in List)
               {
-                  j++;
-              }
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should format a for statement with initializers', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant()
-        {
-        int i;
-        int j = 0;
-          for (i = 0, Console.WriteLine(); i < j; i++, j--){
-          j++;
-          }
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              int i;
-              int j = 0;
-              for (i = 0, Console.WriteLine(); i < j; i++, j--)
-              {
-                  j++;
-              }
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should format a for statement without a condition', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant()
-        {
-          for (int i = 1;; i++){
-          j++;
-          }
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              for (int i = 1;; i++)
-              {
-                  j++;
+                  i++;
               }
           }
       }
@@ -185,10 +93,9 @@ describe('For Statement', () => {
         void Irrelevant() {
         [Foo, Bar]
               [Baz]
-          for (int i; i < 0; i++)
-            {
-              j++;
-            }
+          foreach (int i in List){
+          i++;
+          }
         }
       }
     `;
@@ -199,9 +106,129 @@ describe('For Statement', () => {
           {
               [Foo, Bar]
               [Baz]
-              for (int i; i < 0; i++)
+              foreach (int i in List)
               {
-                  j++;
+                  i++;
+              }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+});
+
+describe('ForEach Variable Statement', () => {
+  it('should format a foreach variable statement', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant()
+        {
+          foreach (var i in List){
+          i++;
+          }
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              foreach (var i in List)
+              {
+                  i++;
+              }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an await foreach variable statement', () => {
+    const input = code`
+      class Irrelevant {
+        async Task Irrelevant()
+        {
+          await foreach (var i in List){
+          i++;
+          }
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          async Task Irrelevant()
+          {
+              await foreach (var i in List)
+              {
+                  i++;
+              }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should wrap a single statement foreach variable loop in a block', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant()
+        {
+          foreach (var i in List)
+          i++;
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              foreach (var i in List)
+              {
+                  i++;
+              }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format attributes', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+        [Foo, Bar]
+              [Baz]
+          foreach (var i in List){
+          i++;
+          }
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              [Foo, Bar]
+              [Baz]
+              foreach (var i in List)
+              {
+                  i++;
               }
           }
       }

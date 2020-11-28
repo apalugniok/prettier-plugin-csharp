@@ -158,7 +158,13 @@ export type StatementNodeType =
   | 'YieldStatement'
   | 'WhileStatement'
   | 'DoStatement'
-  | 'ForStatement';
+  | 'ForStatement'
+  | 'ForEachStatement'
+  | 'ForEachVariableStatement'
+  | 'UsingStatement'
+  | 'FixedStatement'
+  | 'EmptyStatement'
+  | 'CheckedStatement';
 
 export const nameNodeTypes = [
   'AliasQualifiedName',

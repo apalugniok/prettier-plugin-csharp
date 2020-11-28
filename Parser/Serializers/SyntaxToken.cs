@@ -19,6 +19,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers
         {
             writer.WriteStartObject();
 
+            writer.WriteString("nodeType", "Token");
             writer.WriteString("text", value.Text);
 
             writer.WriteSerializedValueOrNull(

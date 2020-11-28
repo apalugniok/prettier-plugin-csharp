@@ -222,8 +222,19 @@ import { yieldStatementPrinter } from './syntax/statement/yield';
 import { whileStatementPrinter } from './syntax/statement/while';
 import { doStatementPrinter } from './syntax/statement/do';
 import { forStatementPrinter } from './syntax/statement/for';
+import { SyntaxToken, tokenPrinter } from './syntax/syntaxToken';
+import {
+  forEachStatementPrinter,
+  forEachVariableStatementPrinter,
+} from './syntax/statement/foreach';
+import { usingStatementPrinter } from './syntax/statement/using';
+import { fixedStatementPrinter } from './syntax/statement/fixed';
+import { emptyStatementPrinter } from './syntax/statement/empty';
+import { checkedStatementPrinter } from './syntax/statement/checked';
 
-const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
+const printersByType: {
+  [key in SyntaxNodeType | 'Token']: Printer['print'];
+} = {
   CompilationUnit: compilationUnitPrinter,
   UsingDirective: usingDirectivePrinter,
   NameEquals: nameEqualsPrinter,
@@ -387,15 +398,21 @@ const printersByType: { [key in SyntaxNodeType]: Printer['print'] } = {
   WhileStatement: whileStatementPrinter,
   DoStatement: doStatementPrinter,
   ForStatement: forStatementPrinter,
+  Token: tokenPrinter,
+  ForEachStatement: forEachStatementPrinter,
+  ForEachVariableStatement: forEachVariableStatementPrinter,
+  UsingStatement: usingStatementPrinter,
+  FixedStatement: fixedStatementPrinter,
+  EmptyStatement: emptyStatementPrinter,
+  CheckedStatement: checkedStatementPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
-  const node: SyntaxNode | null = path.getValue();
+  const node: SyntaxNode | SyntaxToken | null = path.getValue();
 
   if (node == null) {
     return '';
   }
-  console.log(node.nodeType);
 
   return printersByType[node.nodeType](path, options, print);
 };

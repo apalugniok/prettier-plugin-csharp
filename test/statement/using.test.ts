@@ -1,13 +1,13 @@
 ﻿import { code, formatCSharpWithPrettier } from '../helpers/testHelpers';
 
-describe('For Statement', () => {
-  it('should format a for statement with a declaration', () => {
+describe('Using Statement', () => {
+  it('should format a using statement with a variable declaration', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant()
         {
-          for (int i = 1; i < 0; i++){
-          j++;
+          using (var reader = new StreamReader(stream)) {
+            reader.ReadToEnd();
           }
         }
       }
@@ -17,64 +17,9 @@ describe('For Statement', () => {
       {
           void Irrelevant()
           {
-              for (int i = 1; i < 0; i++)
+              using (var reader = new StreamReader(stream))
               {
-                  j++;
-              }
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should format an empty for statement', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant()
-        {
-          for (int i = 1; i < 0; i++){
-          
-          }
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              for (int i = 1; i < 0; i++)
-              { }
-          }
-      }
-    `;
-
-    const actualFormattedCode = formatCSharpWithPrettier(input);
-
-    expect(actualFormattedCode).toEqual(expectedFormattedCode);
-  });
-
-  it('should wrap a single statement for loop in a block', () => {
-    const input = code`
-      class Irrelevant {
-        void Irrelevant()
-        {
-          for (int i =1; i < 0; i++)
-          j++;
-        }
-      }
-    `;
-    const expectedFormattedCode = code`
-      class Irrelevant
-      {
-          void Irrelevant()
-          {
-              for (int i = 1; i < 0; i++)
-              {
-                  j++;
+                  reader.ReadToEnd();
               }
           }
       }
@@ -90,8 +35,9 @@ describe('For Statement', () => {
       class Irrelevant {
         void Irrelevant()
         {
-          for (int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++)
-          j++;
+          using (var reallyLongLongLongLongLongVariable = new StreamReader(stream)) {
+            reader.ReadToEnd();
+          }
         }
       }
     `;
@@ -100,13 +46,11 @@ describe('For Statement', () => {
       {
           void Irrelevant()
           {
-              for (
-                  int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++
+              using (
+                  var reallyLongLongLongLongLongVariable = new StreamReader(stream)
               )
               {
-                  j++;
+                  reader.ReadToEnd();
               }
           }
       }
@@ -117,15 +61,13 @@ describe('For Statement', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a for statement with initializers', () => {
+  it('should format an await using statement with a variable declaration', () => {
     const input = code`
       class Irrelevant {
-        void Irrelevant()
+        async Task Irrelevant()
         {
-        int i;
-        int j = 0;
-          for (i = 0, Console.WriteLine(); i < j; i++, j--){
-          j++;
+          await using (var reader = new StreamReader(stream)) {
+            reader.ReadToEnd();
           }
         }
       }
@@ -133,13 +75,11 @@ describe('For Statement', () => {
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          void Irrelevant()
+          async Task Irrelevant()
           {
-              int i;
-              int j = 0;
-              for (i = 0, Console.WriteLine(); i < j; i++, j--)
+              await using (var reader = new StreamReader(stream))
               {
-                  j++;
+                  reader.ReadToEnd();
               }
           }
       }
@@ -150,13 +90,41 @@ describe('For Statement', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format a for statement without a condition', () => {
+  it('should format a single statement using statement in a block', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant()
         {
-          for (int i = 1;; i++){
-          j++;
+          using (var reader = new StreamReader(stream)) 
+            reader.ReadToEnd();
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              using (var reader = new StreamReader(stream))
+              {
+                  reader.ReadToEnd();
+              }
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format a using statement with an expression', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant()
+        {
+          var reader = new StringReader(manyLines);
+          using (reader) {
           }
         }
       }
@@ -166,10 +134,9 @@ describe('For Statement', () => {
       {
           void Irrelevant()
           {
-              for (int i = 1;; i++)
-              {
-                  j++;
-              }
+              var reader = new StringReader(manyLines);
+              using (reader)
+              { }
           }
       }
     `;
@@ -185,10 +152,9 @@ describe('For Statement', () => {
         void Irrelevant() {
         [Foo, Bar]
               [Baz]
-          for (int i; i < 0; i++)
-            {
-              j++;
-            }
+          using (var reader = new StreamReader(stream))
+          {reader.ReadToEnd();
+          }
         }
       }
     `;
@@ -199,9 +165,9 @@ describe('For Statement', () => {
           {
               [Foo, Bar]
               [Baz]
-              for (int i; i < 0; i++)
+              using (var reader = new StreamReader(stream))
               {
-                  j++;
+                  reader.ReadToEnd();
               }
           }
       }
