@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 
 namespace PrettierCSharpPlugin.Parser.Utils
 {
     public static class Utf8JsonWriterExtensions
     {
-        public static void WriteSerializedValueOrNull<T>(
+        public static void WriteSerializedValueOrNull(
             this Utf8JsonWriter writer,
             string propertyName,
-            T value,
+            object value,
             JsonSerializerOptions options
         )
         {
@@ -23,22 +22,23 @@ namespace PrettierCSharpPlugin.Parser.Utils
             }
         }
 
-        private static void WriteSerializedValue<T>(
+        private static void WriteSerializedValue(
             this Utf8JsonWriter writer,
             string propertyName,
-            T value,
+            object value,
             JsonSerializerOptions options
         )
         {
             writer.WritePropertyName(propertyName);
 
-            if (typeof(IEnumerable<dynamic>).IsAssignableFrom(typeof(T)))
+            switch (value)
             {
-                JsonSerializer.Serialize(writer, (IEnumerable<dynamic>) value, options);
-            }
-            else
-            {
-                JsonSerializer.Serialize(writer, (dynamic) value, options);
+                case IEnumerable<dynamic> enumerable:
+                    JsonSerializer.Serialize(writer, enumerable, options);
+                    break;
+                default:
+                    JsonSerializer.Serialize(writer, value, options);
+                    break;
             }
         }
     }
