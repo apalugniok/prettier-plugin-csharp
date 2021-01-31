@@ -13,7 +13,11 @@ export type CompilationUnitNode = {
   usings: Array<UsingDirectiveNode>;
 } & SyntaxNode;
 
-export const compilationUnitPrinter: Printer['print'] = (path, _, print) => {
+export const compilationUnitPrinter: Printer<CompilationUnitNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const node: CompilationUnitNode = path.getValue();
 
   const usings =

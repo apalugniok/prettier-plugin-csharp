@@ -60,10 +60,7 @@ describe('Anonymous Function Expression', () => {
       {
           void Irrelevant()
           {
-              var foo = async delegate ()
-              {
-                  Console.WriteLine("foo");
-              };
+              var foo = async delegate () { Console.WriteLine("foo"); };
           }
       }
     `;
@@ -132,9 +129,7 @@ describe('Anonymous Function Expression', () => {
       {
           void Irrelevant()
           {
-              foo => {
-                  Console.WriteLine(foo);
-              };
+              foo => { Console.WriteLine(foo); };
           }
       }
     `;
@@ -203,9 +198,7 @@ describe('Anonymous Function Expression', () => {
       {
           void Irrelevant()
           {
-              (foo) => {
-                  Console.WriteLine(foo);
-              };
+              (foo) => { Console.WriteLine(foo); };
           }
       }
     `;

@@ -19,6 +19,24 @@ describe('Enum Declaration', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
+  it('should format an enum declaration with modifiers', () => {
+    const input = code`
+      public enum Foo {
+        Bar
+      }
+    `;
+    const expectedFormattedCode = code`
+      public enum Foo
+      {
+          Bar,
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
   it('should format an enum declaration with multiple members', () => {
     const input = code`
       enum Foo {

@@ -19,7 +19,7 @@ export const labeledStatementPrinter: Printer['print'] = (path, _, print) => {
 
   return concat([
     printAttributeLists(path, print),
-    identifier.text,
+    path.call(print, 'identifier'),
     ':',
     indent(concat([hardline, path.call(print, 'statement')])),
   ]);

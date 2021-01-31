@@ -181,4 +181,22 @@ describe('Attribute List', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should format attributes with comments', () => {
+    const input = code`
+      ///DOCS
+      [Bar/*foo*/]//barbar
+      class Irrelevant {}
+    `;
+    const expectedFormattedCode = code`
+      [Bar /* foo */ ] // barbar
+      class Irrelevant
+      {
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

@@ -10,7 +10,7 @@ import { SyntaxToken } from '../syntaxToken';
 import { AttributeListNode } from './attribute';
 
 export type NamespaceDeclarationNode = {
-  attributeLists: Array<AttributeListNode>; // Even though NamespaceDeclarationSyntax has this property attributes cannot be applies to namespaces
+  attributeLists: Array<AttributeListNode>; // Even though NamespaceDeclarationSyntax has this property attributes cannot be applied to namespaces
   closeBraceToken: SyntaxToken;
   externs: Array<ExternAliasDirectiveNode>;
   members: Array<DeclarationNode>;
@@ -22,7 +22,7 @@ export type NamespaceDeclarationNode = {
   usings: Array<UsingDirectiveNode>;
 } & SyntaxNode;
 
-export const namespaceDeclarationPrinter: Printer['print'] = (
+export const namespaceDeclarationPrinter: Printer<NamespaceDeclarationNode>['print'] = (
   path,
   _,
   print
@@ -48,13 +48,13 @@ export const namespaceDeclarationPrinter: Printer['print'] = (
   }
 
   return concat([
-    'namespace',
+    path.call(print, 'namespaceKeyword'),
     ' ',
     path.call(print, 'name'),
     hardline,
-    '{',
+    path.call(print, 'openBraceToken'),
     indent(concat(body)),
     hardline,
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };

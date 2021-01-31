@@ -30,22 +30,24 @@ export type StructDeclarationNode = {
   typeParameterList: TypeParameterListNode | null;
 } & SyntaxNode;
 
-export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
+export const structDeclarationPrinter: Printer<StructDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const {
     baseList,
     constraintClauses,
     members,
-    modifiers,
-    identifier,
     typeParameterList,
-  }: StructDeclarationNode = path.getValue();
+  } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    'struct',
+    printModifiers(path, print),
+    path.call(print, 'keyword'),
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     typeParameterList != null ? path.call(print, 'typeParameterList') : '',
     baseList != null ? path.call(print, 'baseList') : '',
     constraintClauses.length !== 0
@@ -56,11 +58,11 @@ export const structDeclarationPrinter: Printer['print'] = (path, _, print) => {
         )
       : '',
     hardline,
-    '{',
+    path.call(print, 'openBraceToken'),
     members.length !== 0
       ? indent(concat([hardline, join(hardline, path.map(print, 'members'))]))
       : '',
     hardline,
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };

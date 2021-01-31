@@ -6,5 +6,8 @@ export type DiscardPatternNode = {
   underscoreToken: SyntaxToken;
 } & SyntaxNode;
 
-export const discardPatternPrinter: Printer['print'] = (path) =>
-  (path.getValue() as DiscardPatternNode).underscoreToken.text;
+export const discardPatternPrinter: Printer<DiscardPatternNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'underscoreToken');

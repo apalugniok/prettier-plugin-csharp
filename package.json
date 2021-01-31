@@ -10,11 +10,12 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
+    "start": "dotnet publish -c Release && tsdx watch",
+    "build": "tsdx build --target node",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build",
+    "postinstall": "patch-package"
   },
   "peerDependencies": {},
   "husky": {
@@ -29,14 +30,15 @@
     "trailingComma": "es5"
   },
   "name": "prettier-csharp-plugin",
-  "author": "ap      alugniok",
+  "author": "apalugniok",
   "module": "dist/prettier-csharp-plugin.esm.js",
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
-    "@types/prettier": "^2.0.1",
+    "@types/prettier": "^2.1.6",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
+    "patch-package": "^6.2.2",
     "pretty-quick": "^2.0.1",
     "ts-jest": "^26.1.0",
     "tsdx": "^0.14.1",
@@ -44,6 +46,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.2.1"
   }
 }

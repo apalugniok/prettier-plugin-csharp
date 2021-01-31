@@ -72,7 +72,12 @@ export const catchDeclarationPrinter: Printer['print'] = (path, _, print) => {
     concat([
       '(',
       indent(
-        concat([softline, path.call(print, 'type'), ' ', identifier.text])
+        concat([
+          softline,
+          path.call(print, 'type'),
+          ' ',
+          path.call(print, 'identifier'),
+        ])
       ),
       softline,
       ')',

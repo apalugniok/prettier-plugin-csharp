@@ -31,15 +31,15 @@ export type GenericNameNode = {
 export const genericNamePrinter: Printer['print'] = (path, _, print) => {
   const { identifier }: GenericNameNode = path.getValue();
 
-  return concat([identifier.text, path.call(print, 'typeArgumentList')]);
+  return concat([
+    path.call(print, 'identifier'),
+    path.call(print, 'typeArgumentList'),
+  ]);
 };
 
 export type IdentifierNameNode = {
   identifier: SyntaxToken;
 } & NameNode;
 
-export const identifierNamePrinter: Printer['print'] = (path) => {
-  const { identifier }: IdentifierNameNode = path.getValue();
-
-  return identifier.text;
-};
+export const identifierNamePrinter: Printer['print'] = (path, _, print) =>
+  path.call(print, 'identifier');

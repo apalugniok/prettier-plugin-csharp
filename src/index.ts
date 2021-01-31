@@ -8,12 +8,12 @@ export const languages: Array<SupportLanguage> = [
   {
     extensions: ['.cs'],
     name: 'C#',
-    parsers: ['csharp'],
+    parsers: ['roslyn-csharp'],
   },
 ];
 
 export const parsers: { [key in string]: Parser } = {
-  csharp: {
+  'roslyn-csharp': {
     parse,
     astFormat: 'roslyn-csharp',
     locStart: (node: SyntaxNode) => node.start,

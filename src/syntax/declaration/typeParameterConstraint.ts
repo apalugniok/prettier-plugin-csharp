@@ -15,18 +15,18 @@ export type TypeParameterConstraintClauseNode = {
   whereKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const typeParameterConstraintClausePrinter: Printer['print'] = (
+export const typeParameterConstraintClausePrinter: Printer<TypeParameterConstraintClauseNode>['print'] = (
   path,
   _,
   print
 ) => {
   return group(
     concat([
-      'where',
+      path.call(print, 'whereKeyword'),
       ' ',
       path.call(print, 'name'),
       ' ',
-      ':',
+      path.call(print, 'colonToken'),
       indent(
         concat([
           line,
@@ -48,25 +48,38 @@ export type ConstructorConstraintNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const constructorConstraintPrinter: Printer['print'] = (path) => 'new()';
+export const constructorConstraintPrinter: Printer<ConstructorConstraintNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'newKeyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'closeParenToken'),
+  ]);
 
 export type ClassOrStructConstraintNode = {
   classOrStructKeyword: SyntaxToken;
   questionToken: SyntaxToken;
 } & SyntaxNode;
 
-export const classOrStructConstraintPrinter: Printer['print'] = (path) => {
-  const {
-    classOrStructKeyword,
-    questionToken,
-  }: ClassOrStructConstraintNode = path.getValue();
-
-  return `${classOrStructKeyword.text}${questionToken.text}`;
-};
+export const classOrStructConstraintPrinter: Printer<ClassOrStructConstraintNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'classOrStructKeyword'),
+    path.call(print, 'questionToken'),
+  ]);
 
 export type TypeConstraintNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const typeConstraintPrinter: Printer['print'] = (path, _, print) =>
-  path.call(print, 'type');
+export const typeConstraintPrinter: Printer<TypeConstraintNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'type');

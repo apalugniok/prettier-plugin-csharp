@@ -35,7 +35,7 @@ export const localDeclarationStatementPrinter: Printer['print'] = (
     printAttributeLists(path, print),
     group(
       concat([
-        printModifiers(modifiers),
+        printModifiers(path, print),
         usingKeyword.text === '' ? '' : `${usingKeyword.text} `,
         awaitKeyword.text === '' ? '' : `${awaitKeyword.text} `,
         path.call(print, 'declaration'),

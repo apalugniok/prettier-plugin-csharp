@@ -17,10 +17,14 @@ export type ParameterListNode = {
   parameters: Array<ParameterNode>;
 } & SyntaxNode;
 
-export const parameterListPrinter: Printer['print'] = (path, _, print) => {
+export const parameterListPrinter: Printer<ParameterListNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   return group(
     concat([
-      '(',
+      path.call(print, 'openParenToken'),
       indent(
         concat([
           softline,
@@ -28,7 +32,7 @@ export const parameterListPrinter: Printer['print'] = (path, _, print) => {
         ])
       ),
       softline,
-      ')',
+      path.call(print, 'closeParenToken'),
     ])
   );
 };
@@ -39,14 +43,14 @@ export type BracketedParameterListNode = {
   openBracketToken: SyntaxToken;
 } & SyntaxNode;
 
-export const bracketedParameterListPrinter: Printer['print'] = (
+export const bracketedParameterListPrinter: Printer<BracketedParameterListNode>['print'] = (
   path,
   _,
   print
 ) => {
   return group(
     concat([
-      '[',
+      path.call(print, 'openBracketToken'),
       indent(
         concat([
           softline,
@@ -54,7 +58,7 @@ export const bracketedParameterListPrinter: Printer['print'] = (
         ])
       ),
       softline,
-      ']',
+      path.call(print, 'closeBracketToken'),
     ])
   );
 };
@@ -65,8 +69,16 @@ export type TypeParameterListNode = {
   parameters: Array<TypeParameterNode>;
 } & SyntaxNode;
 
-export const typeParameterListPrinter: Printer['print'] = (path, _, print) =>
-  concat(['<', join(', ', path.map(print, 'parameters')), '>']);
+export const typeParameterListPrinter: Printer<TypeParameterListNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'lessThanToken'),
+    join(', ', path.map(print, 'parameters')),
+    path.call(print, 'greaterThanToken'),
+  ]);
 
 export type ParameterNode = {
   attributeLists: Array<AttributeListNode>;
@@ -76,19 +88,18 @@ export type ParameterNode = {
   type: TypeNode | null;
 } & SyntaxNode;
 
-export const parameterPrinter: Printer['print'] = (path, _, print) => {
-  const {
-    default: defaultValue,
-    modifiers,
-    identifier,
-    type,
-  }: ParameterNode = path.getValue();
+export const parameterPrinter: Printer<ParameterNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { default: defaultValue, type } = path.getValue();
 
   return concat([
     join(' ', [...path.map(print, 'attributeLists'), '']),
-    printModifiers(modifiers),
+    printModifiers(path, print),
     type != null ? concat([path.call(print, 'type'), ' ']) : '',
-    identifier.text,
+    path.call(print, 'identifier'),
     defaultValue != null ? concat([' ', path.call(print, 'default')]) : '',
   ]);
 };
@@ -99,12 +110,16 @@ export type TypeParameterNode = {
   varianceKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const typeParameterPrinter: Printer['print'] = (path, _, print) => {
-  const { identifier, varianceKeyword }: TypeParameterNode = path.getValue();
+export const typeParameterPrinter: Printer<TypeParameterNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { varianceKeyword }: TypeParameterNode = path.getValue();
   return concat([
     join(' ', [...path.map(print, 'attributeLists'), '']),
-    varianceKeyword.text,
+    path.call(print, 'varianceKeyword'),
     varianceKeyword.text !== '' ? ' ' : '',
-    identifier.text,
+    path.call(print, 'identifier'),
   ]);
 };

@@ -8,16 +8,21 @@ export type SingleVariableDesignationNode = {
   identifier: SyntaxToken;
 } & SyntaxNode;
 
-export const singleVariableDesignationPrinter: Printer['print'] = (
-  path: FastPath<SingleVariableDesignationNode>
-) => path.getValue().identifier.text;
+export const singleVariableDesignationPrinter: Printer<SingleVariableDesignationNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'identifier');
 
 export type DiscardDesignationNode = {
   underscoreToken: SyntaxToken;
 } & SyntaxNode;
 
-export const discardDesignationPrinter: Printer['print'] = (path) =>
-  (path.getValue() as DiscardDesignationNode).underscoreToken.text;
+export const discardDesignationPrinter: Printer<DiscardDesignationNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'underscoreToken');
 
 export type ParenthesizedVariableDesignationNode = {
   closeParenToken: SyntaxToken;
@@ -29,10 +34,14 @@ export type ParenthesizedVariableDesignationNode = {
   >;
 } & SyntaxNode;
 
-export const parenthesizedVariableDesignationPrinter: Printer['print'] = (
+export const parenthesizedVariableDesignationPrinter: Printer<ParenthesizedVariableDesignationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  return concat(['(', join(', ', path.map(print, 'variables')), ')']);
+  return concat([
+    path.call(print, 'openParenToken'),
+    join(', ', path.map(print, 'variables')),
+    path.call(print, 'closeParenToken'),
+  ]);
 };

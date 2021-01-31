@@ -27,24 +27,21 @@ export type DelegateDeclarationNode = {
   typeParameterList: TypeParameterListNode;
 };
 
-export const delegateDeclarationPrinter: Printer['print'] = (
+export const delegateDeclarationPrinter: Printer<DelegateDeclarationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    constraintClauses,
-    identifier,
-    modifiers,
-  }: DelegateDeclarationNode = path.getValue();
+  const { constraintClauses } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    'delegate ',
+    printModifiers(path, print),
+    path.call(print, 'delegateKeyword'),
+    ' ',
     path.call(print, 'returnType'),
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     path.call(print, 'typeParameterList'),
     path.call(print, 'parameterList'),
     constraintClauses.length !== 0
@@ -54,6 +51,6 @@ export const delegateDeclarationPrinter: Printer['print'] = (
           )
         )
       : '',
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

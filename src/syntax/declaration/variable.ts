@@ -15,7 +15,7 @@ export type VariableDeclarationNode = {
   variables: Array<VariableDeclaratorNode>;
 } & DeclarationNode;
 
-export const variableDeclarationPrinter: Printer['print'] = (
+export const variableDeclarationPrinter: Printer<VariableDeclarationNode>['print'] = (
   path,
   _,
   print
@@ -33,15 +33,15 @@ export type VariableDeclaratorNode = {
   argumentList: BracketedArgumentListNode | null;
 } & SyntaxNode;
 
-export const variableDeclaratorPrinter: Printer['print'] = (path, _, print) => {
-  const {
-    argumentList,
-    identifier,
-    initializer,
-  }: VariableDeclaratorNode = path.getValue();
+export const variableDeclaratorPrinter: Printer<VariableDeclaratorNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { argumentList, initializer } = path.getValue();
 
   return concat([
-    identifier.text,
+    path.call(print, 'identifier'),
     argumentList != null ? path.call(print, 'argumentList') : '',
     initializer != null ? concat([' ', path.call(print, 'initializer')]) : '',
   ]);
@@ -52,5 +52,8 @@ export type EqualsValueClauseNode = {
   value: ExpressionNode;
 } & SyntaxNode;
 
-export const equalsValueClausePrinter: Printer['print'] = (path, _, print) =>
-  concat(['=', ' ', path.call(print, 'value')]);
+export const equalsValueClausePrinter: Printer<EqualsValueClauseNode>['print'] = (
+  path,
+  _,
+  print
+) => concat([path.call(print, 'equalsToken'), ' ', path.call(print, 'value')]);

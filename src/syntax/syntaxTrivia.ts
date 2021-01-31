@@ -1,39 +1,49 @@
-﻿import { doc } from 'prettier';
-import hardline = doc.builders.hardline;
-import Doc = doc.builders.Doc;
-
-export type SyntaxTrivia = {
-  nodeType: SyntaxTriviaType;
+﻿export type SyntaxTrivia = {
+  triviaType: SyntaxTriviaType;
+  start: number;
+  end: number;
   text: string;
 };
 
 export type SyntaxTriviaType =
-  | 'SingleLineCommentTrivia'
-  | 'MultiLineCommentTrivia'
-  | 'EndOfLineTrivia'; // todo add doc comments
+  | CommentTriviaType
+  | 'EndOfLine'
+  | 'Whitespace'
+  | 'DocumentationCommentExterior'
+  | 'DisabledText'
+  | 'PreprocessingMessage'
+  | 'IfDirective'
+  | 'ElifDirective'
+  | 'ElseDirective'
+  | 'EndIfDirective'
+  | 'RegionDirective'
+  | 'EndRegionDirective'
+  | 'DefineDirective'
+  | 'UndefDirective'
+  | 'ErrorDirective'
+  | 'WarningDirective'
+  | 'LineDirective'
+  | 'PragmaWarningDirective'
+  | 'PragmaChecksumDirective'
+  | 'ReferenceDirective'
+  | 'BadDirective'
+  | 'SkippedTokens'
+  | 'ConflictMarker'
+  | 'ShebangDirective'
+  | 'LoadDirective'
+  | 'NullableDirective';
 
-type SyntaxTriviaPrinter = (node: SyntaxTrivia) => Doc;
+export const commentTriviaTypes = [
+  'SingleLineComment',
+  'MultiLineComment',
+  'SingleLineDocumentationComment',
+  'MultiLineDocumentationComment',
+] as const;
 
-const commentTriviaPrinter: SyntaxTriviaPrinter = (node) => node.text;
+export type CommentTriviaType = typeof commentTriviaTypes[number];
 
-const endOfLineTriviaPrinter: SyntaxTriviaPrinter = () => hardline;
+export type CommentTrivia = SyntaxTrivia & { triviaType: CommentTriviaType };
 
-const triviaPrintersByType: {
-  [key in SyntaxTriviaType]: SyntaxTriviaPrinter;
-} = {
-  SingleLineCommentTrivia: commentTriviaPrinter,
-  MultiLineCommentTrivia: commentTriviaPrinter,
-  EndOfLineTrivia: endOfLineTriviaPrinter,
-};
-
-export const printTrivia: SyntaxTriviaPrinter = (node: SyntaxTrivia) =>
-  triviaPrintersByType[node.nodeType](node);
-
-export const printCommentOnlyTrivia = (nodes: Array<SyntaxTrivia>) =>
-  nodes
-    .filter((node) =>
-      ['SingleLineCommentTrivia', 'MultiLineCommentTrivia'].includes(
-        node.nodeType
-      )
-    )
-    .map(printTrivia);
+export const isComment = (trivia: SyntaxTrivia): trivia is CommentTrivia =>
+  // @ts-ignore
+  commentTriviaTypes.includes(trivia.triviaType);

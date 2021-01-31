@@ -16,5 +16,13 @@ export type VarPatternNode = {
     | ParenthesizedVariableDesignationNode;
 } & SyntaxNode;
 
-export const varPatternPrinter: Printer['print'] = (path, _, print) =>
-  concat(['var', ' ', path.call(print, 'designation')]);
+export const varPatternPrinter: Printer<VarPatternNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'varKeyword'),
+    ' ',
+    path.call(print, 'designation'),
+  ]);

@@ -17,14 +17,18 @@ export type AttributeListNode = {
   target: AttributeTargetSpecifierNode | null;
 } & SyntaxNode;
 
-export const attributeListPrinter: Printer['print'] = (path, _, print) => {
-  const { target }: AttributeListNode = path.getValue();
+export const attributeListPrinter: Printer<AttributeListNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { target } = path.getValue();
 
   return concat([
-    '[',
+    path.call(print, 'openBracketToken'),
     target != null ? concat([path.call(print, 'target'), ' ']) : '',
     join(', ', path.map(print, 'attributes')),
-    ']',
+    path.call(print, 'closeBracketToken'),
   ]);
 };
 
@@ -33,23 +37,27 @@ export type AttributeTargetSpecifierNode = {
   identifier: SyntaxToken;
 } & SyntaxNode;
 
-export const attributeTargetSpecifierPrinter: Printer['print'] = (path) => {
-  const { identifier }: AttributeTargetSpecifierNode = path.getValue();
-
-  return `${identifier.text}:`;
-};
+export const attributeTargetSpecifierPrinter: Printer<AttributeTargetSpecifierNode>['print'] = (
+  path,
+  _,
+  print
+) => concat([path.call(print, 'identifier'), path.call(print, 'colonToken')]);
 
 export type AttributeNode = {
   name: NameNode;
   argumentList: AttributeArgumentListNode | null;
 } & SyntaxNode;
 
-export const attributePrinter: Printer['print'] = (path, _, print) => {
-  const node: AttributeNode = path.getValue();
+export const attributePrinter: Printer<AttributeNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { argumentList } = path.getValue();
 
   return concat([
     path.call(print, 'name'),
-    node.argumentList != null ? path.call(print, 'argumentList') : '',
+    argumentList != null ? path.call(print, 'argumentList') : '',
   ]);
 };
 
@@ -59,14 +67,14 @@ export type AttributeArgumentListNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const attributeArgumentListPrinter: Printer['print'] = (
+export const attributeArgumentListPrinter: Printer<AttributeArgumentListNode>['print'] = (
   path,
   _,
   print
 ) =>
   group(
     concat([
-      '(',
+      path.call(print, 'openParenToken'),
       indent(
         concat([
           softline,
@@ -74,7 +82,7 @@ export const attributeArgumentListPrinter: Printer['print'] = (
         ])
       ),
       softline,
-      ')',
+      path.call(print, 'closeParenToken'),
     ])
   );
 
@@ -84,7 +92,11 @@ export type AttributeArgumentNode = {
   expression: ExpressionNode;
 } & SyntaxNode;
 
-export const attributeArgumentPrinter: Printer['print'] = (path, _, print) =>
+export const attributeArgumentPrinter: Printer<AttributeArgumentNode>['print'] = (
+  path,
+  _,
+  print
+) =>
   concat([
     path.call(print, 'nameColon'),
     path.call(print, 'nameEquals'),

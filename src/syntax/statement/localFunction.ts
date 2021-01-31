@@ -33,7 +33,7 @@ export type LocalFunctionStatementNode = {
   typeParameterList: TypeParameterListNode;
 } & SyntaxNode;
 
-export const localFunctionStatementPrinter: Printer['print'] = (
+export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>['print'] = (
   path,
   _,
   print
@@ -42,16 +42,14 @@ export const localFunctionStatementPrinter: Printer['print'] = (
     constraintClauses,
     body,
     expressionBody,
-    identifier,
-    modifiers,
   }: LocalFunctionStatementNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
+    printModifiers(path, print),
     path.call(print, 'returnType'),
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     path.call(print, 'typeParameterList'),
     path.call(print, 'parameterList'),
     constraintClauses.length !== 0
@@ -61,7 +59,7 @@ export const localFunctionStatementPrinter: Printer['print'] = (
           )
         )
       : '',
-    printMethodBody(path, print, body, expressionBody),
+    printMethodBody(path, print),
     body == null && expressionBody == null ? ';' : '',
   ]);
 };

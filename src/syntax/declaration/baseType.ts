@@ -12,10 +12,15 @@ export type BaseListNode = {
   types: TypeNode;
 } & SyntaxNode;
 
-export const baseListPrinter: Printer['print'] = (path, _, print) => {
+export const baseListPrinter: Printer<BaseListNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   return group(
     concat([
-      ' :',
+      ' ',
+      path.call(print, 'colonToken'),
       indent(
         concat([line, join(concat([',', line]), path.map(print, 'types'))])
       ),
@@ -27,5 +32,8 @@ export type SimpleBaseTypeNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const simpleBaseTypePrinter: Printer['print'] = (path, _, print) =>
-  path.call(print, 'type');
+export const simpleBaseTypePrinter: Printer<SimpleBaseTypeNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'type');

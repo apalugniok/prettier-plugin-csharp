@@ -34,22 +34,24 @@ export type MethodDeclarationNode = {
   typeParameterList: TypeParameterListNode;
 } & DeclarationNode;
 
-export const methodDeclarationPrinter: Printer['print'] = (path, _, print) => {
+export const methodDeclarationPrinter: Printer<MethodDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const {
     constraintClauses,
     body,
     expressionBody,
-    identifier,
-    modifiers,
   }: MethodDeclarationNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
+    printModifiers(path, print),
     path.call(print, 'returnType'),
     ' ',
     path.call(print, 'explicitInterfaceSpecifier'),
-    identifier.text,
+    path.call(print, 'identifier'),
     path.call(print, 'typeParameterList'),
     path.call(print, 'parameterList'),
     constraintClauses.length !== 0
@@ -59,8 +61,10 @@ export const methodDeclarationPrinter: Printer['print'] = (path, _, print) => {
           )
         )
       : '',
-    printMethodBody(path, print, body, expressionBody),
-    body == null && expressionBody == null ? ';' : '',
+    printMethodBody(path, print),
+    body == null && expressionBody == null
+      ? path.call(print, 'semicolonToken')
+      : '',
   ]);
 };
 
@@ -75,26 +79,20 @@ export type ConstructorDeclarationNode = {
   semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
-export const constructorDeclarationPrinter: Printer['print'] = (
+export const constructorDeclarationPrinter: Printer<ConstructorDeclarationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    body,
-    expressionBody,
-    identifier,
-    initializer,
-    modifiers,
-  }: ConstructorDeclarationNode = path.getValue();
+  const { initializer }: ConstructorDeclarationNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    identifier.text,
+    printModifiers(path, print),
+    path.call(print, 'identifier'),
     path.call(print, 'parameterList'),
     initializer != null ? concat([' ', path.call(print, 'initializer')]) : '',
-    printMethodBody(path, print, body, expressionBody),
+    printMethodBody(path, print),
   ]);
 };
 
@@ -109,27 +107,19 @@ export type DestructorDeclarationNode = {
   tildeToken: SyntaxToken;
 } & DeclarationNode;
 
-export const destructorDeclarationPrinter: Printer['print'] = (
+export const destructorDeclarationPrinter: Printer<DestructorDeclarationNode>['print'] = (
   path,
   _,
   print
-) => {
-  const {
-    body,
-    expressionBody,
-    identifier,
-    modifiers,
-  }: DestructorDeclarationNode = path.getValue();
-
-  return concat([
+) =>
+  concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    '~',
-    identifier.text,
+    printModifiers(path, print),
+    path.call(print, 'tildeToken'),
+    path.call(print, 'identifier'),
     path.call(print, 'parameterList'),
-    printMethodBody(path, print, body, expressionBody),
+    printMethodBody(path, print),
   ]);
-};
 
 export type ConstructorInitializerNode = {
   argumentList: ArgumentListNode;
@@ -141,15 +131,13 @@ export const constructorInitializerPrinter: Printer['print'] = (
   path,
   _,
   print
-) => {
-  const { thisOrBaseKeyword }: ConstructorInitializerNode = path.getValue();
-
-  return concat([
-    ': ',
-    thisOrBaseKeyword.text,
+) =>
+  concat([
+    path.call(print, 'colonToken'),
+    ' ',
+    path.call(print, 'thisOrBaseKeyword'),
     path.call(print, 'argumentList'),
   ]);
-};
 
 export type OperatorDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
@@ -163,31 +151,22 @@ export type OperatorDeclarationNode = {
   semicolonToken: SyntaxToken;
 };
 
-export const operatorDeclarationPrinter: Printer['print'] = (
+export const operatorDeclarationPrinter: Printer<OperatorDeclarationNode>['print'] = (
   path,
   _,
   print
-) => {
-  const {
-    body,
-    expressionBody,
-    modifiers,
-    operatorKeyword,
-    operatorToken,
-  }: OperatorDeclarationNode = path.getValue();
-
-  return concat([
+) =>
+  concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
+    printModifiers(path, print),
     path.call(print, 'returnType'),
     ' ',
-    operatorKeyword.text,
+    path.call(print, 'operatorKeyword'),
     ' ',
-    operatorToken.text,
+    path.call(print, 'operatorToken'),
     path.call(print, 'parameterList'),
-    printMethodBody(path, print, body, expressionBody),
+    printMethodBody(path, print),
   ]);
-};
 
 export type ConversionOperatorDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
@@ -201,28 +180,19 @@ export type ConversionOperatorDeclarationNode = {
   type: TypeNode;
 };
 
-export const conversionOperatorDeclarationPrinter: Printer['print'] = (
+export const conversionOperatorDeclarationPrinter: Printer<ConversionOperatorDeclarationNode>['print'] = (
   path,
   _,
   print
-) => {
-  const {
-    body,
-    expressionBody,
-    implicitOrExplicitKeyword,
-    modifiers,
-    operatorKeyword,
-  }: ConversionOperatorDeclarationNode = path.getValue();
-
-  return concat([
+) =>
+  concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    implicitOrExplicitKeyword.text,
+    printModifiers(path, print),
+    path.call(print, 'implicitOrExplicitKeyword'),
     ' ',
-    operatorKeyword.text,
+    path.call(print, 'operatorKeyword'),
     ' ',
     path.call(print, 'type'),
     path.call(print, 'parameterList'),
-    printMethodBody(path, print, body, expressionBody),
+    printMethodBody(path, print),
   ]);
-};

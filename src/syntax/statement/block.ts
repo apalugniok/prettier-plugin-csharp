@@ -7,6 +7,8 @@ import concat = doc.builders.concat;
 import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntaxToken';
 import { printAttributeLists } from '../../helpers/printerHelpers';
+import { builders } from 'prettier/doc';
+import line = builders.line;
 
 export type BlockNode = {
   attributeLists: Array<AttributeListNode>;
@@ -22,10 +24,8 @@ export const blockPrinter: Printer['print'] = (path, _, print) => {
     statements.length !== 0
       ? concat([
           '{',
-          indent(
-            concat([hardline, join(hardline, path.map(print, 'statements'))])
-          ),
-          hardline,
+          indent(concat([line, join(line, path.map(print, 'statements'))])),
+          line,
           '}',
         ])
       : '{ }';

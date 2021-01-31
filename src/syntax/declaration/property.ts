@@ -29,27 +29,21 @@ export type PropertyDeclarationNode = {
   type: TypeNode;
 } & DeclarationNode;
 
-export const propertyDeclarationPrinter: Printer['print'] = (
+export const propertyDeclarationPrinter: Printer<PropertyDeclarationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    accessorList,
-    expressionBody,
-    initializer,
-    modifiers,
-    identifier,
-  }: PropertyDeclarationNode = path.getValue();
+  const { accessorList, expressionBody, initializer } = path.getValue();
 
   return group(
     concat([
       printAttributeLists(path, print),
-      printModifiers(modifiers),
+      printModifiers(path, print),
       path.call(print, 'type'),
       ' ',
       path.call(print, 'explicitInterfaceSpecifier'),
-      identifier.text,
+      path.call(print, 'identifier'),
       accessorList != null
         ? concat([line, path.call(print, 'accessorList')])
         : '',
@@ -59,7 +53,9 @@ export const propertyDeclarationPrinter: Printer['print'] = (
       initializer != null
         ? concat([line, path.call(print, 'initializer')])
         : '',
-      expressionBody != null || initializer != null ? ';' : '',
+      expressionBody != null || initializer != null
+        ? path.call(print, 'semicolonToken')
+        : '',
     ])
   );
 };
@@ -75,26 +71,26 @@ export type EventDeclarationNode = {
   type: TypeNode;
 } & DeclarationNode;
 
-export const eventDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const {
-    accessorList,
-    identifier,
-    modifiers,
-  }: EventDeclarationNode = path.getValue();
+export const eventDeclarationPrinter: Printer<EventDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { accessorList } = path.getValue();
 
   return group(
     concat([
       printAttributeLists(path, print),
-      printModifiers(modifiers),
-      'event',
+      printModifiers(path, print),
+      path.call(print, 'eventKeyword'),
       ' ',
       path.call(print, 'type'),
       ' ',
       path.call(print, 'explicitInterfaceSpecifier'),
-      identifier.text,
+      path.call(print, 'identifier'),
       line,
       path.call(print, 'accessorList'),
-      accessorList == null ? ';' : '',
+      accessorList == null ? path.call(print, 'semicolonToken') : '',
     ])
   );
 };
@@ -111,24 +107,26 @@ export type IndexerDeclarationNode = {
   type: TypeNode;
 } & DeclarationNode;
 
-export const indexerDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { modifiers }: IndexerDeclarationNode = path.getValue();
-
-  return group(
+export const indexerDeclarationPrinter: Printer<IndexerDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  group(
     concat([
       printAttributeLists(path, print),
-      printModifiers(modifiers),
+      printModifiers(path, print),
       path.call(print, 'type'),
       ' ',
       path.call(print, 'explicitInterfaceSpecifier'),
-      'this',
+      path.call(print, 'thisKeyword'),
       path.call(print, 'parameterList'),
       line,
       path.call(print, 'accessorList'),
-      //todo arrow expression indexer
+      path.call(print, 'expressionBody'),
+      path.call(print, 'semicolonToken'),
     ])
   );
-};
 
 export type AccessorListNode = {
   accessors: Array<AccessorDeclarationNode>;
@@ -136,17 +134,25 @@ export type AccessorListNode = {
   openBraceToken: SyntaxToken;
 } & SyntaxNode;
 
-export const accessorListPrinter: Printer['print'] = (path, _, print) => {
-  const { accessors }: AccessorListNode = path.getValue();
+export const accessorListPrinter: Printer<AccessorListNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { accessors } = path.getValue();
 
   return accessors.length !== 0
     ? concat([
-        '{',
+        path.call(print, 'openBraceToken'),
         indent(concat([line, join(line, path.map(print, 'accessors'))])),
         line,
-        '}',
+        path.call(print, 'closeBraceToken'),
       ])
-    : '{ }';
+    : concat([
+        path.call(print, 'openBraceToken'),
+        ' ',
+        path.call(print, 'closeBraceToken'),
+      ]);
 };
 
 export type AccessorDeclarationNode = {
@@ -158,31 +164,25 @@ export type AccessorDeclarationNode = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const accessorDeclarationPrinter: Printer['print'] = (
+export const accessorDeclarationPrinter: Printer<AccessorDeclarationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    body,
-    expressionBody,
-    modifiers,
-    keyword,
-    semicolonToken,
-  }: AccessorDeclarationNode = path.getValue();
+  const { body, expressionBody } = path.getValue();
 
   return group(
     concat([
       join(line, [...path.map(print, 'attributeLists'), '']),
       group(
         concat([
-          printModifiers(modifiers),
-          keyword.text,
+          printModifiers(path, print),
+          path.call(print, 'keyword'),
           body != null ? concat([line, path.call(print, 'body')]) : '',
           expressionBody != null
             ? concat([line, path.call(print, 'expressionBody')])
             : '',
-          semicolonToken.text,
+          path.call(print, 'semicolonToken'),
         ])
       ),
     ])

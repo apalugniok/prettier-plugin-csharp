@@ -15,5 +15,8 @@ export type DeclarationPatternNode = {
     | ParenthesizedVariableDesignationNode;
 } & SyntaxNode;
 
-export const declarationPatternPrinter: Printer['print'] = (path, _, print) =>
-  concat([path.call(print, 'type'), ' ', path.call(print, 'designation')]);
+export const declarationPatternPrinter: Printer<DeclarationPatternNode>['print'] = (
+  path,
+  _,
+  print
+) => concat([path.call(print, 'type'), ' ', path.call(print, 'designation')]);

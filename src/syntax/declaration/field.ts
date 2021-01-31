@@ -16,16 +16,17 @@ export type FieldDeclarationNode = {
   semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
-export const fieldDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { modifiers }: FieldDeclarationNode = path.getValue();
-
-  return concat([
+export const fieldDeclarationPrinter: Printer<FieldDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
+    printModifiers(path, print),
     path.call(print, 'declaration'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
-};
 
 export type EventFieldDeclarationNode = {
   attributeLists: Array<AttributeListNode>;
@@ -35,19 +36,16 @@ export type EventFieldDeclarationNode = {
   semicolonToken: SyntaxToken;
 } & DeclarationNode;
 
-export const eventFieldDeclarationPrinter: Printer['print'] = (
+export const eventFieldDeclarationPrinter: Printer<EventFieldDeclarationNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { modifiers }: EventFieldDeclarationNode = path.getValue();
-
-  return concat([
+) =>
+  concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    'event',
+    printModifiers(path, print),
+    path.call(print, 'eventKeyword'),
     ' ',
     path.call(print, 'declaration'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
-};

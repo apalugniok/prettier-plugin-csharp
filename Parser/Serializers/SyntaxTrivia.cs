@@ -17,7 +17,9 @@ namespace PrettierCSharpPlugin.Parser.Serializers
         {
             writer.WriteStartObject();
 
-            writer.WriteString("nodeType", Enum.GetName(typeof(SyntaxKind), value.Kind()));
+            writer.WriteString("triviaType", Enum.GetName(typeof(SyntaxKind), value.Kind())!.Replace("Trivia", ""));
+            writer.WriteNumber("start", value.FullSpan.Start);
+            writer.WriteNumber("end", value.FullSpan.End);
             writer.WriteString("text", value.ToFullString());
 
             writer.WriteEndObject();

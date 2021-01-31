@@ -99,7 +99,11 @@ export type TupleElementNode = {
 export const tupleElementPrinter: Printer['print'] = (path, _, print) => {
   const { identifier }: TupleElementNode = path.getValue();
 
-  return concat([path.call(print, 'type'), ' ', identifier.text]);
+  return concat([
+    path.call(print, 'type'),
+    ' ',
+    path.call(print, 'identifier'),
+  ]);
 };
 
 export type OmittedTypeArgumentNode = {

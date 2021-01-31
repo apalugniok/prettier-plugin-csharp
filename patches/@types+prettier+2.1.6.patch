@@ -1,0 +1,22 @@
+diff --git a/node_modules/@types/prettier/index.d.ts b/node_modules/@types/prettier/index.d.ts
+index bc784a1..e91b85f 100644
+--- a/node_modules/@types/prettier/index.d.ts
++++ b/node_modules/@types/prettier/index.d.ts
+@@ -24,13 +24,13 @@ export type Doc = doc.builders.Doc;
+ // https://github.com/prettier/prettier/blob/master/src/common/fast-path.js
+ export interface FastPath<T = any> {
+     stack: T[];
+-    getName(): null | PropertyKey;
++    getName(): null | keyof T;
+     getValue(): T;
+     getNode(count?: number): null | T;
+     getParentNode(count?: number): null | T;
+-    call<U>(callback: (path: this) => U, ...names: PropertyKey[]): U;
+-    each(callback: (path: this) => void, ...names: PropertyKey[]): void;
+-    map<U>(callback: (path: this, index: number) => U, ...names: PropertyKey[]): U[];
++    call<U>(callback: (path: this) => U, ...names: Array<keyof T>): U;
++    each(callback: (path: this) => void, ...names: Array<keyof T>): void;
++    map<U>(callback: (path: this, index: number) => U, ...names: Array<keyof T>): U[];
+ }
+ 
+ export type BuiltInParser = (text: string, options?: any) => AST;

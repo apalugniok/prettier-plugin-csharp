@@ -2,33 +2,46 @@
 import join = doc.builders.join;
 import hardline = doc.builders.hardline;
 import Doc = doc.builders.Doc;
-import { SyntaxToken } from '../syntax/syntaxToken';
 import { BlockNode } from '../syntax/statement/block';
 import { ArrowExpressionClauseNode } from '../syntax/expression/arrowExpressionClause';
 import concat = doc.builders.concat;
 import line = doc.builders.line;
 import { StatementNode } from '../syntax/syntaxNode';
 import indent = doc.builders.indent;
+import { SyntaxToken } from '../syntax/syntaxToken';
 
 export const printAttributeLists = (
   path: FastPath,
   print: (path: FastPath) => Doc
 ) => join(hardline, [...path.map(print, 'attributeLists'), '']);
 
-export const printModifiers = (modifiers: Array<SyntaxToken>) =>
-  join(' ', [...modifiers.map((token) => token.text), '']);
-
-export const printMethodBody = (
+export const printModifiers = (
   path: FastPath,
-  print: (path: FastPath) => Doc,
-  body: BlockNode | null,
-  expressionBody: ArrowExpressionClauseNode | null
-): Doc =>
-  body != null
+  print: (path: FastPath) => Doc
+) => join(' ', [...path.map(print, 'modifiers'), '']);
+
+export const printMethodBody = <
+  TNode extends {
+    body: BlockNode | null;
+    expressionBody: ArrowExpressionClauseNode | null;
+    semicolonToken: SyntaxToken;
+  }
+>(
+  path: FastPath<TNode>,
+  print: (path: FastPath) => Doc
+): Doc => {
+  const { body, expressionBody } = path.getValue();
+
+  return body != null
     ? concat([line, path.call(print, 'body')])
     : expressionBody != null
-    ? concat([' ', path.call(print, 'expressionBody'), ';'])
+    ? concat([
+        ' ',
+        path.call(print, 'expressionBody'),
+        path.call(print, 'semicolonToken'),
+      ])
     : '';
+};
 
 export const wrapInBlock = (
   statement: StatementNode,

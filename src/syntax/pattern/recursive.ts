@@ -21,7 +21,11 @@ export type RecursivePatternNode = {
     | null;
 } & SyntaxNode;
 
-export const recursivePatternPrinter: Printer['print'] = (path, _, print) => {
+export const recursivePatternPrinter: Printer<RecursivePatternNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const type = path.call(print, 'type');
   const positionalPatternClause = path.call(print, 'positionalPatternClause');
   const propertyPatternClause = path.call(print, 'propertyPatternClause');

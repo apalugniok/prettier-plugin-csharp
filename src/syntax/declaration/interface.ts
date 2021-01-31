@@ -30,7 +30,7 @@ export type InterfaceDeclarationNode = {
   typeParameterList: TypeParameterListNode | null;
 } & SyntaxNode;
 
-export const interfaceDeclarationPrinter: Printer['print'] = (
+export const interfaceDeclarationPrinter: Printer<InterfaceDeclarationNode>['print'] = (
   path,
   _,
   print
@@ -39,17 +39,15 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
     baseList,
     constraintClauses,
     members,
-    modifiers,
-    identifier,
     typeParameterList,
-  }: InterfaceDeclarationNode = path.getValue();
+  } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    'interface',
+    printModifiers(path, print),
+    path.call(print, 'keyword'),
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     typeParameterList != null ? path.call(print, 'typeParameterList') : '',
     baseList != null ? path.call(print, 'baseList') : '',
     constraintClauses.length !== 0
@@ -60,23 +58,24 @@ export const interfaceDeclarationPrinter: Printer['print'] = (
         )
       : '',
     hardline,
-    '{',
+    path.call(print, 'openBraceToken'),
     members.length !== 0
       ? indent(concat([hardline, join(hardline, path.map(print, 'members'))]))
       : '',
     hardline,
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };
 
 export type ExplicitInterfaceSpecifierNode = {
+  dotToken: SyntaxToken;
   name: NameNode;
 } & SyntaxNode;
 
-export const explicitInterfaceSpecifierPrinter: Printer['print'] = (
+export const explicitInterfaceSpecifierPrinter: Printer<ExplicitInterfaceSpecifierNode>['print'] = (
   path,
   _,
   print
 ) => {
-  return concat([path.call(print, 'name'), '.']);
+  return concat([path.call(print, 'name'), path.call(print, 'dotToken')]);
 };

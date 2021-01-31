@@ -5,8 +5,6 @@ import indent = doc.builders.indent;
 import concat = doc.builders.concat;
 import join = doc.builders.join;
 import hardline = doc.builders.hardline;
-import line = doc.builders.line;
-import group = doc.builders.group;
 import { EqualsValueClauseNode } from './variable';
 import { SyntaxToken } from '../syntaxToken';
 import { BaseListNode } from './baseType';
@@ -27,23 +25,22 @@ export type EnumDeclarationNode = {
   semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
 } & DeclarationNode;
 
-export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const {
-    baseList,
-    identifier,
-    members,
-    modifiers,
-  }: EnumDeclarationNode = path.getValue();
+export const enumDeclarationPrinter: Printer<EnumDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { baseList, members } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    printModifiers(modifiers),
-    'enum',
+    printModifiers(path, print),
+    path.call(print, 'enumKeyword'),
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     baseList != null ? path.call(print, 'baseList') : '',
     hardline,
-    '{',
+    path.call(print, 'openBraceToken'),
     members.length !== 0
       ? indent(
           concat([
@@ -54,7 +51,7 @@ export const enumDeclarationPrinter: Printer['print'] = (path, _, print) => {
         )
       : '',
     hardline,
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };
 
@@ -65,19 +62,17 @@ export type EnumMemberDeclarationNode = {
   modifiers: Array<SyntaxToken>; // Enum members cannot have access modifiers
 } & DeclarationNode;
 
-export const enumMemberDeclarationPrinter: Printer['print'] = (
+export const enumMemberDeclarationPrinter: Printer<EnumMemberDeclarationNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    equalsValue,
-    identifier,
-  }: EnumMemberDeclarationNode = path.getValue();
+  const { equalsValue } = path.getValue();
 
   return concat([
-    group(join(line, [...path.map(print, 'attributeLists'), ''])),
-    identifier.text,
+    printAttributeLists(path, print),
+    printModifiers(path, print),
+    path.call(print, 'identifier'),
     equalsValue != null ? concat([' ', path.call(print, 'equalsValue')]) : '',
   ]);
 };

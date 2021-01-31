@@ -113,7 +113,7 @@ describe('Local Function Statement', () => {
            var a = 1;
            var b = "foo";
          }
-      }
+      }}
     `;
 
     const expectedFormattedCode = code`

@@ -199,16 +199,36 @@ describe('Property Declaration', () => {
     const input = code`
       class Irrelevant
       {
-         public int this[int i]
-         {
-            
+         public int this[int i]{
+         get { return arr[i]; }
+         set { arr[i] = value; }
          }
       }
     `;
     const expectedFormattedCode = code`
       class Irrelevant
       {
-          public int this[int i] { }
+          public int this[int i] { get { return arr[i]; } set { arr[i] = value; } }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an expression body indexer property', () => {
+    const input = code`
+      class Irrelevant
+      {
+         public int this[int i] 
+         => arr[i];
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          public int this[int i] => arr[i];
       }
     `;
 

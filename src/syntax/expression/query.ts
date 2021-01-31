@@ -52,7 +52,13 @@ export type QueryContinuationNode = {
 export const queryContinuationPrinter: Printer['print'] = (path, _, print) => {
   const { identifier }: QueryContinuationNode = path.getValue();
 
-  return concat(['into', ' ', identifier.text, line, path.call(print, 'body')]);
+  return concat([
+    'into',
+    ' ',
+    path.call(print, 'identifier'),
+    line,
+    path.call(print, 'body'),
+  ]);
 };
 
 export type FromClauseNode = {
@@ -70,7 +76,7 @@ export const fromClausePrinter: Printer['print'] = (path, _, print) => {
     'from',
     ' ',
     type !== null ? concat([path.call(print, 'type'), ' ']) : '',
-    identifier.text,
+    path.call(print, 'identifier'),
     ' ',
     'in',
     ' ',
@@ -91,7 +97,7 @@ export const letClausePrinter: Printer['print'] = (path, _, print) => {
   return concat([
     'let',
     ' ',
-    identifier.text,
+    path.call(print, 'identifier'),
     ' ',
     '=',
     ' ',
@@ -119,7 +125,7 @@ export const joinClausePrinter: Printer['print'] = (path, _, print) => {
     'join',
     ' ',
     type != null ? concat([path.call(print, 'type'), ' ']) : '',
-    identifier.text,
+    path.call(print, 'identifier'),
     ' ',
     'in',
     ' ',
@@ -145,7 +151,7 @@ export type JoinIntoClauseNode = {
 export const joinIntoClausePrinter: Printer['print'] = (path, _, print) => {
   const { identifier }: JoinIntoClauseNode = path.getValue();
 
-  return concat(['into', ' ', identifier.text]);
+  return concat(['into', ' ', path.call(print, 'identifier')]);
 };
 
 export type WhereClauseNode = {
