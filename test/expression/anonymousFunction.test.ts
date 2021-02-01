@@ -129,7 +129,7 @@ describe('Anonymous Function Expression', () => {
       {
           void Irrelevant()
           {
-              foo => { Console.WriteLine(foo); };
+              foo => { Console.WriteLine(foo) };
           }
       }
     `;
@@ -198,7 +198,7 @@ describe('Anonymous Function Expression', () => {
       {
           void Irrelevant()
           {
-              (foo) => { Console.WriteLine(foo); };
+              (foo) => { Console.WriteLine(foo) };
           }
       }
     `;
@@ -225,9 +225,7 @@ describe('Anonymous Function Expression', () => {
                   reallyReallyReallyLongArgumentA,
                   reallyReallyReallyLongArgumentB,
                   reallyReallyReallyLongArgumentC
-              ) => {
-                  Console.WriteLine(foo);
-              };
+              ) => { Console.WriteLine(foo) };
           }
       }
     `;

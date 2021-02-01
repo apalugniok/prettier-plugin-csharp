@@ -9,16 +9,15 @@ export type IsPatternExpression = {
   pattern: PatternNode;
 } & SyntaxNode;
 
-export const isPatternExpressionPrinter: Printer['print'] = (
+export const isPatternExpressionPrinter: Printer<IsPatternExpression>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
+) =>
+  concat([
     path.call(print, 'expression'),
     ' ',
-    'is',
+    path.call(print, 'isKeyword'),
     ' ',
     path.call(print, 'pattern'),
   ]);
-};

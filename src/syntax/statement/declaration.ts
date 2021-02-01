@@ -20,26 +20,24 @@ export type LocalDeclarationStatementNode = {
   usingKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const localDeclarationStatementPrinter: Printer['print'] = (
+export const localDeclarationStatementPrinter: Printer<LocalDeclarationStatementNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    awaitKeyword,
-    modifiers,
-    usingKeyword,
-  }: LocalDeclarationStatementNode = path.getValue();
+  const { awaitKeyword, usingKeyword } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
     group(
       concat([
         printModifiers(path, print),
-        usingKeyword.text === '' ? '' : `${usingKeyword.text} `,
-        awaitKeyword.text === '' ? '' : `${awaitKeyword.text} `,
+        path.call(print, 'usingKeyword'),
+        usingKeyword.text !== '' ? ' ' : '',
+        path.call(print, 'awaitKeyword'),
+        awaitKeyword.text !== '' ? ' ' : '',
         path.call(print, 'declaration'),
-        ';',
+        path.call(print, 'semicolonToken'),
       ])
     ),
   ]);

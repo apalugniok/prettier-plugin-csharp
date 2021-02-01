@@ -4,7 +4,10 @@ import { SyntaxToken } from '../syntaxToken';
 import { VariableDeclarationNode } from '../declaration/variable';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists, wrapInBlock } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  wrapStatementInBlock,
+} from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
 import group = doc.builders.group;
 import indent = doc.builders.indent;
@@ -21,8 +24,12 @@ export type UsingStatement = {
   usingKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const usingStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { awaitKeyword, statement }: UsingStatement = path.getValue();
+export const usingStatementPrinter: Printer<UsingStatement>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { awaitKeyword }: UsingStatement = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
@@ -45,6 +52,6 @@ export const usingStatementPrinter: Printer['print'] = (path, _, print) => {
       ])
     ),
     hardline,
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
   ]);
 };

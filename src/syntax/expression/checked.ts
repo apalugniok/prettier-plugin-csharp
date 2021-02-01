@@ -10,6 +10,14 @@ export type CheckedExpressionNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const checkedExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['checked', '(', path.call(print, 'expression'), ')']);
-};
+export const checkedExpressionPrinter: Printer<CheckedExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'expression'),
+    path.call(print, 'closeParenToken'),
+  ]);

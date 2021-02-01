@@ -18,21 +18,19 @@ export type ObjectCreationExpressionNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const objectCreationExpressionPrinter: Printer['print'] = (
+export const objectCreationExpressionPrinter: Printer<ObjectCreationExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    argumentList,
-    initializer,
-  }: ObjectCreationExpressionNode = path.getValue();
+  const { argumentList, initializer } = path.getValue();
 
   const shouldShowArgumentsList =
     (argumentList?.arguments?.length ?? 0) > 0 || initializer == null;
 
   return concat([
-    'new ',
+    path.call(print, 'newKeyword'),
+    ' ',
     path.call(print, 'type'),
     shouldShowArgumentsList ? path.call(print, 'argumentList') : '',
     path.call(print, 'initializer'),
@@ -46,21 +44,19 @@ export type AnonymousObjectCreationExpressionSyntax = {
   initializers: Array<InitializerExpressionNode> | null;
 } & SyntaxNode;
 
-export const anonymousObjectCreationExpressionPrinter: Printer['print'] = (
+export const anonymousObjectCreationExpressionPrinter: Printer<AnonymousObjectCreationExpressionSyntax>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    initializers,
-  }: AnonymousObjectCreationExpressionSyntax = path.getValue();
+  const { initializers } = path.getValue();
 
   const objectCreationBody =
     initializers != null && initializers.length !== 0
       ? group(
           concat([
             line,
-            '{',
+            path.call(print, 'openBraceToken'),
             indent(
               concat([
                 line,
@@ -69,12 +65,17 @@ export const anonymousObjectCreationExpressionPrinter: Printer['print'] = (
             ),
             ifBreak(',', ''),
             line,
-            '}',
+            path.call(print, 'closeBraceToken'),
           ])
         )
-      : ' {}';
+      : concat([
+          ' ',
+          path.call(print, 'openBraceToken'),
+          ' ',
+          path.call(print, 'closeBraceToken'),
+        ]);
 
-  return concat(['new', objectCreationBody]);
+  return concat([path.call(print, 'newKeyword'), objectCreationBody]);
 };
 
 export type AnonymousObjectMemberDeclaratorSyntax = {
@@ -82,15 +83,8 @@ export type AnonymousObjectMemberDeclaratorSyntax = {
   nameEquals: NameEqualsNode | null;
 } & SyntaxNode;
 
-export const anonymousObjectMemberDeclaratorSyntax: Printer['print'] = (
+export const anonymousObjectMemberDeclaratorSyntax: Printer<AnonymousObjectMemberDeclaratorSyntax>['print'] = (
   path,
   _,
   print
-) => {
-  const { nameEquals }: AnonymousObjectMemberDeclaratorSyntax = path.getValue();
-
-  return concat([
-    path.call(print, 'nameEquals'),
-    path.call(print, 'expression'),
-  ]);
-};
+) => concat([path.call(print, 'nameEquals'), path.call(print, 'expression')]);

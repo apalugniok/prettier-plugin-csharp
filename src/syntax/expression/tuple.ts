@@ -15,10 +15,14 @@ export type TupleExpressionNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const tupleExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return group(
+export const tupleExpressionPrinter: Printer<TupleExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  group(
     concat([
-      '(',
+      path.call(print, 'openParenToken'),
       indent(
         concat([
           softline,
@@ -26,7 +30,6 @@ export const tupleExpressionPrinter: Printer['print'] = (path, _, print) => {
         ])
       ),
       softline,
-      ')',
+      path.call(print, 'closeParenToken'),
     ])
   );
-};

@@ -6,17 +6,24 @@ import { SyntaxNode, TypeNode } from '../syntaxNode';
 
 export type ImplicitStackAllocArrayCreationExpressionNode = {
   stackAllocKeyword: SyntaxToken;
-  openBracketKeyword: SyntaxToken;
-  closeBracketKeyword: SyntaxToken;
+  openBracketToken: SyntaxToken;
+  closeBracketToken: SyntaxToken;
   initializer: InitializerExpressionNode;
 } & SyntaxNode;
 
-export const implicitStackAllocArrayCreationExpressionPrinter: Printer['print'] = (
+export const implicitStackAllocArrayCreationExpressionPrinter: Printer<ImplicitStackAllocArrayCreationExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  return concat(['stackalloc', '[', ']', path.call(print, 'initializer')]);
+  var a = path.getValue();
+
+  return concat([
+    path.call(print, 'stackAllocKeyword'),
+    path.call(print, 'openBracketToken'),
+    path.call(print, 'closeBracketToken'),
+    path.call(print, 'initializer'),
+  ]);
 };
 
 export type StackAllocArrayCreationExpressionNode = {
@@ -25,15 +32,14 @@ export type StackAllocArrayCreationExpressionNode = {
   initializer: InitializerExpressionNode;
 } & SyntaxNode;
 
-export const stackAllocArrayCreationExpressionPrinter: Printer['print'] = (
+export const stackAllocArrayCreationExpressionPrinter: Printer<StackAllocArrayCreationExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
-    'stackalloc',
+) =>
+  concat([
+    path.call(print, 'stackAllocKeyword'),
     ' ',
     path.call(print, 'type'),
     path.call(print, 'initializer'),
   ]);
-};

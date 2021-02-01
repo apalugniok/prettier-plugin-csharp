@@ -15,8 +15,16 @@ export type TypeArgumentListNode = {
   lessThanToken: SyntaxToken;
 } & SyntaxNode;
 
-export const typeArgumentListPrinter: Printer['print'] = (path, _, print) =>
-  concat(['<', join(', ', path.map(print, 'arguments')), '>']);
+export const typeArgumentListPrinter: Printer<TypeArgumentListNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'lessThanToken'),
+    join(', ', path.map(print, 'arguments')),
+    path.call(print, 'greaterThanToken'),
+  ]);
 
 export type ArgumentListNode = {
   arguments: Array<ArgumentNode>;
@@ -24,10 +32,14 @@ export type ArgumentListNode = {
   openParenToken: SyntaxToken;
 };
 
-export const argumentListPrinter: Printer['print'] = (path, _, print) => {
-  return group(
+export const argumentListPrinter: Printer<ArgumentListNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  group(
     concat([
-      '(',
+      path.call(print, 'openParenToken'),
       indent(
         concat([
           softline,
@@ -35,10 +47,9 @@ export const argumentListPrinter: Printer['print'] = (path, _, print) => {
         ])
       ),
       softline,
-      ')',
+      path.call(print, 'closeParenToken'),
     ])
   );
-};
 
 export type BracketedArgumentListNode = {
   arguments: Array<ArgumentNode>;
@@ -46,14 +57,14 @@ export type BracketedArgumentListNode = {
   openBracketToken: SyntaxToken;
 } & SyntaxNode;
 
-export const bracketedArgumentListPrinter: Printer['print'] = (
+export const bracketedArgumentListPrinter: Printer<BracketedArgumentListNode>['print'] = (
   path,
   _,
   print
-) => {
-  return group(
+) =>
+  group(
     concat([
-      '[',
+      path.call(print, 'openBracketToken'),
       indent(
         concat([
           softline,
@@ -61,24 +72,29 @@ export const bracketedArgumentListPrinter: Printer['print'] = (
         ])
       ),
       softline,
-      ']',
+      path.call(print, 'closeBracketToken'),
     ])
   );
-};
 
 export type ArgumentNode = {
   expression: ExpressionNode;
   nameColon: NameColonNode | null;
   refKindKeyword: SyntaxToken;
+  // BackCompat overload see: https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntax.argumentsyntax?view=roslyn-dotnet
   refOrOutKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const argumentPrinter: Printer['print'] = (path, _, print) => {
-  const { refOrOutKeyword }: ArgumentNode = path.getValue();
+export const argumentPrinter: Printer<ArgumentNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { refKindKeyword } = path.getValue();
 
   return concat([
     path.call(print, 'nameColon'),
-    refOrOutKeyword.text !== '' ? concat([refOrOutKeyword.text, ' ']) : '',
+    path.call(print, 'refKindKeyword'),
+    refKindKeyword.text !== '' ? ' ' : '',
     path.call(print, 'expression'),
   ]);
 };

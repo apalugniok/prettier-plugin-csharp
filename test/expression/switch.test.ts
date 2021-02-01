@@ -44,7 +44,7 @@ describe('Switch Expression', () => {
       {
           void IrrelevantMethod()
           {
-              statement switch {};
+              statement switch { };
           }
       }
     `;

@@ -127,7 +127,7 @@ describe('Interpolated String', () => {
       }
     `;
 
-    // In the input code the string new lines are indented by 4 spaces from the level of identation fo the class
+    // In the input code the string new lines are indented by 4 spaces from the level of indentation for the class
     // which must be preserved when formatting the verbatim string
     const expectedFormattedCode = code`
       class Irrelevant

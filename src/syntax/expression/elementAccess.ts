@@ -8,16 +8,11 @@ export type ElementAccessExpressionNode = {
   expression: ExpressionNode;
 } & SyntaxNode;
 
-export const elementAccessExpressionPrinter: Printer['print'] = (
+export const elementAccessExpressionPrinter: Printer<ElementAccessExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
-    path.call(print, 'expression'),
-    path.call(print, 'argumentList'),
-  ]);
-};
+) => concat([path.call(print, 'expression'), path.call(print, 'argumentList')]);
 
 export type ImplicitElementAccessNode = {
   argumentList: BracketedArgumentListNode;
@@ -25,7 +20,7 @@ export type ImplicitElementAccessNode = {
 
 //TODO: what is this syntax need to know for testing
 
-export const implicitElementAccessPrinter: Printer['print'] = (
+export const implicitElementAccessPrinter: Printer<ImplicitElementAccessNode>['print'] = (
   path,
   _,
   print

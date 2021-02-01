@@ -10,6 +10,14 @@ export type TypeOfExpressionNode = {
   type: ExpressionNode;
 } & SyntaxNode;
 
-export const typeOfExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['typeof', '(', path.call(print, 'type'), ')']);
-};
+export const typeOfExpressionPrinter: Printer<TypeOfExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'type'),
+    path.call(print, 'closeParenToken'),
+  ]);

@@ -13,17 +13,21 @@ export type GotoStatementNode = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const gotoStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { caseOrDefaultKeyword }: GotoStatementNode = path.getValue();
+export const gotoStatementPrinter: Printer<GotoStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { caseOrDefaultKeyword } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'goto ',
-    caseOrDefaultKeyword.text &&
-      (caseOrDefaultKeyword.text === 'default'
-        ? caseOrDefaultKeyword.text
-        : `${caseOrDefaultKeyword.text} `),
+    path.call(print, 'gotoKeyword'),
+    ' ',
+    ['default', ''].includes(caseOrDefaultKeyword.text)
+      ? path.call(print, 'caseOrDefaultKeyword')
+      : concat([path.call(print, 'caseOrDefaultKeyword'), ' ']),
     path.call(print, 'expression'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

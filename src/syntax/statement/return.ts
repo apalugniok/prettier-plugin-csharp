@@ -12,14 +12,18 @@ export type ReturnStatementNode = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const returnStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { expression }: ReturnStatementNode = path.getValue();
+export const returnStatementPrinter: Printer<ReturnStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { expression } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'return',
+    path.call(print, 'returnKeyword'),
     expression == null ? '' : ' ',
     path.call(print, 'expression'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

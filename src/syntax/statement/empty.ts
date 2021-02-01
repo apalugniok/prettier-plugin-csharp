@@ -10,7 +10,11 @@ export type EmptyStatement = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const emptyStatementPrinter: Printer['print'] = (path, _, print) =>
+export const emptyStatementPrinter: Printer<EmptyStatement>['print'] = (
+  path,
+  _,
+  print
+) =>
   concat([
     printAttributeLists(path, print),
     path.call(print, 'semicolonToken'),

@@ -10,6 +10,14 @@ export type SizeOfExpressionNode = {
   type: ExpressionNode;
 } & SyntaxNode;
 
-export const sizeOfExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['sizeof', '(', path.call(print, 'type'), ')']);
-};
+export const sizeOfExpressionPrinter: Printer<SizeOfExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'type'),
+    path.call(print, 'closeParenToken'),
+  ]);

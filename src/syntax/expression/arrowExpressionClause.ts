@@ -10,9 +10,15 @@ export type ArrowExpressionClauseNode = {
   arrowToken: SyntaxToken;
   expression: ExpressionNode;
 } & SyntaxNode;
-export const arrowExpressionClausePrinter: Printer['print'] = (
+
+export const arrowExpressionClausePrinter: Printer<ArrowExpressionClauseNode>['print'] = (
   path,
   _,
   print
 ) =>
-  group(concat(['=>', indent(concat([line, path.call(print, 'expression')]))]));
+  group(
+    concat([
+      path.call(print, 'arrowToken'),
+      indent(concat([line, path.call(print, 'expression')])),
+    ])
+  );

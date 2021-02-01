@@ -8,6 +8,13 @@ export type ThrowExpressionNode = {
   throwKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const throwExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['throw', ' ', path.call(print, 'expression')]);
-};
+export const throwExpressionPrinter: Printer<ThrowExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'throwKeyword'),
+    ' ',
+    path.call(print, 'expression'),
+  ]);

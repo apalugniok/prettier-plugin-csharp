@@ -4,7 +4,10 @@ import { SyntaxToken } from '../syntaxToken';
 import { VariableDeclarationNode } from '../declaration/variable';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists, wrapInBlock } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  wrapStatementInBlock,
+} from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
 
 export type FixedStatement = {
@@ -16,10 +19,12 @@ export type FixedStatement = {
   statement: StatementNode;
 } & SyntaxNode;
 
-export const fixedStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { statement }: FixedStatement = path.getValue();
-
-  return concat([
+export const fixedStatementPrinter: Printer<FixedStatement>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     printAttributeLists(path, print),
     path.call(print, 'fixedKeyword'),
     ' ',
@@ -27,6 +32,5 @@ export const fixedStatementPrinter: Printer['print'] = (path, _, print) => {
     path.call(print, 'declaration'),
     path.call(print, 'closeParenToken'),
     hardline,
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
   ]);
-};

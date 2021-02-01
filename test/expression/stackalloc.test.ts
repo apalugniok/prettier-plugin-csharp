@@ -5,7 +5,7 @@ describe('Stackalloc Expressions', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
-          stackalloc [] {};
+          stackalloc [] { };
         }
       }
     `;
@@ -14,7 +14,7 @@ describe('Stackalloc Expressions', () => {
       {
           void Irrelevant()
           {
-              stackalloc[] {};
+              stackalloc[] { };
           }
       }
     `;

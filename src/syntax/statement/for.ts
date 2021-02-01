@@ -9,7 +9,10 @@ import softline = doc.builders.softline;
 import join = doc.builders.join;
 import line = doc.builders.line;
 import hardline = doc.builders.hardline;
-import { printAttributeLists, wrapInBlock } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  wrapStatementInBlock,
+} from '../../helpers/printerHelpers';
 import indent = doc.builders.indent;
 
 export type ForStatementNode = {
@@ -26,34 +29,38 @@ export type ForStatementNode = {
   statement: StatementNode;
 } & SyntaxNode;
 
-export const forStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { condition, statement }: ForStatementNode = path.getValue();
+export const forStatementPrinter: Printer<ForStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { condition }: ForStatementNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'for',
+    path.call(print, 'forKeyword'),
     ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(
           concat([
             softline,
             path.call(print, 'declaration'),
             join(', ', path.map(print, 'initializers')),
-            ';',
+            path.call(print, 'firstSemicolonToken'),
             condition == null ? '' : line,
             path.call(print, 'condition'),
-            ';',
+            path.call(print, 'secondSemicolonToken'),
             line,
             join(', ', path.map(print, 'incrementors')),
           ])
         ),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
     hardline,
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
   ]);
 };

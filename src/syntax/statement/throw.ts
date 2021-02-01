@@ -12,14 +12,18 @@ export type ThrowStatementNode = {
   throwKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const throwStatementPrinter: Printer['print'] = (path, _, print) => {
+export const throwStatementPrinter: Printer<ThrowStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const { expression }: ThrowStatementNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'throw',
+    path.call(print, 'throwKeyword'),
     expression == null ? '' : ' ',
     path.call(print, 'expression'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

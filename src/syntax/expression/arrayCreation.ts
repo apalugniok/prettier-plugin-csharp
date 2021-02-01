@@ -11,17 +11,17 @@ export type ArrayCreationExpressionNode = {
   type: ArrayTypeNode;
 } & SyntaxNode;
 
-export const arrayCreationExpressionPrinter: Printer['print'] = (
+export const arrayCreationExpressionPrinter: Printer<ArrayCreationExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
-    'new ',
+) =>
+  concat([
+    path.call(print, 'newKeyword'),
+    ' ',
     path.call(print, 'type'),
     path.call(print, 'initializer'),
   ]);
-};
 
 export type ImplicitArrayCreationExpressionNode = {
   closeBracketToken: SyntaxToken;
@@ -31,18 +31,15 @@ export type ImplicitArrayCreationExpressionNode = {
   openBracketToken: SyntaxToken;
 } & SyntaxNode;
 
-export const implicitArrayCreationExpressionPrinter: Printer['print'] = (
+export const implicitArrayCreationExpressionPrinter: Printer<ImplicitArrayCreationExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { commas }: ImplicitArrayCreationExpressionNode = path.getValue();
-
-  return concat([
-    'new',
-    '[',
-    ...commas.map((comma) => comma.text),
-    ']',
+) =>
+  concat([
+    path.call(print, 'newKeyword'),
+    path.call(print, 'openBracketToken'),
+    ...path.map(print, 'commas'),
+    path.call(print, 'closeBracketToken'),
     path.call(print, 'initializer'),
   ]);
-};

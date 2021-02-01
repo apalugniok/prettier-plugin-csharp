@@ -9,18 +9,15 @@ export type AssignmentExpressionNode = {
   right: ExpressionNode;
 } & SyntaxNode;
 
-export const assignmentExpressionPrinter: Printer['print'] = (
+export const assignmentExpressionPrinter: Printer<AssignmentExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { operatorToken }: AssignmentExpressionNode = path.getValue();
-
-  return concat([
+) =>
+  concat([
     path.call(print, 'left'),
     ' ',
-    operatorToken.text,
+    path.call(print, 'operatorToken'),
     ' ',
     path.call(print, 'right'),
   ]);
-};

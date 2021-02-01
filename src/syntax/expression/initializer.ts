@@ -15,7 +15,7 @@ export type InitializerExpressionNode = {
   expressions: Array<ExpressionNode>;
 } & SyntaxNode;
 
-export const initializerExpressionPrinter: Printer['print'] = (
+export const initializerExpressionPrinter: Printer<InitializerExpressionNode>['print'] = (
   path,
   _,
   print
@@ -38,7 +38,7 @@ export const initializerExpressionPrinter: Printer['print'] = (
     ? group(
         concat([
           shouldAddLeadingWhitespace ? line : softline,
-          '{',
+          path.call(print, 'openBraceToken'),
           indent(
             concat([
               shouldAddSpaceAfterOpenBrace ? line : softline,
@@ -47,8 +47,13 @@ export const initializerExpressionPrinter: Printer['print'] = (
           ),
           ifBreak(',', ''),
           shouldAddSpaceBeforeCloseBrace ? line : softline,
-          '}',
+          path.call(print, 'closeBraceToken'),
         ])
       )
-    : ' {}';
+    : concat([
+        ' ',
+        path.call(print, 'openBraceToken'),
+        ' ',
+        path.call(print, 'closeBraceToken'),
+      ]);
 };

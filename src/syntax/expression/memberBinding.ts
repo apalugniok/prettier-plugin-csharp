@@ -8,12 +8,8 @@ export type MemberBindingExpressionNode = {
   operatorToken: SyntaxToken;
 } & SyntaxNode;
 
-export const memberBindingExpressionPrinter: Printer['print'] = (
+export const memberBindingExpressionPrinter: Printer<MemberBindingExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { operatorToken }: MemberBindingExpressionNode = path.getValue();
-
-  return concat([operatorToken.text, path.call(print, 'name')]);
-};
+) => concat([path.call(print, 'operatorToken'), path.call(print, 'name')]);

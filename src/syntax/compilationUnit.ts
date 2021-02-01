@@ -35,5 +35,5 @@ export const compilationUnitPrinter: Printer<CompilationUnitNode>['print'] = (
       ? concat([join(hardline, path.map(print, 'members')), hardline])
       : '';
 
-  return concat([usings, externs, members]);
+  return concat([usings, externs, members, path.call(print, 'endOfFileToken')]);
 };

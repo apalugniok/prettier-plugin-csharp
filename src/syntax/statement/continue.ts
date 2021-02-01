@@ -11,6 +11,13 @@ export type ContinueStatementNode = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const continueStatementPrinter: Printer['print'] = (path, _, print) => {
-  return concat([printAttributeLists(path, print), 'continue;']);
-};
+export const continueStatementPrinter: Printer<ContinueStatementNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    printAttributeLists(path, print),
+    path.call(print, 'continueKeyword'),
+    path.call(print, 'semicolonToken'),
+  ]);

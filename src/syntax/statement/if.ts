@@ -20,19 +20,23 @@ export type IfStatementNode = {
   else: ElseClauseNode | null;
 } & SyntaxNode;
 
-export const ifStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { else: elseClause, statement }: IfStatementNode = path.getValue();
+export const ifStatementPrinter: Printer<IfStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { else: elseClause, statement } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'if',
+    path.call(print, 'ifKeyword'),
     ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(concat([softline, path.call(print, 'condition')])),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
     group(
@@ -51,11 +55,15 @@ export type ElseClauseNode = {
   statement: StatementNode;
 } & SyntaxNode;
 
-export const elseClausePrinter: Printer['print'] = (path, _, print) => {
+export const elseClausePrinter: Printer<ElseClauseNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const { statement }: ElseClauseNode = path.getValue();
 
   return concat([
-    'else',
+    path.call(print, 'elseKeyword'),
     statement.nodeType === 'Block' ? hardline : ' ',
     path.call(print, 'statement'),
   ]);

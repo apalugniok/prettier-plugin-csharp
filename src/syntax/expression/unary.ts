@@ -8,27 +8,19 @@ export type PrefixUnaryExpressionNode = {
   operatorToken: SyntaxToken;
 } & SyntaxNode;
 
-export const prefixUnaryExpressionPrinter: Printer['print'] = (
+export const prefixUnaryExpressionPrinter: Printer<PrefixUnaryExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { operatorToken }: PrefixUnaryExpressionNode = path.getValue();
-
-  return concat([operatorToken.text, path.call(print, 'operand')]);
-};
+) => concat([path.call(print, 'operatorToken'), path.call(print, 'operand')]);
 
 export type PostfixUnaryExpressionNode = {
   operand: ExpressionNode;
   operatorToken: SyntaxToken;
 } & SyntaxNode;
 
-export const postfixUnaryExpressionPrinter: Printer['print'] = (
+export const postfixUnaryExpressionPrinter: Printer<PostfixUnaryExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { operatorToken }: PrefixUnaryExpressionNode = path.getValue();
-
-  return concat([path.call(print, 'operand'), operatorToken.text]);
-};
+) => concat([path.call(print, 'operand'), path.call(print, 'operatorToken')]);

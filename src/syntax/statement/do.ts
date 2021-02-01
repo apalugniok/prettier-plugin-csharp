@@ -3,7 +3,10 @@ import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists, wrapInBlock } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  wrapStatementInBlock,
+} from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
 import softline = doc.builders.softline;
 import indent = doc.builders.indent;
@@ -20,25 +23,26 @@ export type DoStatementNode = {
   whileKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const doStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { statement }: DoStatementNode = path.getValue();
-
-  return concat([
+export const doStatementPrinter: Printer<DoStatementNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     printAttributeLists(path, print),
-    'do',
+    path.call(print, 'doKeyword'),
     hardline,
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
     ' ',
-    'while',
+    path.call(print, 'whileKeyword'),
     ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(concat([softline, path.call(print, 'condition')])),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
-};

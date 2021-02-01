@@ -27,23 +27,28 @@ export type SwitchStatementNode = {
   switchKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const switchStatementPrinter: Printer['print'] = (path, _, print) => {
+export const switchStatementPrinter: Printer<SwitchStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   return concat([
     printAttributeLists(path, print),
-    'switch ',
+    path.call(print, 'switchKeyword'),
+    ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(concat([softline, path.call(print, 'expression')])),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
     hardline,
-    '{',
+    path.call(print, 'openBraceToken'),
     indent(concat([hardline, join(hardline, path.map(print, 'sections'))])),
     hardline,
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };
 
@@ -54,12 +59,15 @@ export type SwitchSectionNode = {
   statements: Array<StatementNode>;
 } & SyntaxNode;
 
-export const switchSectionPrinter: Printer['print'] = (path, _, print) => {
-  return concat([
+export const switchSectionPrinter: Printer<SwitchSectionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     join(hardline, path.map(print, 'labels')),
     indent(concat([hardline, join(hardline, path.map(print, 'statements'))])),
   ]);
-};
 
 export type CasePattenSwitchLabelNode = {
   colonToken: SyntaxToken;
@@ -68,20 +76,20 @@ export type CasePattenSwitchLabelNode = {
   whenClause: WhenClauseNode | null;
 } & SyntaxNode;
 
-export const casePatternSwitchLabelPrinter: Printer['print'] = (
+export const casePatternSwitchLabelPrinter: Printer<CasePattenSwitchLabelNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const { keyword, whenClause }: CasePattenSwitchLabelNode = path.getValue();
+  const { whenClause } = path.getValue();
 
   return concat([
-    keyword.text,
+    path.call(print, 'keyword'),
     ' ',
     path.call(print, 'pattern'),
     whenClause == null ? '' : ' ',
     path.call(print, 'whenClause'),
-    ':',
+    path.call(print, 'colonToken'),
   ]);
 };
 
@@ -91,18 +99,25 @@ export type CaseSwitchLabelNode = {
   value: ExpressionNode;
 } & SyntaxNode;
 
-export const caseSwitchLabelPrinter: Printer['print'] = (path, _, print) => {
-  const { keyword }: CaseSwitchLabelNode = path.getValue();
-  return concat([keyword.text, ' ', path.call(print, 'value'), ':']);
-};
+export const caseSwitchLabelPrinter: Printer<CaseSwitchLabelNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    ' ',
+    path.call(print, 'value'),
+    path.call(print, 'colonToken'),
+  ]);
 
 export type DefaultSwitchLabelNode = {
   colonToken: SyntaxToken;
   keyword: SyntaxToken;
 } & SyntaxNode;
 
-export const defaultSwitchLabelPrinter: Printer['print'] = (path, _, print) => {
-  const { keyword }: DefaultSwitchLabelNode = path.getValue();
-
-  return concat([keyword.text, ':']);
-};
+export const defaultSwitchLabelPrinter: Printer<DefaultSwitchLabelNode>['print'] = (
+  path,
+  _,
+  print
+) => concat([path.call(print, 'keyword'), path.call(print, 'colonToken')]);

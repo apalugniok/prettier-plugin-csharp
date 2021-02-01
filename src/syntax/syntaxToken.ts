@@ -13,7 +13,16 @@ export type SyntaxToken = {
 };
 
 export const tokenPrinter: Printer['print'] = (path, _, print) => {
-  const { leadingTrivia, text, trailingTrivia }: SyntaxToken = path.getValue();
+  const node = path.getValue();
+  const { leadingTrivia, trailingTrivia }: SyntaxToken = node;
+  let { text } = node;
+
+  if (
+    path.getParentNode().nodeType === 'InterpolatedStringExpression' &&
+    text === '@$"'
+  ) {
+    text = '$@"';
+  }
 
   return concat([
     printComments(leadingTrivia, 'leading'),

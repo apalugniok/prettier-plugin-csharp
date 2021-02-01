@@ -11,6 +11,14 @@ export type BreakStatementNode = {
   semicolonToken: SyntaxToken;
 } & SyntaxNode;
 
-export const breakStatementPrinter: Printer['print'] = (path, _, print) => {
-  return concat([printAttributeLists(path, print), `break;`]);
+export const breakStatementPrinter: Printer<BreakStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  return concat([
+    printAttributeLists(path, print),
+    path.call(print, 'breakKeyword'),
+    path.call(print, 'semicolonToken'),
+  ]);
 };

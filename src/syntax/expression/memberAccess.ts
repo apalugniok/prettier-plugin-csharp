@@ -17,15 +17,12 @@ export type MemberAccessExpressionNode = {
   operatorToken: SyntaxToken;
 } & SyntaxNode;
 
-export const memberAccessExpressionPrinter: Printer['print'] = (
+export const memberAccessExpressionPrinter: Printer<MemberAccessExpressionNode>['print'] = (
   path,
   options,
   print
 ) => {
-  const {
-    expression,
-    operatorToken,
-  }: MemberAccessExpressionNode = path.getValue();
+  const { expression } = path.getValue();
 
   // @ts-ignore
   const shouldStartNewLine = !nameNodeTypes.includes(expression.nodeType);
@@ -34,7 +31,7 @@ export const memberAccessExpressionPrinter: Printer['print'] = (
     concat([
       dedent(path.call(print, 'expression')),
       shouldStartNewLine ? softline : '',
-      operatorToken.text,
+      path.call(print, 'operatorToken'),
       path.call(print, 'name'),
     ])
   );

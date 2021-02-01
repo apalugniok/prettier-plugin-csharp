@@ -1,7 +1,6 @@
 ﻿import { StatementNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { doc, Printer } from 'prettier';
-import hardline = doc.builders.hardline;
 import join = doc.builders.join;
 import concat = doc.builders.concat;
 import indent = doc.builders.indent;
@@ -17,18 +16,22 @@ export type BlockNode = {
   statements: Array<StatementNode>;
 } & StatementNode;
 
-export const blockPrinter: Printer['print'] = (path, _, print) => {
-  const { statements }: BlockNode = path.getValue();
+export const blockPrinter: Printer<BlockNode>['print'] = (path, _, print) => {
+  const { statements } = path.getValue();
 
   const block =
     statements.length !== 0
       ? concat([
-          '{',
+          path.call(print, 'openBraceToken'),
           indent(concat([line, join(line, path.map(print, 'statements'))])),
           line,
-          '}',
+          path.call(print, 'closeBraceToken'),
         ])
-      : '{ }';
+      : concat([
+          path.call(print, 'openBraceToken'),
+          ' ',
+          path.call(print, 'closeBraceToken'),
+        ]);
 
   return concat([printAttributeLists(path, print), block]);
 };

@@ -10,11 +10,15 @@ export type CastExpressionNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const castExpressionPrinter: Printer['print'] = (path, _, print) => {
+export const castExpressionPrinter: Printer<CastExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   return concat([
-    '(',
+    path.call(print, 'openParenToken'),
     path.call(print, 'type'),
-    ')',
+    path.call(print, 'closeParenToken'),
     ' ',
     path.call(print, 'expression'),
   ]);

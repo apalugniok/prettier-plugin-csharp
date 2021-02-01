@@ -15,14 +15,8 @@ export type DeclarationExpressionNode = {
     | ParenthesizedVariableDesignationNode;
 } & SyntaxNode;
 
-export const declarationExpressionPrinter: Printer['print'] = (
+export const declarationExpressionPrinter: Printer<DeclarationExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
-    path.call(print, 'type'),
-    ' ',
-    path.call(print, 'designation'),
-  ]);
-};
+) => concat([path.call(print, 'type'), ' ', path.call(print, 'designation')]);

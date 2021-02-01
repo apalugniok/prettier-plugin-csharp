@@ -16,6 +16,6 @@ export const code = (strings: TemplateStringsArray) => {
 export const formatCSharpWithPrettier = (text: string) =>
   format(text, {
     //@ts-ignore
-    parser: 'csharp',
+    parser: 'roslyn-csharp',
     plugins: ['.'],
   });

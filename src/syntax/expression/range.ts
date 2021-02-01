@@ -9,12 +9,13 @@ export type RangeExpressionNode = {
   rightOperand: ExpressionNode;
 } & SyntaxNode;
 
-export const rangeExpressionPrinter: Printer['print'] = (path, _, print) => {
-  const { operatorToken }: RangeExpressionNode = path.getValue();
-
-  return concat([
+export const rangeExpressionPrinter: Printer<RangeExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     path.call(print, 'leftOperand'),
-    operatorToken.text,
+    path.call(print, 'operatorToken'),
     path.call(print, 'rightOperand'),
   ]);
-};

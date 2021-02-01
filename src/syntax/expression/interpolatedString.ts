@@ -9,27 +9,26 @@ export type InterpolatedStringExpressionNode = {
   stringStartToken: SyntaxToken;
 } & SyntaxNode;
 
-export const interpolatedStringExpressionPrinter: Printer['print'] = (
+export const interpolatedStringExpressionPrinter: Printer<InterpolatedStringExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  const {
-    stringStartToken,
-  }: InterpolatedStringExpressionNode = path.getValue();
-  return concat([
-    stringStartToken.text.includes('@') ? '$@"' : '$"',
+) =>
+  concat([
+    path.call(print, 'stringStartToken'),
     ...path.map(print, 'contents'),
-    '"',
+    path.call(print, 'stringEndToken'),
   ]);
-};
 
 export type InterpolatedStringTextNode = {
   textToken: SyntaxToken;
 };
 
-export const interpolatedStringTextPrinter: Printer['print'] = (path) =>
-  (path.getValue() as InterpolatedStringTextNode).textToken.text;
+export const interpolatedStringTextPrinter: Printer<InterpolatedStringTextNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'textToken');
 
 export type InterpolationNode = {
   alignmentClause: InterpolationAlignmentClauseNode;
@@ -39,13 +38,17 @@ export type InterpolationNode = {
   openBraceToken: SyntaxToken;
 } & SyntaxNode;
 
-export const interpolationPrinter: Printer['print'] = (path, _, print) => {
+export const interpolationPrinter: Printer<InterpolationNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   return concat([
-    '{',
+    path.call(print, 'openBraceToken'),
     path.call(print, 'expression'),
     path.call(print, 'alignmentClause'),
     path.call(print, 'formatClause'),
-    '}',
+    path.call(print, 'closeBraceToken'),
   ]);
 };
 
@@ -54,12 +57,16 @@ export type InterpolationAlignmentClauseNode = {
   value: ExpressionNode;
 } & SyntaxNode;
 
-export const interpolationAlignmentClausePrinter: Printer['print'] = (
+export const interpolationAlignmentClausePrinter: Printer<InterpolationAlignmentClauseNode>['print'] = (
   path,
   _,
   print
 ) => {
-  return concat([', ', path.call(print, 'value')]);
+  return concat([
+    path.call(print, 'commaToken'),
+    ' ',
+    path.call(print, 'value'),
+  ]);
 };
 
 export type InterpolationFormatClauseNode = {
@@ -67,8 +74,12 @@ export type InterpolationFormatClauseNode = {
   formatStringToken: SyntaxToken;
 } & SyntaxNode;
 
-export const interpolationFormatClausePrinter: Printer['print'] = (path) => {
-  const { formatStringToken }: InterpolationFormatClauseNode = path.getValue();
-
-  return concat([':', formatStringToken.text]);
-};
+export const interpolationFormatClausePrinter: Printer<InterpolationFormatClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'colonToken'),
+    path.call(print, 'formatStringToken'),
+  ]);

@@ -189,7 +189,8 @@ describe('Attribute List', () => {
       class Irrelevant {}
     `;
     const expectedFormattedCode = code`
-      [Bar /* foo */ ] // barbar
+      /// DOCS
+      [Bar /* foo */] // barbar
       class Irrelevant
       {
       }

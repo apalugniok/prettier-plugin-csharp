@@ -10,8 +10,16 @@ export type AliasQualifiedNameNode = {
   name: NameNode;
 } & NameNode;
 
-export const aliasQualifiedNamePrinter: Printer['print'] = (path, _, print) =>
-  concat([path.call(print, 'alias'), '::', path.call(print, 'name')]);
+export const aliasQualifiedNamePrinter: Printer<AliasQualifiedNameNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'alias'),
+    path.call(print, 'colonColonToken'),
+    path.call(print, 'name'),
+  ]);
 
 export type QualifiedNameNode = {
   dotToken: SyntaxToken;
@@ -19,8 +27,16 @@ export type QualifiedNameNode = {
   right: NameNode;
 } & NameNode;
 
-export const qualifiedNamePrinter: Printer['print'] = (path, _, print) =>
-  concat([path.call(print, 'left'), '.', path.call(print, 'right')]);
+export const qualifiedNamePrinter: Printer<QualifiedNameNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'left'),
+    path.call(print, 'dotToken'),
+    path.call(print, 'right'),
+  ]);
 
 export type GenericNameNode = {
   identifier: SyntaxToken;
@@ -28,18 +44,22 @@ export type GenericNameNode = {
   typeArgumentList: TypeArgumentListNode;
 } & NameNode;
 
-export const genericNamePrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: GenericNameNode = path.getValue();
-
-  return concat([
+export const genericNamePrinter: Printer<GenericNameNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     path.call(print, 'identifier'),
     path.call(print, 'typeArgumentList'),
   ]);
-};
 
 export type IdentifierNameNode = {
   identifier: SyntaxToken;
 } & NameNode;
 
-export const identifierNamePrinter: Printer['print'] = (path, _, print) =>
-  path.call(print, 'identifier');
+export const identifierNamePrinter: Printer<IdentifierNameNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'identifier');

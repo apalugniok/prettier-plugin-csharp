@@ -13,7 +13,7 @@ export type ExpressionStatementNode = {
   allowsAnyExpression: boolean;
 } & SyntaxNode;
 
-export const expressionStatementPrinter: Printer['print'] = (
+export const expressionStatementPrinter: Printer<ExpressionStatementNode>['print'] = (
   path,
   _,
   print
@@ -21,6 +21,6 @@ export const expressionStatementPrinter: Printer['print'] = (
   return concat([
     printAttributeLists(path, print),
     group(path.call(print, 'expression')),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

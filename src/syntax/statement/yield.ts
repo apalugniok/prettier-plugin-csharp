@@ -13,18 +13,20 @@ export type YieldStatementNode = {
   yieldKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const yieldStatementPrinter: Printer['print'] = (path, _, print) => {
-  const {
-    expression,
-    returnOrBreakKeyword,
-  }: YieldStatementNode = path.getValue();
+export const yieldStatementPrinter: Printer<YieldStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { expression } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'yield ',
-    returnOrBreakKeyword.text,
+    path.call(print, 'yieldKeyword'),
+    ' ',
+    path.call(print, 'returnOrBreakKeyword'),
     expression == null ? '' : ' ',
     path.call(print, 'expression'),
-    ';',
+    path.call(print, 'semicolonToken'),
   ]);
 };

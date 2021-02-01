@@ -18,20 +18,25 @@ export type LockStatementNode = {
   statement: StatementNode;
 } & SyntaxNode;
 
-export const lockStatementPrinter: Printer['print'] = (path, _, print) => {
+export const lockStatementPrinter: Printer<LockStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const { statement }: LockStatementNode = path.getValue();
 
   const shouldIndentStatement = statement.nodeType !== 'Block';
 
   return concat([
     printAttributeLists(path, print),
-    'lock ',
+    path.call(print, 'lockKeyword'),
+    ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(concat([softline, path.call(print, 'expression')])),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
     shouldIndentStatement

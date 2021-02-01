@@ -6,18 +6,18 @@ export type ThisExpressionNode = {
   token: SyntaxToken;
 } & SyntaxNode;
 
-export const thisExpressionPrinter: Printer['print'] = (path) => {
-  const { token }: ThisExpressionNode = path.getValue();
-
-  return token.text;
-};
+export const thisExpressionPrinter: Printer<ThisExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'token');
 
 export type BaseExpressionNode = {
   token: SyntaxToken;
 } & SyntaxNode;
 
-export const baseExpressionPrinter: Printer['print'] = (path) => {
-  const { token }: BaseExpressionNode = path.getValue();
-
-  return token.text;
-};
+export const baseExpressionPrinter: Printer<BaseExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'token');

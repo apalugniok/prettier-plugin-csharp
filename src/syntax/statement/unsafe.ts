@@ -13,11 +13,14 @@ export type UnsafeStatementNode = {
   unsafeKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const unsafeStatementPrinter: Printer['print'] = (path, _, print) => {
-  return concat([
+export const unsafeStatementPrinter: Printer<UnsafeStatementNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     printAttributeLists(path, print),
-    'unsafe',
+    path.call(print, 'unsafeKeyword'),
     hardline,
     path.call(print, 'block'),
   ]);
-};

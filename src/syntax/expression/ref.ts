@@ -10,11 +10,17 @@ export type MakeRefExpressionNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const makeRefExpressionPrinter: Printer['print'] = (path, _, print) => {
-  const { keyword }: MakeRefExpressionNode = path.getValue();
-
-  return concat([keyword.text, '(', path.call(print, 'expression'), ')']);
-};
+export const makeRefExpressionPrinter: Printer<MakeRefExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'expression'),
+    path.call(print, 'closeParenToken'),
+  ]);
 
 export type RefTypeExpressionNode = {
   closeParenToken: SyntaxToken;
@@ -23,11 +29,17 @@ export type RefTypeExpressionNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const refTypeExpressionPrinter: Printer['print'] = (path, _, print) => {
-  const { keyword }: MakeRefExpressionNode = path.getValue();
-
-  return concat([keyword.text, '(', path.call(print, 'expression'), ')']);
-};
+export const refTypeExpressionPrinter: Printer<RefTypeExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'expression'),
+    path.call(print, 'closeParenToken'),
+  ]);
 
 export type RefValueExpressionNode = {
   closeParenToken: SyntaxToken;
@@ -38,16 +50,17 @@ export type RefValueExpressionNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const refValueExpressionPrinter: Printer['print'] = (path, _, print) => {
-  const { keyword }: MakeRefExpressionNode = path.getValue();
-
-  return concat([
-    keyword.text,
-    '(',
+export const refValueExpressionPrinter: Printer<RefValueExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
     path.call(print, 'expression'),
-    ',',
+    path.call(print, 'comma'),
     ' ',
     path.call(print, 'type'),
-    ')',
+    path.call(print, 'closeParenToken'),
   ]);
-};

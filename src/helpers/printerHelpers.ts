@@ -6,7 +6,7 @@ import { BlockNode } from '../syntax/statement/block';
 import { ArrowExpressionClauseNode } from '../syntax/expression/arrowExpressionClause';
 import concat = doc.builders.concat;
 import line = doc.builders.line;
-import { StatementNode } from '../syntax/syntaxNode';
+import { StatementNode, SyntaxNode } from '../syntax/syntaxNode';
 import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntax/syntaxToken';
 
@@ -28,7 +28,7 @@ export const printMethodBody = <
   }
 >(
   path: FastPath<TNode>,
-  print: (path: FastPath) => Doc
+  print: (path: FastPath<TNode>) => Doc
 ): Doc => {
   const { body, expressionBody } = path.getValue();
 
@@ -43,12 +43,13 @@ export const printMethodBody = <
     : '';
 };
 
-export const wrapInBlock = (
-  statement: StatementNode,
-  path: FastPath,
-  print: (path: FastPath) => Doc
+export const wrapStatementInBlock = <
+  TNode extends { statement: StatementNode }
+>(
+  path: FastPath<TNode>,
+  print: (path: FastPath<TNode>) => Doc
 ) =>
-  statement.nodeType === 'Block'
+  path.getValue().statement.nodeType === 'Block'
     ? path.call(print, 'statement')
     : concat([
         '{',

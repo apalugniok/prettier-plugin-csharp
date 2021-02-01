@@ -8,7 +8,10 @@ import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists, wrapInBlock } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  wrapStatementInBlock,
+} from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
 
 export type ForEachStatementNode = {
@@ -24,8 +27,12 @@ export type ForEachStatementNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const forEachStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { awaitKeyword, statement }: ForEachStatementNode = path.getValue();
+export const forEachStatementPrinter: Printer<ForEachStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { awaitKeyword }: ForEachStatementNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
@@ -43,7 +50,7 @@ export const forEachStatementPrinter: Printer['print'] = (path, _, print) => {
     path.call(print, 'expression'),
     path.call(print, 'closeParenToken'),
     hardline,
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
   ]);
 };
 
@@ -59,17 +66,17 @@ export type ForEachVariableStatementNode = {
   variable: ExpressionNode;
 } & SyntaxNode;
 
-export const forEachVariableStatementPrinter: Printer['print'] = (
+export const forEachVariableStatementPrinter: Printer<ForEachVariableStatementNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const { statement }: ForEachStatementNode = path.getValue();
+  const { awaitKeyword } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
     path.call(print, 'awaitKeyword'),
-    ' ',
+    awaitKeyword.text !== '' ? ' ' : '',
     path.call(print, 'forEachKeyword'),
     ' ',
     path.call(print, 'openParenToken'),
@@ -79,6 +86,6 @@ export const forEachVariableStatementPrinter: Printer['print'] = (
     ' ',
     path.call(print, 'expression'),
     path.call(print, 'closeParenToken'),
-    wrapInBlock(statement, path, print),
+    wrapStatementInBlock(path, print),
   ]);
 };

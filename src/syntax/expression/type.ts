@@ -23,27 +23,36 @@ export type ArrayRankSpecifierNode = {
   sizes: Array<ExpressionNode>;
 } & SyntaxNode;
 
-export const arrayRankSpecifierPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['[', join(', ', path.map(print, 'sizes')), ']']);
-};
+export const arrayRankSpecifierPrinter: Printer<ArrayRankSpecifierNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'openBracketToken'),
+    join(', ', path.map(print, 'sizes')),
+    path.call(print, 'closeBracketToken'),
+  ]);
 
 export type OmittedArraySizeExpressionNode = {
   omittedArraySizeExpressionToken: SyntaxToken;
 } & SyntaxNode;
 
-export const omittedArraySizeExpressionPrinter: Printer['print'] = (path) =>
-  (path.getValue() as OmittedArraySizeExpressionNode)
-    .omittedArraySizeExpressionToken.text;
+export const omittedArraySizeExpressionPrinter: Printer<OmittedArraySizeExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'omittedArraySizeExpressionToken');
 
 export type PredefinedTypeNode = {
   keyword: SyntaxToken;
 } & SyntaxNode;
 
-export const predefinedTypePrinter: Printer['print'] = (path) => {
-  const { keyword }: PredefinedTypeNode = path.getValue();
-
-  return keyword.text;
-};
+export const predefinedTypePrinter: Printer<PredefinedTypeNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'keyword');
 
 export type RefTypeNode = {
   readonlyKeyword: SyntaxToken;
@@ -51,13 +60,17 @@ export type RefTypeNode = {
   type: TypeNode;
 } & SyntaxNode;
 
-export const refTypePrinter: Printer['print'] = (path, _, print) => {
-  const { readonlyKeyword, refKeyword }: RefTypeNode = path.getValue();
+export const refTypePrinter: Printer<RefTypeNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { readonlyKeyword } = path.getValue();
 
   return concat([
-    refKeyword.text,
+    path.call(print, 'refKeyword'),
     ' ',
-    readonlyKeyword.text,
+    path.call(print, 'readonlyKeyword'),
     readonlyKeyword.text !== '' ? '' : ' ',
     path.call(print, 'type'),
   ]);
@@ -68,18 +81,24 @@ export type PointerTypeNode = {
   elementType: TypeNode;
 } & SyntaxNode;
 
-export const pointerTypePrinter: Printer['print'] = (path, _, print) => {
-  return concat([path.call(print, 'elementType'), '*']);
-};
+export const pointerTypePrinter: Printer<PointerTypeNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([path.call(print, 'elementType'), path.call(print, 'asteriskToken')]);
 
 export type NullableTypeNode = {
   elementType: TypeNode;
   questionToken: SyntaxToken;
 } & SyntaxNode;
 
-export const nullableTypePrinter: Printer['print'] = (path, _, print) => {
-  return concat([path.call(print, 'elementType'), '?']);
-};
+export const nullableTypePrinter: Printer<NullableTypeNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([path.call(print, 'elementType'), path.call(print, 'questionToken')]);
 
 export type TupleTypeNode = {
   closeParenToken: SyntaxToken;
@@ -87,35 +106,34 @@ export type TupleTypeNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const tupleTypePrinter: Printer['print'] = (path, _, print) => {
-  return concat(['(', join(', ', path.map(print, 'elements')), ')']);
-};
+export const tupleTypePrinter: Printer<TupleTypeNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'openParenToken'),
+    join(', ', path.map(print, 'elements')),
+    path.call(print, 'closeParenToken'),
+  ]);
 
 export type TupleElementNode = {
   identifier: SyntaxToken;
   type: TypeNode;
 } & SyntaxNode;
 
-export const tupleElementPrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: TupleElementNode = path.getValue();
-
-  return concat([
-    path.call(print, 'type'),
-    ' ',
-    path.call(print, 'identifier'),
-  ]);
-};
+export const tupleElementPrinter: Printer<TupleElementNode>['print'] = (
+  path,
+  _,
+  print
+) => concat([path.call(print, 'type'), ' ', path.call(print, 'identifier')]);
 
 export type OmittedTypeArgumentNode = {
   omittedTypeArgumentToken: SyntaxToken;
 } & SyntaxNode;
 
-export const omittedTypeArgumentPrinter: Printer['print'] = (
+export const omittedTypeArgumentPrinter: Printer<OmittedTypeArgumentNode>['print'] = (
   path,
   _,
   print
-) => {
-  const { omittedTypeArgumentToken }: OmittedTypeArgumentNode = path.getValue();
-
-  return omittedTypeArgumentToken.text;
-};
+) => path.call(print, 'omittedTypeArgumentToken');

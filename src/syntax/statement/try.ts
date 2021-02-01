@@ -19,12 +19,16 @@ export type TryStatementNode = {
   finally: FinallyClauseNode | null;
 } & SyntaxNode;
 
-export const tryStatementPrinter: Printer['print'] = (path, _, print) => {
+export const tryStatementPrinter: Printer<TryStatementNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const { catches, finally: finallyClause }: TryStatementNode = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
-    'try',
+    path.call(print, 'tryKeyword'),
     hardline,
     path.call(print, 'block'),
     catches.length !== 0 ? hardline : '',
@@ -42,12 +46,16 @@ export type CatchClauseNode = {
   block: BlockNode;
 } & SyntaxNode;
 
-export const catchClausePrinter: Printer['print'] = (path, _, print) => {
-  const { declaration, filter }: CatchClauseNode = path.getValue();
+export const catchClausePrinter: Printer<CatchClauseNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { declaration, filter } = path.getValue();
 
   return concat([
     concat([
-      'catch',
+      path.call(print, 'catchKeyword'),
       declaration != null ? ' ' : '',
       path.call(print, 'declaration'),
       filter != null ? ' ' : '',
@@ -65,12 +73,14 @@ export type CatchDeclarationNode = {
   closeParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const catchDeclarationPrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: CatchDeclarationNode = path.getValue();
-
-  return group(
+export const catchDeclarationPrinter: Printer<CatchDeclarationNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  group(
     concat([
-      '(',
+      path.call(print, 'openParenToken'),
       indent(
         concat([
           softline,
@@ -80,10 +90,9 @@ export const catchDeclarationPrinter: Printer['print'] = (path, _, print) => {
         ])
       ),
       softline,
-      ')',
+      path.call(print, 'closeParenToken'),
     ])
   );
-};
 
 export type CatchFilterClauseNode = {
   whenKeyword: SyntaxToken;
@@ -92,26 +101,36 @@ export type CatchFilterClauseNode = {
   closeParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const catchFilterClausePrinter: Printer['print'] = (path, _, print) => {
-  return concat([
-    'when',
+export const catchFilterClausePrinter: Printer<CatchFilterClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'whenKeyword'),
     ' ',
     group(
       concat([
-        '(',
+        path.call(print, 'openParenToken'),
         indent(concat([softline, path.call(print, 'filterExpression')])),
         softline,
-        ')',
+        path.call(print, 'closeParenToken'),
       ])
     ),
   ]);
-};
 
 export type FinallyClauseNode = {
   finallyKeyword: SyntaxToken;
   block: BlockNode;
 } & SyntaxNode;
 
-export const finallyClausePrinter: Printer['print'] = (path, _, print) => {
-  return concat(['finally', hardline, path.call(print, 'block')]);
-};
+export const finallyClausePrinter: Printer<FinallyClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'finallyKeyword'),
+    hardline,
+    path.call(print, 'block'),
+  ]);

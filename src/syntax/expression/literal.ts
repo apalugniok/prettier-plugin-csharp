@@ -6,8 +6,8 @@ export type LiteralExpressionNode = {
   token: SyntaxToken;
 } & SyntaxNode;
 
-export const literalExpressionPrinter: Printer['print'] = (path) => {
-  const { token }: LiteralExpressionNode = path.getValue();
-
-  return token.text;
-};
+export const literalExpressionPrinter: Printer<LiteralExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => path.call(print, 'token');

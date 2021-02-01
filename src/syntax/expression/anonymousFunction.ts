@@ -5,7 +5,6 @@ import { ExpressionNode, SyntaxNode } from '../syntaxNode';
 import { Doc, doc, FastPath, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import group = doc.builders.group;
-import join = doc.builders.join;
 import line = doc.builders.line;
 
 export type AnonymousMethodExpressionNode = {
@@ -18,18 +17,18 @@ export type AnonymousMethodExpressionNode = {
   parameterList: ParameterListNode;
 } & SyntaxNode;
 
-export const anonymousMethodExpressionPrinter: Printer['print'] = (
+export const anonymousMethodExpressionPrinter: Printer<AnonymousMethodExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const { asyncKeyword }: AnonymousMethodExpressionNode = path.getValue();
+  const { asyncKeyword } = path.getValue();
 
   return group(
     concat([
-      asyncKeyword.text !== ''
-        ? join(' ', [asyncKeyword.text, 'delegate'])
-        : 'delegate',
+      path.call(print, 'asyncKeyword'),
+      asyncKeyword.text !== '' ? ' ' : '',
+      path.call(print, 'delegateKeyword'),
       ' ',
       path.call(print, 'parameterList'),
       line,
@@ -37,18 +36,6 @@ export const anonymousMethodExpressionPrinter: Printer['print'] = (
     ])
   );
 };
-
-const printLambdaBody = (
-  path: FastPath,
-  print: (path: FastPath) => Doc,
-  body: BlockNode | null,
-  expressionBody: ExpressionNode
-): Doc =>
-  body != null
-    ? path.call(print, 'block')
-    : expressionBody != null
-    ? path.call(print, 'expressionBody')
-    : '';
 
 export type SimpleLambdaExpressionNode = {
   arrowToken: SyntaxToken;
@@ -58,25 +45,22 @@ export type SimpleLambdaExpressionNode = {
   parameter: ParameterNode;
 } & SyntaxNode;
 
-export const simpleLambdaExpressionPrinter: Printer['print'] = (
+export const simpleLambdaExpressionPrinter: Printer<SimpleLambdaExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    asyncKeyword,
-    block,
-    expressionBody,
-  }: SimpleLambdaExpressionNode = path.getValue();
+  const { asyncKeyword } = path.getValue();
 
   return group(
     concat([
-      asyncKeyword.text !== '' ? concat([asyncKeyword.text, ' ']) : '',
+      path.call(print, 'asyncKeyword'),
+      asyncKeyword.text !== '' ? ' ' : '',
       path.call(print, 'parameter'),
       ' ',
-      '=>',
+      path.call(print, 'arrowToken'),
       ' ',
-      printLambdaBody(path, print, block, expressionBody),
+      printLambdaBody(path, print),
     ])
   );
 };
@@ -89,25 +73,37 @@ export type ParenthesizedLambdaExpressionSyntax = {
   parameterList: ParameterListNode;
 } & SyntaxNode;
 
-export const parenthesizedLambdaExpressionPrinter: Printer['print'] = (
+export const parenthesizedLambdaExpressionPrinter: Printer<ParenthesizedLambdaExpressionSyntax>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    asyncKeyword,
-    block,
-    expressionBody,
-  }: ParenthesizedLambdaExpressionSyntax = path.getValue();
+  const { asyncKeyword } = path.getValue();
 
   return group(
     concat([
-      asyncKeyword.text !== '' ? concat([asyncKeyword.text, ' ']) : '',
+      path.call(print, 'asyncKeyword'),
+      asyncKeyword.text !== '' ? ' ' : '',
       path.call(print, 'parameterList'),
       ' ',
-      '=>',
+      path.call(print, 'arrowToken'),
       ' ',
-      printLambdaBody(path, print, block, expressionBody),
+      printLambdaBody(path, print),
     ])
   );
+};
+
+const printLambdaBody = <
+  TNode extends { block: BlockNode; expressionBody: ExpressionNode }
+>(
+  path: FastPath<TNode>,
+  print: (path: FastPath) => Doc
+): Doc => {
+  const { block, expressionBody } = path.getValue();
+
+  return block != null
+    ? group(path.call(print, 'block'))
+    : expressionBody != null
+    ? path.call(print, 'expressionBody')
+    : '';
 };

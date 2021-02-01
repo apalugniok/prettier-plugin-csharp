@@ -197,7 +197,7 @@ describe('Anonymous Object Creation Expression', () => {
       {
           void Irrelevant()
           {
-              new {};
+              new { };
           }
       }
     `;

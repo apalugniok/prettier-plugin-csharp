@@ -14,24 +14,25 @@ export type ConditionalExpressionNode = {
   whenTrue: ExpressionNode;
 } & SyntaxNode;
 
-export const conditionalExpressionPrinter: Printer['print'] = (
+export const conditionalExpressionPrinter: Printer<ConditionalExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return group(
+) =>
+  group(
     concat([
       path.call(print, 'condition'),
       indent(
         concat([
           line,
-          '? ',
+          path.call(print, 'questionToken'),
+          ' ',
           path.call(print, 'whenTrue'),
           line,
-          ': ',
+          path.call(print, 'colonToken'),
+          ' ',
           path.call(print, 'whenFalse'),
         ])
       ),
     ])
   );
-};

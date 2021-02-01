@@ -1,10 +1,5 @@
 ﻿import { SyntaxToken } from '../syntaxToken';
-import {
-  ExpressionNode,
-  nameNodeTypes,
-  SyntaxNode,
-  TypeNode,
-} from '../syntaxNode';
+import { ExpressionNode, nameNodeTypes, SyntaxNode } from '../syntaxNode';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import softline = doc.builders.softline;
@@ -17,15 +12,12 @@ export type ConditionalAccessExpressionNode = {
   whenNotNull: ExpressionNode;
 } & SyntaxNode;
 
-export const conditionalAccessExpressionPrinter: Printer['print'] = (
+export const conditionalAccessExpressionPrinter: Printer<ConditionalAccessExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  const {
-    operatorToken,
-    expression,
-  }: ConditionalAccessExpressionNode = path.getValue();
+  const { expression } = path.getValue();
 
   // @ts-ignore
   const shouldStartNewLine = !nameNodeTypes.includes(expression.nodeType);
@@ -34,7 +26,7 @@ export const conditionalAccessExpressionPrinter: Printer['print'] = (
     concat([
       dedent(path.call(print, 'expression')),
       shouldStartNewLine ? softline : '',
-      operatorToken.text,
+      path.call(print, 'operatorToken'),
       dedent(path.call(print, 'whenNotNull')),
     ])
   );

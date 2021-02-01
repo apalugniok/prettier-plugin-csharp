@@ -19,7 +19,11 @@ export type QueryExpressionNode = {
   fromClause: FromClauseNode;
 } & SyntaxNode;
 
-export const queryExpressionPrinter: Printer['print'] = (path, _, print) =>
+export const queryExpressionPrinter: Printer<QueryExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
   group(
     indent(
       concat([path.call(print, 'fromClause'), line, path.call(print, 'body')])
@@ -32,8 +36,12 @@ export type QueryBodyNode = {
   selectOrGroup: SelectClauseNode | GroupClauseNode;
 } & SyntaxNode;
 
-export const queryBodyPrinter: Printer['print'] = (path, _, print) => {
-  const { continuation }: QueryBodyNode = path.getValue();
+export const queryBodyPrinter: Printer<QueryBodyNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { continuation } = path.getValue();
 
   return concat([
     join(line, [...path.map(print, 'clauses'), '']),
@@ -49,17 +57,18 @@ export type QueryContinuationNode = {
   intoKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const queryContinuationPrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: QueryContinuationNode = path.getValue();
-
-  return concat([
-    'into',
+export const queryContinuationPrinter: Printer<QueryContinuationNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'intoKeyword'),
     ' ',
     path.call(print, 'identifier'),
     line,
     path.call(print, 'body'),
   ]);
-};
 
 export type FromClauseNode = {
   expression: ExpressionNode;
@@ -69,16 +78,20 @@ export type FromClauseNode = {
   type: TypeNode | null;
 } & SyntaxNode;
 
-export const fromClausePrinter: Printer['print'] = (path, _, print) => {
-  const { identifier, type }: FromClauseNode = path.getValue();
+export const fromClausePrinter: Printer<FromClauseNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { type } = path.getValue();
 
   return concat([
-    'from',
+    path.call(print, 'fromKeyword'),
     ' ',
     type !== null ? concat([path.call(print, 'type'), ' ']) : '',
     path.call(print, 'identifier'),
     ' ',
-    'in',
+    path.call(print, 'inKeyword'),
     ' ',
     path.call(print, 'expression'),
   ]);
@@ -91,19 +104,20 @@ export type LetClauseNode = {
   letKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const letClausePrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: LetClauseNode = path.getValue();
-
-  return concat([
-    'let',
+export const letClausePrinter: Printer<LetClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'letKeyword'),
     ' ',
     path.call(print, 'identifier'),
     ' ',
-    '=',
+    path.call(print, 'equalsToken'),
     ' ',
     path.call(print, 'expression'),
   ]);
-};
 
 export type JoinClauseNode = {
   equalsKeyword: SyntaxToken;
@@ -118,24 +132,28 @@ export type JoinClauseNode = {
   type: TypeNode | null;
 } & SyntaxNode;
 
-export const joinClausePrinter: Printer['print'] = (path, _, print) => {
-  const { identifier, type }: JoinClauseNode = path.getValue();
+export const joinClausePrinter: Printer<JoinClauseNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  const { type } = path.getValue();
 
   return concat([
-    'join',
+    path.call(print, 'joinKeyword'),
     ' ',
     type != null ? concat([path.call(print, 'type'), ' ']) : '',
     path.call(print, 'identifier'),
     ' ',
-    'in',
+    path.call(print, 'inKeyword'),
     ' ',
     path.call(print, 'inExpression'),
     ' ',
-    'on',
+    path.call(print, 'onKeyword'),
     ' ',
     path.call(print, 'leftExpression'),
     ' ',
-    'equals',
+    path.call(print, 'equalsKeyword'),
     ' ',
     path.call(print, 'rightExpression'),
     ' ',
@@ -148,30 +166,46 @@ export type JoinIntoClauseNode = {
   identifier: SyntaxToken;
 } & SyntaxNode;
 
-export const joinIntoClausePrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: JoinIntoClauseNode = path.getValue();
-
-  return concat(['into', ' ', path.call(print, 'identifier')]);
-};
+export const joinIntoClausePrinter: Printer<JoinIntoClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'intoKeyword'),
+    ' ',
+    path.call(print, 'identifier'),
+  ]);
 
 export type WhereClauseNode = {
   condition: ExpressionNode;
   whereKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const whereClausePrinter: Printer['print'] = (path, _, print) => {
-  return concat(['where', ' ', path.call(print, 'condition')]);
-};
+export const whereClausePrinter: Printer<WhereClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'whereKeyword'),
+    ' ',
+    path.call(print, 'condition'),
+  ]);
 
 export type OrderByClauseNode = {
   orderByKeyword: SyntaxToken;
   orderings: Array<OrderingNode>;
 } & SyntaxNode;
 
-export const orderByClausePrinter: Printer['print'] = (path, _, print) => {
-  return group(
+export const orderByClausePrinter: Printer<OrderByClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  group(
     concat([
-      'orderby',
+      path.call(print, 'orderByKeyword'),
       ifBreak('', ' '),
       indent(
         concat([
@@ -181,21 +215,23 @@ export const orderByClausePrinter: Printer['print'] = (path, _, print) => {
       ),
     ])
   );
-};
 
 export type OrderingNode = {
   ascendingOrDescendingKeyword: SyntaxToken;
   expression: ExpressionNode;
 } & SyntaxNode;
 
-export const orderingPrinter: Printer['print'] = (path, _, print) => {
+export const orderingPrinter: Printer<OrderingNode>['print'] = (
+  path,
+  _,
+  print
+) => {
   const { ascendingOrDescendingKeyword }: OrderingNode = path.getValue();
 
   return concat([
     path.call(print, 'expression'),
-    ascendingOrDescendingKeyword.text !== ''
-      ? concat([' ', ascendingOrDescendingKeyword.text])
-      : '',
+    ascendingOrDescendingKeyword.text !== '' ? ' ' : '',
+    path.call(print, 'ascendingOrDescendingKeyword'),
   ]);
 };
 
@@ -204,9 +240,16 @@ export type SelectClauseNode = {
   selectKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const selectClausePrinter: Printer['print'] = (path, _, print) => {
-  return concat(['select', ' ', path.call(print, 'expression')]);
-};
+export const selectClausePrinter: Printer<SelectClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'selectKeyword'),
+    ' ',
+    path.call(print, 'expression'),
+  ]);
 
 export type GroupClauseNode = {
   byExpression: ExpressionNode;
@@ -215,14 +258,17 @@ export type GroupClauseNode = {
   groupKeyword: SyntaxToken;
 } & SyntaxNode;
 
-export const groupClausePrinter: Printer['print'] = (path, _, print) => {
-  return concat([
-    'group',
+export const groupClausePrinter: Printer<GroupClauseNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
+    path.call(print, 'groupKeyword'),
     ' ',
     path.call(print, 'groupExpression'),
     ' ',
-    'by',
+    path.call(print, 'byKeyword'),
     ' ',
     path.call(print, 'byExpression'),
   ]);
-};

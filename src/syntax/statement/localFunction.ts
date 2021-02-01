@@ -38,11 +38,7 @@ export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>[
   _,
   print
 ) => {
-  const {
-    constraintClauses,
-    body,
-    expressionBody,
-  }: LocalFunctionStatementNode = path.getValue();
+  const { constraintClauses } = path.getValue();
 
   return concat([
     printAttributeLists(path, print),
@@ -60,6 +56,6 @@ export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>[
         )
       : '',
     printMethodBody(path, print),
-    body == null && expressionBody == null ? ';' : '',
+    path.call(print, 'semicolonToken'),
   ]);
 };

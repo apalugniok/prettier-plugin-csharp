@@ -9,14 +9,15 @@ export type BinaryExpressionNode = {
   right: ExpressionNode;
 } & SyntaxNode;
 
-export const binaryExpressionPrinter: Printer['print'] = (path, _, print) => {
-  const { operatorToken }: BinaryExpressionNode = path.getValue();
-
-  return concat([
+export const binaryExpressionPrinter: Printer<BinaryExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     path.call(print, 'left'),
     ' ',
-    operatorToken.text,
+    path.call(print, 'operatorToken'),
     ' ',
     path.call(print, 'right'),
   ]);
-};

@@ -13,7 +13,11 @@ export type CheckedStatement = {
   block: BlockNode;
 } & SyntaxNode;
 
-export const checkedStatementPrinter: Printer['print'] = (path, _, print) =>
+export const checkedStatementPrinter: Printer<CheckedStatement>['print'] = (
+  path,
+  _,
+  print
+) =>
   concat([
     printAttributeLists(path, print),
     path.call(print, 'keyword'),

@@ -14,13 +14,14 @@ export type LabeledStatementNode = {
   statement: StatementNode;
 } & SyntaxNode;
 
-export const labeledStatementPrinter: Printer['print'] = (path, _, print) => {
-  const { identifier }: LabeledStatementNode = path.getValue();
-
-  return concat([
+export const labeledStatementPrinter: Printer<LabeledStatementNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([
     printAttributeLists(path, print),
     path.call(print, 'identifier'),
-    ':',
+    path.call(print, 'colonToken'),
     indent(concat([hardline, path.call(print, 'statement')])),
   ]);
-};

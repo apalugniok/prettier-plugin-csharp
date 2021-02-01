@@ -10,6 +10,15 @@ export type DefaultExpressionNode = {
   type: ExpressionNode;
 } & SyntaxNode;
 
-export const defaultExpressionPrinter: Printer['print'] = (path, _, print) => {
-  return concat(['default', '(', path.call(print, 'type'), ')']);
+export const defaultExpressionPrinter: Printer<DefaultExpressionNode>['print'] = (
+  path,
+  _,
+  print
+) => {
+  return concat([
+    path.call(print, 'keyword'),
+    path.call(print, 'openParenToken'),
+    path.call(print, 'type'),
+    path.call(print, 'closeParenToken'),
+  ]);
 };

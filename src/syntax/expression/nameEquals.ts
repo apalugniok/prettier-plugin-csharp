@@ -9,5 +9,9 @@ export type NameEqualsNode = {
   name: IdentifierNameNode;
 } & SyntaxNode;
 
-export const nameEqualsPrinter: Printer['print'] = (path, _, print) =>
-  concat([path.call(print, 'name'), ' ', '= ']);
+export const nameEqualsPrinter: Printer<NameEqualsNode>['print'] = (
+  path,
+  _,
+  print
+) =>
+  concat([path.call(print, 'name'), ' ', path.call(print, 'equalsToken'), ' ']);

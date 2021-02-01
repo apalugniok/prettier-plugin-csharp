@@ -9,10 +9,14 @@ export type ParenthesizedExpressionNode = {
   openParenToken: SyntaxToken;
 } & SyntaxNode;
 
-export const parenthesizedExpressionPrinter: Printer['print'] = (
+export const parenthesizedExpressionPrinter: Printer<ParenthesizedExpressionNode>['print'] = (
   path,
   _,
   print
 ) => {
-  return concat(['(', path.call(print, 'expression'), ')']);
+  return concat([
+    path.call(print, 'openParenToken'),
+    path.call(print, 'expression'),
+    path.call(print, 'closeParenToken'),
+  ]);
 };
