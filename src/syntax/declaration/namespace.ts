@@ -8,6 +8,7 @@ import Doc = doc.builders.Doc;
 import { ExternAliasDirectiveNode, UsingDirectiveNode } from '../directive';
 import { SyntaxToken } from '../syntaxToken';
 import { AttributeListNode } from './attribute';
+import { printLeadingNewLine } from '../../helpers/printerHelpers';
 
 export type NamespaceDeclarationNode = {
   attributeLists: Array<AttributeListNode>; // Even though NamespaceDeclarationSyntax has this property attributes cannot be applied to namespaces
@@ -20,7 +21,7 @@ export type NamespaceDeclarationNode = {
   openBraceToken: SyntaxToken;
   semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
   usings: Array<UsingDirectiveNode>;
-} & SyntaxNode;
+} & DeclarationNode;
 
 export const namespaceDeclarationPrinter: Printer<NamespaceDeclarationNode>['print'] = (
   path,
@@ -48,6 +49,7 @@ export const namespaceDeclarationPrinter: Printer<NamespaceDeclarationNode>['pri
   }
 
   return concat([
+    printLeadingNewLine(path),
     path.call(print, 'namespaceKeyword'),
     ' ',
     path.call(print, 'name'),

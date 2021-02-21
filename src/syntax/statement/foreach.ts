@@ -10,6 +10,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import {
   printAttributeLists,
+  printLeadingNewLine,
   wrapStatementInBlock,
 } from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
@@ -25,7 +26,7 @@ export type ForEachStatementNode = {
   openParenToken: SyntaxToken;
   statement: StatementNode;
   type: TypeNode;
-} & SyntaxNode;
+} & StatementNode;
 
 export const forEachStatementPrinter: Printer<ForEachStatementNode>['print'] = (
   path,
@@ -35,6 +36,7 @@ export const forEachStatementPrinter: Printer<ForEachStatementNode>['print'] = (
   const { awaitKeyword }: ForEachStatementNode = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'awaitKeyword'),
     awaitKeyword.text === '' ? '' : ' ',
@@ -64,7 +66,7 @@ export type ForEachVariableStatementNode = {
   openParenToken: SyntaxToken;
   statement: StatementNode;
   variable: ExpressionNode;
-} & SyntaxNode;
+} & StatementNode;
 
 export const forEachVariableStatementPrinter: Printer<ForEachVariableStatementNode>['print'] = (
   path,
@@ -74,6 +76,7 @@ export const forEachVariableStatementPrinter: Printer<ForEachVariableStatementNo
   const { awaitKeyword } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'awaitKeyword'),
     awaitKeyword.text !== '' ? ' ' : '',

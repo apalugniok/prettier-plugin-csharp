@@ -13,7 +13,10 @@ import group = doc.builders.group;
 import softline = doc.builders.softline;
 import indent = doc.builders.indent;
 import hardline = doc.builders.hardline;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import join = doc.builders.join;
 
 export type SwitchStatementNode = {
@@ -25,7 +28,7 @@ export type SwitchStatementNode = {
   openParenToken: SyntaxToken;
   sections: Array<SwitchSectionNode>;
   switchKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const switchStatementPrinter: Printer<SwitchStatementNode>['print'] = (
   path,
@@ -33,6 +36,7 @@ export const switchStatementPrinter: Printer<SwitchStatementNode>['print'] = (
   print
 ) => {
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'switchKeyword'),
     ' ',

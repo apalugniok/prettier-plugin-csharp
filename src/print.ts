@@ -231,6 +231,7 @@ import { usingStatementPrinter } from './syntax/statement/using';
 import { fixedStatementPrinter } from './syntax/statement/fixed';
 import { emptyStatementPrinter } from './syntax/statement/empty';
 import { checkedStatementPrinter } from './syntax/statement/checked';
+import { awaitExpressionPrinter } from './syntax/expression/await';
 
 const printersByType: {
   [key in SyntaxNodeType | 'Token']: Printer['print'];
@@ -405,6 +406,7 @@ const printersByType: {
   FixedStatement: fixedStatementPrinter,
   EmptyStatement: emptyStatementPrinter,
   CheckedStatement: checkedStatementPrinter,
+  AwaitExpression: awaitExpressionPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {
@@ -414,5 +416,6 @@ export const printNode: Printer['print'] = (path, options, print) => {
     return '';
   }
 
+  console.log(node.nodeType);
   return printersByType[node.nodeType](path, options, print);
 };

@@ -1,9 +1,12 @@
-import { ExpressionNode, SyntaxNode } from '../syntaxNode';
+import { ExpressionNode, StatementNode, SyntaxNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 
 export type GotoStatementNode = {
   attributeLists: Array<AttributeListNode>;
@@ -11,7 +14,7 @@ export type GotoStatementNode = {
   expression: ExpressionNode | null;
   gotoKeyword: SyntaxToken;
   semicolonToken: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const gotoStatementPrinter: Printer<GotoStatementNode>['print'] = (
   path,
@@ -21,6 +24,7 @@ export const gotoStatementPrinter: Printer<GotoStatementNode>['print'] = (
   const { caseOrDefaultKeyword } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'gotoKeyword'),
     ' ',

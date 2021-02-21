@@ -16,18 +16,12 @@ export const conditionalAccessExpressionPrinter: Printer<ConditionalAccessExpres
   path,
   _,
   print
-) => {
-  const { expression } = path.getValue();
-
-  // @ts-ignore
-  const shouldStartNewLine = !nameNodeTypes.includes(expression.nodeType);
-
-  return indent(
+) =>
+  indent(
     concat([
       dedent(path.call(print, 'expression')),
-      shouldStartNewLine ? softline : '',
+      softline,
       path.call(print, 'operatorToken'),
       dedent(path.call(print, 'whenNotNull')),
     ])
   );
-};

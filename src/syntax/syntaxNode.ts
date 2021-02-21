@@ -127,7 +127,8 @@ export type ExpressionNodeType =
   | 'AnonymousObjectCreationExpression'
   | 'ArrayCreationExpression'
   | 'ImplicitArrayCreationExpression'
-  | 'ConditionalExpression';
+  | 'ConditionalExpression'
+  | 'AwaitExpression';
 
 export type TypeNodeType =
   | NameNodeType
@@ -197,6 +198,7 @@ export type QueryClauseNodeType =
   | 'OrderByClause';
 
 export type SyntaxNode = {
+  hasLeadingNewLine: boolean;
   nodeType: SyntaxNodeType;
   start: number;
   end: number;

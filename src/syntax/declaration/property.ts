@@ -13,6 +13,7 @@ import { BracketedParameterListNode } from './parameter';
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 import { ExplicitInterfaceSpecifierNode } from './interface';
@@ -38,6 +39,7 @@ export const propertyDeclarationPrinter: Printer<PropertyDeclarationNode>['print
 
   return group(
     concat([
+      printLeadingNewLine(path),
       printAttributeLists(path, print),
       printModifiers(path, print),
       path.call(print, 'type'),
@@ -80,6 +82,7 @@ export const eventDeclarationPrinter: Printer<EventDeclarationNode>['print'] = (
 
   return group(
     concat([
+      printLeadingNewLine(path),
       printAttributeLists(path, print),
       printModifiers(path, print),
       path.call(print, 'eventKeyword'),
@@ -114,6 +117,7 @@ export const indexerDeclarationPrinter: Printer<IndexerDeclarationNode>['print']
 ) =>
   group(
     concat([
+      printLeadingNewLine(path),
       printAttributeLists(path, print),
       printModifiers(path, print),
       path.call(print, 'type'),

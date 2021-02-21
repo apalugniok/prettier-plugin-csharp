@@ -37,19 +37,24 @@ export const argumentListPrinter: Printer<ArgumentListNode>['print'] = (
   _,
   print
 ) =>
-  group(
-    concat([
-      path.call(print, 'openParenToken'),
-      indent(
+  path.getValue().arguments.length !== 0
+    ? group(
         concat([
+          path.call(print, 'openParenToken'),
+          indent(
+            concat([
+              softline,
+              join(concat([',', line]), path.map(print, 'arguments')),
+            ])
+          ),
           softline,
-          join(concat([',', line]), path.map(print, 'arguments')),
+          path.call(print, 'closeParenToken'),
         ])
-      ),
-      softline,
-      path.call(print, 'closeParenToken'),
-    ])
-  );
+      )
+    : concat([
+        path.call(print, 'openParenToken'),
+        path.call(print, 'closeParenToken'),
+      ]);
 
 export type BracketedArgumentListNode = {
   arguments: Array<ArgumentNode>;

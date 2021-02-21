@@ -1,9 +1,12 @@
 ﻿import { SyntaxToken } from '../syntaxToken';
-import { ExpressionNode, SyntaxNode } from '../syntaxNode';
+import { ExpressionNode, StatementNode, SyntaxNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import group = doc.builders.group;
 
 export type ExpressionStatementNode = {
@@ -11,7 +14,7 @@ export type ExpressionStatementNode = {
   expression: ExpressionNode;
   semicolonToken: SyntaxToken;
   allowsAnyExpression: boolean;
-} & SyntaxNode;
+} & StatementNode;
 
 export const expressionStatementPrinter: Printer<ExpressionStatementNode>['print'] = (
   path,
@@ -19,6 +22,7 @@ export const expressionStatementPrinter: Printer<ExpressionStatementNode>['print
   print
 ) => {
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     group(path.call(print, 'expression')),
     path.call(print, 'semicolonToken'),

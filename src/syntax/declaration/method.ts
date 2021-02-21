@@ -14,6 +14,7 @@ import group = doc.builders.group;
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printMethodBody,
   printModifiers,
 } from '../../helpers/printerHelpers';
@@ -46,6 +47,7 @@ export const methodDeclarationPrinter: Printer<MethodDeclarationNode>['print'] =
   }: MethodDeclarationNode = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'returnType'),
@@ -87,6 +89,7 @@ export const constructorDeclarationPrinter: Printer<ConstructorDeclarationNode>[
   const { initializer }: ConstructorDeclarationNode = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'identifier'),
@@ -113,6 +116,7 @@ export const destructorDeclarationPrinter: Printer<DestructorDeclarationNode>['p
   print
 ) =>
   concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'tildeToken'),
@@ -149,7 +153,7 @@ export type OperatorDeclarationNode = {
   parameterList: ParameterListNode;
   returnType: TypeNode;
   semicolonToken: SyntaxToken;
-};
+} & DeclarationNode;
 
 export const operatorDeclarationPrinter: Printer<OperatorDeclarationNode>['print'] = (
   path,
@@ -157,6 +161,7 @@ export const operatorDeclarationPrinter: Printer<OperatorDeclarationNode>['print
   print
 ) =>
   concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'returnType'),
@@ -178,7 +183,7 @@ export type ConversionOperatorDeclarationNode = {
   parameterList: ParameterListNode;
   semicolonToken: SyntaxToken;
   type: TypeNode;
-};
+} & DeclarationNode;
 
 export const conversionOperatorDeclarationPrinter: Printer<ConversionOperatorDeclarationNode>['print'] = (
   path,
@@ -186,6 +191,7 @@ export const conversionOperatorDeclarationPrinter: Printer<ConversionOperatorDec
   print
 ) =>
   concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'implicitOrExplicitKeyword'),

@@ -2,6 +2,7 @@
 import { doc, Printer } from 'prettier';
 import { ExpressionNode, SyntaxNode } from '../syntaxNode';
 import concat = doc.builders.concat;
+import group = doc.builders.group;
 
 export type InterpolatedStringExpressionNode = {
   contents: Array<InterpolatedStringTextNode | InterpolationNode>;
@@ -14,11 +15,13 @@ export const interpolatedStringExpressionPrinter: Printer<InterpolatedStringExpr
   _,
   print
 ) =>
-  concat([
-    path.call(print, 'stringStartToken'),
-    ...path.map(print, 'contents'),
-    path.call(print, 'stringEndToken'),
-  ]);
+  group(
+    concat([
+      path.call(print, 'stringStartToken'),
+      ...path.map(print, 'contents'),
+      path.call(print, 'stringEndToken'),
+    ])
+  );
 
 export type InterpolatedStringTextNode = {
   textToken: SyntaxToken;

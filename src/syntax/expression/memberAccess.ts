@@ -1,10 +1,5 @@
 ﻿import { SyntaxToken } from '../syntaxToken';
-import {
-  ExpressionNode,
-  NameNode,
-  nameNodeTypes,
-  SyntaxNode,
-} from '../syntaxNode';
+import { ExpressionNode, NameNode, SyntaxNode } from '../syntaxNode';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import softline = doc.builders.softline;
@@ -22,17 +17,16 @@ export const memberAccessExpressionPrinter: Printer<MemberAccessExpressionNode>[
   options,
   print
 ) => {
-  const { expression } = path.getValue();
+  // When a member access if followed by an invocation the indentation is added in the invocation expression printer
+  const isInvokedMemberAccess =
+    path.getParentNode()?.nodeType === 'InvocationExpression';
 
-  // @ts-ignore
-  const shouldStartNewLine = !nameNodeTypes.includes(expression.nodeType);
+  const unIndentedFormat = concat([
+    dedent(path.call(print, 'expression')),
+    softline,
+    path.call(print, 'operatorToken'),
+    path.call(print, 'name'),
+  ]);
 
-  return indent(
-    concat([
-      dedent(path.call(print, 'expression')),
-      shouldStartNewLine ? softline : '',
-      path.call(print, 'operatorToken'),
-      path.call(print, 'name'),
-    ])
-  );
+  return isInvokedMemberAccess ? unIndentedFormat : indent(unIndentedFormat);
 };

@@ -6,6 +6,7 @@ import concat = doc.builders.concat;
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 
@@ -22,6 +23,7 @@ export const fieldDeclarationPrinter: Printer<FieldDeclarationNode>['print'] = (
   print
 ) =>
   concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'declaration'),

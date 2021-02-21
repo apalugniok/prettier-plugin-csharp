@@ -1,16 +1,20 @@
-﻿import { ExpressionNode, SyntaxNode } from '../syntaxNode';
+﻿import { ExpressionNode, StatementNode, SyntaxNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import concat = doc.builders.concat;
+import group = doc.builders.group;
 
 export type ThrowStatementNode = {
   attributeLists: Array<AttributeListNode>;
   expression: ExpressionNode | null;
   semicolonToken: SyntaxToken;
   throwKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const throwStatementPrinter: Printer<ThrowStatementNode>['print'] = (
   path,
@@ -19,11 +23,14 @@ export const throwStatementPrinter: Printer<ThrowStatementNode>['print'] = (
 ) => {
   const { expression }: ThrowStatementNode = path.getValue();
 
-  return concat([
-    printAttributeLists(path, print),
-    path.call(print, 'throwKeyword'),
-    expression == null ? '' : ' ',
-    path.call(print, 'expression'),
-    path.call(print, 'semicolonToken'),
-  ]);
+  return group(
+    concat([
+      printLeadingNewLine(path),
+      printAttributeLists(path, print),
+      path.call(print, 'throwKeyword'),
+      expression == null ? '' : ' ',
+      path.call(print, 'expression'),
+      path.call(print, 'semicolonToken'),
+    ])
+  );
 };

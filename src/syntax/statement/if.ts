@@ -3,7 +3,10 @@ import { SyntaxToken } from '../syntaxToken';
 import { ExpressionNode, StatementNode, SyntaxNode } from '../syntaxNode';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import group = doc.builders.group;
 import line = doc.builders.line;
 import hardline = doc.builders.hardline;
@@ -18,7 +21,7 @@ export type IfStatementNode = {
   closeParenToken: SyntaxToken;
   statement: StatementNode;
   else: ElseClauseNode | null;
-} & SyntaxNode;
+} & StatementNode;
 
 export const ifStatementPrinter: Printer<IfStatementNode>['print'] = (
   path,
@@ -28,6 +31,7 @@ export const ifStatementPrinter: Printer<IfStatementNode>['print'] = (
   const { else: elseClause, statement } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'ifKeyword'),
     ' ',

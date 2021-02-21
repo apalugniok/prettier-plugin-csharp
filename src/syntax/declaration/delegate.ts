@@ -1,12 +1,13 @@
 ﻿import { AttributeListNode } from './attribute';
 import { SyntaxToken } from '../syntaxToken';
-import { TypeNode } from '../syntaxNode';
+import { DeclarationNode, SyntaxNode, TypeNode } from '../syntaxNode';
 import { ParameterListNode, TypeParameterListNode } from './parameter';
 import { TypeParameterConstraintClauseNode } from './typeParameterConstraint';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 import group = doc.builders.group;
@@ -25,7 +26,7 @@ export type DelegateDeclarationNode = {
   returnType: TypeNode;
   semicolonToken: SyntaxToken;
   typeParameterList: TypeParameterListNode;
-};
+} & DeclarationNode;
 
 export const delegateDeclarationPrinter: Printer<DelegateDeclarationNode>['print'] = (
   path,
@@ -35,6 +36,7 @@ export const delegateDeclarationPrinter: Printer<DelegateDeclarationNode>['print
   const { constraintClauses } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'delegateKeyword'),

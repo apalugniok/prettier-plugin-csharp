@@ -11,6 +11,7 @@ import line = doc.builders.line;
 import hardline = doc.builders.hardline;
 import {
   printAttributeLists,
+  printLeadingNewLine,
   wrapStatementInBlock,
 } from '../../helpers/printerHelpers';
 import indent = doc.builders.indent;
@@ -27,7 +28,7 @@ export type ForStatementNode = {
   openParenToken: SyntaxToken;
   secondSemicolonToken: SyntaxToken;
   statement: StatementNode;
-} & SyntaxNode;
+} & StatementNode;
 
 export const forStatementPrinter: Printer<ForStatementNode>['print'] = (
   path,
@@ -37,6 +38,7 @@ export const forStatementPrinter: Printer<ForStatementNode>['print'] = (
   const { condition }: ForStatementNode = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'forKeyword'),
     ' ',

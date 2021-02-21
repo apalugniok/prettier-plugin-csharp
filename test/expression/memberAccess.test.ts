@@ -114,4 +114,36 @@ describe('Member Access Expression', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should format indent the invocation on an invoked member expression', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          foo.Bar.Foo(longLongLongLongLongArgument1, longLongLongLongLongArgument2, 
+          longLongLongLongLongArgument3,longLongLongLongLongArgument4, longLongLongLongLongArgument5);
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              foo
+                  .Bar
+                  .Foo(
+                      longLongLongLongLongArgument1,
+                      longLongLongLongLongArgument2,
+                      longLongLongLongLongArgument3,
+                      longLongLongLongLongArgument4,
+                      longLongLongLongLongArgument5
+                  );
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

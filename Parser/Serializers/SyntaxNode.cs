@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PrettierCSharpPlugin.Parser.Utils;
 
 namespace PrettierCSharpPlugin.Parser.Serializers
@@ -28,6 +30,9 @@ namespace PrettierCSharpPlugin.Parser.Serializers
             writer.WriteString("nodeType", type.Name.Replace("Syntax", ""));
             writer.WriteNumber("start", value.Span.Start);
             writer.WriteNumber("end", value.Span.End);
+
+            //TODO: Implement properly
+            writer.WriteBoolean("hasLeadingNewLine", value.GetLeadingTrivia().Any(t => t.IsKind(SyntaxKind.EndOfLineTrivia)));
 
             var typeDeclaredProperties = type.GetProperties().Where(p => p.DeclaringType == type);
 

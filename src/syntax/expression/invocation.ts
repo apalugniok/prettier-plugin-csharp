@@ -2,6 +2,8 @@
 import { ArgumentListNode } from './argument';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
+import indent = doc.builders.indent;
+import group = doc.builders.group;
 
 export type InvocationExpressionNode = {
   expression: ExpressionNode;
@@ -12,4 +14,15 @@ export const invocationExpressionPrinter: Printer<InvocationExpressionNode>['pri
   path,
   _,
   print
-) => concat([path.call(print, 'expression'), path.call(print, 'argumentList')]);
+) => {
+  // When invoking on a member access we want to indent the arguments to the same level
+  // as the member access expression
+  const isInvocationOnMemberAccessExpression =
+    path.getValue().expression.nodeType === 'MemberAccessExpression';
+
+  const expression = group(
+    concat([path.call(print, 'expression'), path.call(print, 'argumentList')])
+  );
+
+  return isInvocationOnMemberAccessExpression ? indent(expression) : expression;
+};

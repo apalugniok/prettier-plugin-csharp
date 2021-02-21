@@ -21,6 +21,7 @@ namespace PrettierCSharpPlugin.Parser.Serializers
 
             writer.WriteString("nodeType", "Token");
             writer.WriteString("text", value.Text);
+            writer.WriteString("kind", value.Kind().ToString());
 
             writer.WriteSerializedValueOrNull(
                 "leadingTrivia",

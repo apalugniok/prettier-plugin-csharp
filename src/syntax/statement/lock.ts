@@ -3,7 +3,10 @@ import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import softline = doc.builders.softline;
 import group = doc.builders.group;
 import indent = doc.builders.indent;
@@ -16,7 +19,7 @@ export type LockStatementNode = {
   lockKeyword: SyntaxToken;
   openParenToken: SyntaxToken;
   statement: StatementNode;
-} & SyntaxNode;
+} & StatementNode;
 
 export const lockStatementPrinter: Printer<LockStatementNode>['print'] = (
   path,
@@ -28,6 +31,7 @@ export const lockStatementPrinter: Printer<LockStatementNode>['print'] = (
   const shouldIndentStatement = statement.nodeType !== 'Block';
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'lockKeyword'),
     ' ',

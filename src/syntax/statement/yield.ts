@@ -1,8 +1,11 @@
-﻿import { ExpressionNode, SyntaxNode } from '../syntaxNode';
+﻿import { ExpressionNode, StatementNode, SyntaxNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
 import { doc, Printer } from 'prettier';
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import concat = doc.builders.concat;
 
 export type YieldStatementNode = {
@@ -11,7 +14,7 @@ export type YieldStatementNode = {
   returnOrBreakKeyword: SyntaxToken;
   semicolonToken: SyntaxToken;
   yieldKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const yieldStatementPrinter: Printer<YieldStatementNode>['print'] = (
   path,
@@ -21,6 +24,7 @@ export const yieldStatementPrinter: Printer<YieldStatementNode>['print'] = (
   const { expression } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'yieldKeyword'),
     ' ',

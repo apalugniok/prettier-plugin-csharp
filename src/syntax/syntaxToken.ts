@@ -3,6 +3,7 @@ import { doc, Doc, Printer } from 'prettier';
 import lineSuffix = doc.builders.lineSuffix;
 import concat = doc.builders.concat;
 import hardline = doc.builders.hardline;
+import ifBreak = doc.builders.ifBreak;
 
 export type SyntaxToken = {
   nodeType: 'Token';
@@ -13,15 +14,17 @@ export type SyntaxToken = {
 };
 
 export const tokenPrinter: Printer['print'] = (path, _, print) => {
-  const node = path.getValue();
-  const { leadingTrivia, trailingTrivia }: SyntaxToken = node;
-  let { text } = node;
+  const token: SyntaxToken = path.getValue();
+  const { leadingTrivia, trailingTrivia } = token;
+  let text: Doc = token.text;
 
-  if (
-    path.getParentNode().nodeType === 'InterpolatedStringExpression' &&
-    text === '@$"'
-  ) {
+  const isInterpolatedStringStart =
+    token.kind === 'InterpolatedStringStartToken';
+
+  if (isInterpolatedStringStart && text === '@$"') {
     text = '$@"';
+  } else if (isInterpolatedStringStart) {
+    text = ifBreak('$@"', text);
   }
 
   return concat([

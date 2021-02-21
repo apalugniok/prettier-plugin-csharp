@@ -13,7 +13,6 @@
 
     <ItemGroup>
       <Compile Remove="dist\**" />
-      <Compile Remove="Example.cs" />
     </ItemGroup>
 
     <ItemGroup>

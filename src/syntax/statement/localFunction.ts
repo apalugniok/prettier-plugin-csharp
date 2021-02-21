@@ -1,4 +1,4 @@
-﻿import { SyntaxNode, TypeNode } from '../syntaxNode';
+﻿import { StatementNode, SyntaxNode, TypeNode } from '../syntaxNode';
 import { AttributeListNode } from '../declaration/attribute';
 import { BlockNode } from './block';
 import { TypeParameterConstraintClauseNode } from '../declaration/typeParameterConstraint';
@@ -11,6 +11,7 @@ import {
 import { doc, Printer } from 'prettier';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printMethodBody,
   printModifiers,
 } from '../../helpers/printerHelpers';
@@ -31,7 +32,7 @@ export type LocalFunctionStatementNode = {
   returnType: TypeNode;
   semicolonToken: SyntaxToken;
   typeParameterList: TypeParameterListNode;
-} & SyntaxNode;
+} & StatementNode;
 
 export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>['print'] = (
   path,
@@ -41,6 +42,7 @@ export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>[
   const { constraintClauses } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'returnType'),
@@ -56,6 +58,5 @@ export const localFunctionStatementPrinter: Printer<LocalFunctionStatementNode>[
         )
       : '',
     printMethodBody(path, print),
-    path.call(print, 'semicolonToken'),
   ]);
 };

@@ -2,6 +2,10 @@
 import { ExpressionNode, SyntaxNode } from '../syntaxNode';
 import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
+import indent = doc.builders.indent;
+import line = doc.builders.line;
+import { builders } from 'prettier/doc';
+import dedent = builders.dedent;
 
 export type BinaryExpressionNode = {
   left: ExpressionNode;
@@ -13,11 +17,16 @@ export const binaryExpressionPrinter: Printer<BinaryExpressionNode>['print'] = (
   path,
   _,
   print
-) =>
-  concat([
+) => {
+  return concat([
     path.call(print, 'left'),
-    ' ',
-    path.call(print, 'operatorToken'),
-    ' ',
-    path.call(print, 'right'),
+    indent(
+      concat([
+        line,
+        path.call(print, 'operatorToken'),
+        ' ',
+        dedent(path.call(print, 'right')),
+      ])
+    ),
   ]);
+};

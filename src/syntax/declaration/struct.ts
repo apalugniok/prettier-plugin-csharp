@@ -13,6 +13,7 @@ import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 
@@ -28,7 +29,7 @@ export type StructDeclarationNode = {
   openBraceToken: SyntaxToken;
   semicolonToken: SyntaxToken; // Optional trailing semicolon conventionally omitted
   typeParameterList: TypeParameterListNode | null;
-} & SyntaxNode;
+} & DeclarationNode;
 
 export const structDeclarationPrinter: Printer<StructDeclarationNode>['print'] = (
   path,
@@ -43,6 +44,7 @@ export const structDeclarationPrinter: Printer<StructDeclarationNode>['print'] =
   } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'keyword'),

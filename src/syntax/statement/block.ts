@@ -8,6 +8,7 @@ import { SyntaxToken } from '../syntaxToken';
 import { printAttributeLists } from '../../helpers/printerHelpers';
 import { builders } from 'prettier/doc';
 import line = builders.line;
+import group = doc.builders.group;
 
 export type BlockNode = {
   attributeLists: Array<AttributeListNode>;
@@ -16,8 +17,21 @@ export type BlockNode = {
   statements: Array<StatementNode>;
 } & StatementNode;
 
+const parentNodesForWhichBlockGroupIsAlwaysBroken = [
+  'TryStatement',
+  'IfStatement',
+  'ElseClause',
+  'ForStatement',
+  'ForEachStatement',
+];
+
 export const blockPrinter: Printer<BlockNode>['print'] = (path, _, print) => {
   const { statements } = path.getValue();
+
+  const shouldBreak = parentNodesForWhichBlockGroupIsAlwaysBroken.includes(
+    // @ts-ignore
+    path.getParentNode()?.nodeType
+  );
 
   const block =
     statements.length !== 0
@@ -33,5 +47,7 @@ export const blockPrinter: Printer<BlockNode>['print'] = (path, _, print) => {
           path.call(print, 'closeBraceToken'),
         ]);
 
-  return concat([printAttributeLists(path, print), block]);
+  return group(concat([printAttributeLists(path, print), block]), {
+    shouldBreak,
+  });
 };

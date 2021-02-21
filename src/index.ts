@@ -1,4 +1,4 @@
-import { Parser, SupportLanguage } from 'prettier';
+import { Options, Parser, SupportLanguage } from 'prettier';
 
 import { parse } from './parse';
 import { printNode } from './print';
@@ -29,4 +29,4 @@ export const printers = {
 
 export const options = {};
 
-export const defaultOptions = { tabWidth: 4 };
+export const defaultOptions: Options = { tabWidth: 4, printWidth: 120 };

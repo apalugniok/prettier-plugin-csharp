@@ -1,5 +1,6 @@
 ﻿import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 import { SyntaxToken } from '../syntaxToken';
@@ -8,7 +9,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import { AttributeListNode } from '../declaration/attribute';
 import group = doc.builders.group;
-import { SyntaxNode } from '../syntaxNode';
+import { StatementNode, SyntaxNode } from '../syntaxNode';
 
 export type LocalDeclarationStatementNode = {
   attributeLists: Array<AttributeListNode>;
@@ -18,7 +19,7 @@ export type LocalDeclarationStatementNode = {
   modifiers: Array<SyntaxToken>;
   semicolonToken: SyntaxToken;
   usingKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const localDeclarationStatementPrinter: Printer<LocalDeclarationStatementNode>['print'] = (
   path,
@@ -28,6 +29,7 @@ export const localDeclarationStatementPrinter: Printer<LocalDeclarationStatement
   const { awaitKeyword, usingKeyword } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     group(
       concat([

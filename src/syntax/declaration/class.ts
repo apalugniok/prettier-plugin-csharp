@@ -13,6 +13,7 @@ import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntaxToken';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 
@@ -43,6 +44,7 @@ export const classDeclarationPrinter: Printer<ClassDeclarationNode>['print'] = (
   } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'keyword'),

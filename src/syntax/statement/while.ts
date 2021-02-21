@@ -5,6 +5,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import {
   printAttributeLists,
+  printLeadingNewLine,
   wrapStatementInBlock,
 } from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
@@ -19,7 +20,7 @@ export type WhileStatementNode = {
   openParenToken: SyntaxToken;
   statement: StatementNode;
   whileKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const whileStatementPrinter: Printer<WhileStatementNode>['print'] = (
   path,
@@ -27,6 +28,7 @@ export const whileStatementPrinter: Printer<WhileStatementNode>['print'] = (
   print
 ) =>
   concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'whileKeyword'),
     ' ',

@@ -1,10 +1,18 @@
 ﻿import { AttributeListNode } from '../declaration/attribute';
 import { SyntaxToken } from '../syntaxToken';
-import { ExpressionNode, SyntaxNode, TypeNode } from '../syntaxNode';
+import {
+  ExpressionNode,
+  StatementNode,
+  SyntaxNode,
+  TypeNode,
+} from '../syntaxNode';
 import { doc, Printer } from 'prettier';
 import { BlockNode } from './block';
 import concat = doc.builders.concat;
-import { printAttributeLists } from '../../helpers/printerHelpers';
+import {
+  printAttributeLists,
+  printLeadingNewLine,
+} from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
 import join = doc.builders.join;
 import softline = doc.builders.softline;
@@ -17,7 +25,7 @@ export type TryStatementNode = {
   block: BlockNode;
   catches: Array<CatchClauseNode>;
   finally: FinallyClauseNode | null;
-} & SyntaxNode;
+} & StatementNode;
 
 export const tryStatementPrinter: Printer<TryStatementNode>['print'] = (
   path,
@@ -27,6 +35,7 @@ export const tryStatementPrinter: Printer<TryStatementNode>['print'] = (
   const { catches, finally: finallyClause }: TryStatementNode = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'tryKeyword'),
     hardline,

@@ -10,6 +10,7 @@ import { SyntaxToken } from '../syntaxToken';
 import { BaseListNode } from './baseType';
 import {
   printAttributeLists,
+  printLeadingNewLine,
   printModifiers,
 } from '../../helpers/printerHelpers';
 
@@ -33,6 +34,7 @@ export const enumDeclarationPrinter: Printer<EnumDeclarationNode>['print'] = (
   const { baseList, members } = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     printModifiers(path, print),
     path.call(print, 'enumKeyword'),

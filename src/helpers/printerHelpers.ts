@@ -9,14 +9,24 @@ import line = doc.builders.line;
 import { StatementNode, SyntaxNode } from '../syntax/syntaxNode';
 import indent = doc.builders.indent;
 import { SyntaxToken } from '../syntax/syntaxToken';
+import { AttributeListNode } from '../syntax/declaration/attribute';
+import group = doc.builders.group;
 
-export const printAttributeLists = (
-  path: FastPath,
+export const printAttributeLists = <
+  TNode extends {
+    attributeLists: Array<AttributeListNode>;
+  }
+>(
+  path: FastPath<TNode>,
   print: (path: FastPath) => Doc
 ) => join(hardline, [...path.map(print, 'attributeLists'), '']);
 
-export const printModifiers = (
-  path: FastPath,
+export const printModifiers = <
+  TNode extends {
+    modifiers: Array<SyntaxToken>;
+  }
+>(
+  path: FastPath<TNode>,
   print: (path: FastPath) => Doc
 ) => join(' ', [...path.map(print, 'modifiers'), '']);
 
@@ -53,7 +63,11 @@ export const wrapStatementInBlock = <
     ? path.call(print, 'statement')
     : concat([
         '{',
-        indent(concat([hardline, path.call(print, 'statement')])),
+        group(indent(concat([hardline, path.call(print, 'statement')]))),
         hardline,
         '}',
       ]);
+
+export const printLeadingNewLine = <TNode extends SyntaxNode>(
+  path: FastPath<TNode>
+): Doc => (path.getValue().hasLeadingNewLine ? hardline : '');

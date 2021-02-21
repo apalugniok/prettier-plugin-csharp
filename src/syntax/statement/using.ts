@@ -6,6 +6,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import {
   printAttributeLists,
+  printLeadingNewLine,
   wrapStatementInBlock,
 } from '../../helpers/printerHelpers';
 import hardline = doc.builders.hardline;
@@ -22,7 +23,7 @@ export type UsingStatement = {
   openParenToken: SyntaxToken;
   statement: StatementNode;
   usingKeyword: SyntaxToken;
-} & SyntaxNode;
+} & StatementNode;
 
 export const usingStatementPrinter: Printer<UsingStatement>['print'] = (
   path,
@@ -32,6 +33,7 @@ export const usingStatementPrinter: Printer<UsingStatement>['print'] = (
   const { awaitKeyword }: UsingStatement = path.getValue();
 
   return concat([
+    printLeadingNewLine(path),
     printAttributeLists(path, print),
     path.call(print, 'awaitKeyword'),
     awaitKeyword.text === '' ? '' : ' ',
