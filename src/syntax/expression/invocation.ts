@@ -20,9 +20,9 @@ export const invocationExpressionPrinter: Printer<InvocationExpressionNode>['pri
   const isInvocationOnMemberAccessExpression =
     path.getValue().expression.nodeType === 'MemberAccessExpression';
 
-  const expression = group(
-    concat([path.call(print, 'expression'), path.call(print, 'argumentList')])
-  );
-
+  const expression = concat([
+    path.call(print, 'expression'),
+    group(path.call(print, 'argumentList')),
+  ]);
   return isInvocationOnMemberAccessExpression ? indent(expression) : expression;
 };

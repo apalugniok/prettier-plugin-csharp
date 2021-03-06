@@ -18,12 +18,11 @@ export const tokenPrinter: Printer['print'] = (path, _, print) => {
   const { leadingTrivia, trailingTrivia } = token;
   let text: Doc = token.text;
 
-  const isInterpolatedStringStart =
-    token.kind === 'InterpolatedStringStartToken';
-
-  if (isInterpolatedStringStart && text === '@$"') {
+  if (token.kind === 'InterpolatedVerbatimStringStartToken' && text === '@$"') {
     text = '$@"';
-  } else if (isInterpolatedStringStart) {
+  }
+
+  if (token.kind === 'InterpolatedStringStartToken') {
     text = ifBreak('$@"', text);
   }
 

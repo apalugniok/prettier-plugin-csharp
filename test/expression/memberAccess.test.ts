@@ -60,7 +60,8 @@ describe('Member Access Expression', () => {
       {
           void Irrelevant()
           {
-              foo.PropertyA
+              foo
+                  .PropertyA
                   .PropertyB
                   .PropertyA
                   .PropertyA
@@ -94,7 +95,8 @@ describe('Member Access Expression', () => {
       {
           void Irrelevant()
           {
-              foo.PropertyA
+              foo
+                  .PropertyA
                   .PropertyB
                   ?.PropertyA
                   ?.PropertyA

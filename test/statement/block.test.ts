@@ -15,9 +15,7 @@ describe('Block Statement', () => {
       {
           void Irrelevant()
           {
-              {
-                  var a = 1;
-              }
+              { var a = 1; }
           }
       }
     `;
@@ -45,9 +43,7 @@ describe('Block Statement', () => {
           {
               [Foo, Bar]
               [Baz]
-              {
-                  var a = 1;
-              }
+              { var a = 1; }
           }
       }
     `;

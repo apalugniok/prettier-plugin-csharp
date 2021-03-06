@@ -48,14 +48,20 @@ export const forStatementPrinter: Printer<ForStatementNode>['print'] = (
         indent(
           concat([
             softline,
-            path.call(print, 'declaration'),
-            join(', ', path.map(print, 'initializers')),
+            group(path.call(print, 'declaration')),
+            join(
+              ', ',
+              path.map((path) => group(print(path)), 'initializers')
+            ),
             path.call(print, 'firstSemicolonToken'),
             condition == null ? '' : line,
-            path.call(print, 'condition'),
+            group(path.call(print, 'condition')),
             path.call(print, 'secondSemicolonToken'),
             line,
-            join(', ', path.map(print, 'incrementors')),
+            join(
+              ', ',
+              path.map((path) => group(print(path)), 'incrementors')
+            ),
           ])
         ),
         softline,

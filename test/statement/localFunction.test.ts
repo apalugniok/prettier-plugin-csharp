@@ -29,7 +29,6 @@ describe('Local Function Statement', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
-        
            int Foo<T>() {}
            }
       }
@@ -54,7 +53,6 @@ describe('Local Function Statement', () => {
     const input = code`
       class Irrelevant {
       void Irrelevant() {
-        
            int Foo<TValue, TArgument>() where TValue: class, new() where TArgument:class,new() {}
            }
       }

@@ -37,7 +37,8 @@ describe('Invocation Expression', () => {
       {
           void Irrelevant()
           {
-              foo.Where()
+              foo
+                  .Where()
                   .Select()
                   .Where()
                   .Where()

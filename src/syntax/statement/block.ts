@@ -23,6 +23,21 @@ const parentNodesForWhichBlockGroupIsAlwaysBroken = [
   'ElseClause',
   'ForStatement',
   'ForEachStatement',
+  'MethodDeclaration',
+  'ConstructorDeclaration',
+  'DestructorDeclaration',
+  'OperatorDeclaration',
+  'ConversionOperatorDeclaration',
+  'BlockStatement',
+  'UnsafeStatement',
+  'CheckedStatement',
+  'FixedStatement',
+  'WhileStatement',
+  'LockStatement',
+  'CatchClause',
+  'DoStatement',
+  'UsingStatement',
+  'LocalFunctionStatement',
 ];
 
 export const blockPrinter: Printer<BlockNode>['print'] = (path, _, print) => {
@@ -35,19 +50,22 @@ export const blockPrinter: Printer<BlockNode>['print'] = (path, _, print) => {
 
   const block =
     statements.length !== 0
-      ? concat([
-          path.call(print, 'openBraceToken'),
-          indent(concat([line, join(line, path.map(print, 'statements'))])),
-          line,
-          path.call(print, 'closeBraceToken'),
-        ])
+      ? group(
+          concat([
+            path.call(print, 'openBraceToken'),
+            indent(concat([line, join(line, path.map(print, 'statements'))])),
+            line,
+            path.call(print, 'closeBraceToken'),
+          ]),
+          {
+            shouldBreak,
+          }
+        )
       : concat([
           path.call(print, 'openBraceToken'),
           ' ',
           path.call(print, 'closeBraceToken'),
         ]);
 
-  return group(concat([printAttributeLists(path, print), block]), {
-    shouldBreak,
-  });
+  return concat([printAttributeLists(path, print), block]);
 };

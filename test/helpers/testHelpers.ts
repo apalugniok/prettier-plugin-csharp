@@ -18,4 +18,5 @@ export const formatCSharpWithPrettier = (text: string) =>
     //@ts-ignore
     parser: 'roslyn-csharp',
     plugins: ['.'],
+    printWidth: 80,
   });

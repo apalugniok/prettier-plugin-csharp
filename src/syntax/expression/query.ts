@@ -93,7 +93,7 @@ export const fromClausePrinter: Printer<FromClauseNode>['print'] = (
     ' ',
     path.call(print, 'inKeyword'),
     ' ',
-    path.call(print, 'expression'),
+    group(path.call(print, 'expression')),
   ]);
 };
 
@@ -116,7 +116,7 @@ export const letClausePrinter: Printer<LetClauseNode>['print'] = (
     ' ',
     path.call(print, 'equalsToken'),
     ' ',
-    path.call(print, 'expression'),
+    group(path.call(print, 'expression')),
   ]);
 
 export type JoinClauseNode = {
@@ -147,15 +147,15 @@ export const joinClausePrinter: Printer<JoinClauseNode>['print'] = (
     ' ',
     path.call(print, 'inKeyword'),
     ' ',
-    path.call(print, 'inExpression'),
+    group(path.call(print, 'inExpression')),
     ' ',
     path.call(print, 'onKeyword'),
     ' ',
-    path.call(print, 'leftExpression'),
+    group(path.call(print, 'leftExpression')),
     ' ',
     path.call(print, 'equalsKeyword'),
     ' ',
-    path.call(print, 'rightExpression'),
+    group(path.call(print, 'rightExpression')),
     ' ',
     path.call(print, 'into'),
   ]);
@@ -190,7 +190,7 @@ export const whereClausePrinter: Printer<WhereClauseNode>['print'] = (
   concat([
     path.call(print, 'whereKeyword'),
     ' ',
-    path.call(print, 'condition'),
+    group(path.call(print, 'condition')),
   ]);
 
 export type OrderByClauseNode = {
@@ -229,7 +229,7 @@ export const orderingPrinter: Printer<OrderingNode>['print'] = (
   const { ascendingOrDescendingKeyword }: OrderingNode = path.getValue();
 
   return concat([
-    path.call(print, 'expression'),
+    group(path.call(print, 'expression')),
     ascendingOrDescendingKeyword.text !== '' ? ' ' : '',
     path.call(print, 'ascendingOrDescendingKeyword'),
   ]);
@@ -248,7 +248,7 @@ export const selectClausePrinter: Printer<SelectClauseNode>['print'] = (
   concat([
     path.call(print, 'selectKeyword'),
     ' ',
-    path.call(print, 'expression'),
+    group(path.call(print, 'expression')),
   ]);
 
 export type GroupClauseNode = {
@@ -266,9 +266,9 @@ export const groupClausePrinter: Printer<GroupClauseNode>['print'] = (
   concat([
     path.call(print, 'groupKeyword'),
     ' ',
-    path.call(print, 'groupExpression'),
+    group(path.call(print, 'groupExpression')),
     ' ',
     path.call(print, 'byKeyword'),
     ' ',
-    path.call(print, 'byExpression'),
+    group(path.call(print, 'byExpression')),
   ]);

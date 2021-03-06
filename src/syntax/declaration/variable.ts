@@ -9,6 +9,7 @@ import { doc, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import join = doc.builders.join;
 import { SyntaxToken } from '../syntaxToken';
+import group = doc.builders.group;
 
 export type VariableDeclarationNode = {
   type: TypeNode;
@@ -40,11 +41,13 @@ export const variableDeclaratorPrinter: Printer<VariableDeclaratorNode>['print']
 ) => {
   const { argumentList, initializer } = path.getValue();
 
-  return concat([
-    path.call(print, 'identifier'),
-    argumentList != null ? path.call(print, 'argumentList') : '',
-    initializer != null ? concat([' ', path.call(print, 'initializer')]) : '',
-  ]);
+  return group(
+    concat([
+      path.call(print, 'identifier'),
+      argumentList != null ? path.call(print, 'argumentList') : '',
+      initializer != null ? concat([' ', path.call(print, 'initializer')]) : '',
+    ])
+  );
 };
 
 export type EqualsValueClauseNode = {

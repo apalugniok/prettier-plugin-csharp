@@ -90,7 +90,7 @@ describe('For Statement', () => {
       class Irrelevant {
         void Irrelevant()
         {
-          for (int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0; reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++)
+          for (int longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0; longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0; longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++)
           j++;
         }
       }
@@ -101,9 +101,9 @@ describe('For Statement', () => {
           void Irrelevant()
           {
               for (
-                  int reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0;
-                  reallyReallyReallyLongVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++
+                  int longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded = 0;
+                  longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded < 0;
+                  longVariableDeclarationToCauseTheLineLengthLimitToBeExceeded++
               )
               {
                   j++;
