@@ -69,7 +69,10 @@ import {
   fieldDeclarationPrinter,
 } from './syntax/declaration/field';
 import { namespaceDeclarationPrinter } from './syntax/declaration/namespace';
-import { classDeclarationPrinter } from './syntax/declaration/class';
+import {
+  classDeclarationPrinter,
+  recordDeclarationPrinter,
+} from './syntax/declaration/class';
 import {
   constructorDeclarationPrinter,
   constructorInitializerPrinter,
@@ -96,6 +99,7 @@ import { localDeclarationStatementPrinter } from './syntax/statement/declaration
 import {
   anonymousObjectCreationExpressionPrinter,
   anonymousObjectMemberDeclaratorSyntax,
+  implicitObjectCreationExpressionPrinter,
   objectCreationExpressionPrinter,
 } from './syntax/expression/objectCreation';
 import { assignmentExpressionPrinter } from './syntax/expression/assignment';
@@ -232,6 +236,12 @@ import { fixedStatementPrinter } from './syntax/statement/fixed';
 import { emptyStatementPrinter } from './syntax/statement/empty';
 import { checkedStatementPrinter } from './syntax/statement/checked';
 import { awaitExpressionPrinter } from './syntax/expression/await';
+import { globalStatementPrinter } from './syntax/declaration/global';
+import { binaryPatternPrinter } from './syntax/pattern/binary';
+import { parenthesizedPatternPrinter } from './syntax/pattern/parenthesized';
+import { relationalPatternPrinter } from './syntax/pattern/relational';
+import { typePatternPrinter } from './syntax/pattern/type';
+import { unaryPatternPrinter } from './syntax/pattern/unary';
 
 const printersByType: {
   [key in SyntaxNodeType | 'Token']: Printer['print'];
@@ -407,6 +417,14 @@ const printersByType: {
   EmptyStatement: emptyStatementPrinter,
   CheckedStatement: checkedStatementPrinter,
   AwaitExpression: awaitExpressionPrinter,
+  GlobalStatement: globalStatementPrinter,
+  RecordDeclaration: recordDeclarationPrinter,
+  ImplicitObjectCreationExpression: implicitObjectCreationExpressionPrinter,
+  BinaryPattern: binaryPatternPrinter,
+  ParenthesizedPattern: parenthesizedPatternPrinter,
+  RelationalPattern: relationalPatternPrinter,
+  TypePattern: typePatternPrinter,
+  UnaryPattern: unaryPatternPrinter,
 };
 
 export const printNode: Printer['print'] = (path, options, print) => {

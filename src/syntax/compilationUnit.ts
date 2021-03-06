@@ -21,19 +21,21 @@ export const compilationUnitPrinter: Printer<CompilationUnitNode>['print'] = (
   const node: CompilationUnitNode = path.getValue();
 
   const usings =
-    node.usings.length !== 0
-      ? concat([join(hardline, path.map(print, 'usings')), hardline])
-      : '';
+    node.usings.length !== 0 ? join(hardline, path.map(print, 'usings')) : '';
 
   const externs =
-    node.externs.length !== 0
-      ? concat([join(hardline, path.map(print, 'externs')), hardline])
-      : '';
+    node.externs.length !== 0 ? join(hardline, path.map(print, 'externs')) : '';
 
   const members =
     node.members.length !== 0
-      ? concat([join(hardline, path.map(print, 'members')), hardline])
+      ? concat([join(hardline, path.map(print, 'members'))])
       : '';
 
-  return concat([usings, externs, members, path.call(print, 'endOfFileToken')]);
+  return concat([
+    usings,
+    externs,
+    members,
+    hardline,
+    path.call(print, 'endOfFileToken'),
+  ]);
 };

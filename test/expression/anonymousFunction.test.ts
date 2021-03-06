@@ -70,7 +70,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an simple lambda expression with an empty block body', () => {
+  it('should format a simple lambda expression with an empty block body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -93,7 +93,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an simple lambda expression with an expression body', () => {
+  it('should format a simple lambda expression with an expression body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -116,7 +116,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an simple lambda expression with a filled block body', () => {
+  it('should format a simple lambda expression with a filled block body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -139,7 +139,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an parenthesized lambda expression with an empty block body', () => {
+  it('should format a parenthesized lambda expression with an empty block body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -162,7 +162,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an parenthesized lambda expression with an expression body', () => {
+  it('should format a parenthesized lambda expression with an expression body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -185,7 +185,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an parenthesized lambda expression with a filled block body', () => {
+  it('should format a parenthesized lambda expression with a filled block body', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -208,7 +208,7 @@ describe('Anonymous Function Expression', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
-  it('should format an parenthesized lambda expression with multiple long parameters using new lines', () => {
+  it('should format a parenthesized lambda expression with multiple long parameters using new lines', () => {
     const input = code`
       class Irrelevant {
         void Irrelevant() {
@@ -226,6 +226,29 @@ describe('Anonymous Function Expression', () => {
                   reallyReallyReallyLongArgumentB,
                   reallyReallyReallyLongArgumentC
               ) => { Console.WriteLine(foo) };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format a simple lambda expression with the static modifiers', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          Func<double, double> square = static x => { return x * x; };
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              Func<double, double> square = static x => { return x * x; };
           }
       }
     `;

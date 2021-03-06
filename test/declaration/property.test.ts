@@ -283,5 +283,24 @@ describe('Property Declaration', () => {
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
 
+  it('should format an init only setter', () => {
+    const input = code`
+      class Irrelevant {
+        int Foo {get;
+        init;}
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          int Foo { get; init; }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
   //todo
 });

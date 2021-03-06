@@ -82,7 +82,9 @@ export type DeclarationNodeType =
   | 'DestructorDeclaration'
   | 'OperatorDeclaration'
   | 'ConversionOperatorDeclaration'
-  | 'DelegateDeclaration';
+  | 'DelegateDeclaration'
+  | 'GlobalStatement'
+  | 'RecordDeclaration';
 
 export type ExpressionNodeType =
   | TypeNodeType
@@ -128,7 +130,8 @@ export type ExpressionNodeType =
   | 'ArrayCreationExpression'
   | 'ImplicitArrayCreationExpression'
   | 'ConditionalExpression'
-  | 'AwaitExpression';
+  | 'AwaitExpression'
+  | 'ImplicitObjectCreationExpression';
 
 export type TypeNodeType =
   | NameNodeType
@@ -181,7 +184,12 @@ export type PatternNodeType =
   | 'DeclarationPattern'
   | 'VarPattern'
   | 'RecursivePattern'
-  | 'ConstantPattern';
+  | 'ConstantPattern'
+  | 'BinaryPattern'
+  | 'ParenthesizedPattern'
+  | 'RelationalPattern'
+  | 'TypePattern'
+  | 'UnaryPattern';
 
 export type AttributeNodeTypes =
   | 'Attribute'

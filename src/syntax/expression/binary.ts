@@ -17,8 +17,8 @@ export const binaryExpressionPrinter: Printer<BinaryExpressionNode>['print'] = (
   path,
   _,
   print
-) => {
-  return concat([
+) =>
+  concat([
     path.call(print, 'left'),
     indent(
       concat([
@@ -29,4 +29,3 @@ export const binaryExpressionPrinter: Printer<BinaryExpressionNode>['print'] = (
       ])
     ),
   ]);
-};

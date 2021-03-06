@@ -31,6 +31,8 @@ export type ClassDeclarationNode = {
   typeParameterList: TypeParameterListNode | null;
 } & SyntaxNode;
 
+export type RecordDeclarationNode = ClassDeclarationNode;
+
 export const classDeclarationPrinter: Printer<ClassDeclarationNode>['print'] = (
   path,
   _,
@@ -68,3 +70,5 @@ export const classDeclarationPrinter: Printer<ClassDeclarationNode>['print'] = (
     path.call(print, 'closeBraceToken'),
   ]);
 };
+
+export const recordDeclarationPrinter = classDeclarationPrinter;

@@ -256,4 +256,50 @@ describe('Anonymous Object Creation Expression', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should format an implicit object creation', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          Foo irrelevant = new();
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              Foo irrelevant = new();
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
+
+  it('should format an implicit object creation with an initializer', () => {
+    const input = code`
+      class Irrelevant {
+        void Irrelevant() {
+          Foo irrelevant = new() { foo = "bar" };
+        }
+      }
+    `;
+    const expectedFormattedCode = code`
+      class Irrelevant
+      {
+          void Irrelevant()
+          {
+              Foo irrelevant = new() { foo = "bar" };
+          }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

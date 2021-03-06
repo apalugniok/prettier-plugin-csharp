@@ -37,6 +37,26 @@ export const objectCreationExpressionPrinter: Printer<ObjectCreationExpressionNo
   ]);
 };
 
+export type ImplicitObjectCreationExpression = {
+  argumentList: ArgumentListNode;
+  initializer: InitializerExpressionNode;
+  newKeyword: SyntaxToken;
+  openParenToken: SyntaxToken;
+  type: ExpressionNode;
+} & SyntaxNode;
+
+export const implicitObjectCreationExpressionPrinter: Printer<ImplicitObjectCreationExpression>['print'] = (
+  path,
+  _,
+  print
+) => {
+  return concat([
+    path.call(print, 'newKeyword'),
+    path.call(print, 'argumentList'),
+    path.call(print, 'initializer'),
+  ]);
+};
+
 export type AnonymousObjectCreationExpressionSyntax = {
   closeBraceToken: SyntaxToken;
   newKeyword: SyntaxToken;

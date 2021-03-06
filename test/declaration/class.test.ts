@@ -244,4 +244,25 @@ describe('Class Declaration', () => {
 
     expect(actualFormattedCode).toEqual(expectedFormattedCode);
   });
+
+  it('should format a record', () => {
+    const input = code`
+      public record Person
+      {
+            public string? FirstName { get; set; }
+       public string? LastName { get; set; }
+      }
+    `;
+    const expectedFormattedCode = code`
+      public record Person
+      {
+          public string? FirstName { get; set; }
+          public string? LastName { get; set; }
+      }
+    `;
+
+    const actualFormattedCode = formatCSharpWithPrettier(input);
+
+    expect(actualFormattedCode).toEqual(expectedFormattedCode);
+  });
 });

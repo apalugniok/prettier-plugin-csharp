@@ -6,6 +6,7 @@ import { Doc, doc, FastPath, Printer } from 'prettier';
 import concat = doc.builders.concat;
 import group = doc.builders.group;
 import line = doc.builders.line;
+import join = doc.builders.join;
 
 export type AnonymousMethodExpressionNode = {
   asyncKeyword: SyntaxToken;
@@ -42,6 +43,7 @@ export type SimpleLambdaExpressionNode = {
   asyncKeyword: SyntaxToken;
   block: BlockNode;
   expressionBody: ExpressionNode;
+  modifiers: Array<SyntaxToken>;
   parameter: ParameterNode;
 } & SyntaxNode;
 
@@ -56,6 +58,7 @@ export const simpleLambdaExpressionPrinter: Printer<SimpleLambdaExpressionNode>[
     concat([
       path.call(print, 'asyncKeyword'),
       asyncKeyword.text !== '' ? ' ' : '',
+      join(' ', [...path.map(print, 'modifiers'), '']),
       path.call(print, 'parameter'),
       ' ',
       path.call(print, 'arrowToken'),

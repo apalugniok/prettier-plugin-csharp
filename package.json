@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "dotnet publish -c Release && tsdx watch",
-    "build": "tsdx build --target node",
+    "build": "dotnet publish -c Release && tsdx build --target node",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
