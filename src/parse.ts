@@ -5,12 +5,9 @@ const getAbsolutePath = (relativePath: string) =>
   path.join(__dirname, relativePath);
 
 export const parse = (text: string) => {
-  const rosylnParserDllPath =
-    process.env.NODE_ENV === 'production'
-      ? getAbsolutePath('./Parser/PrettierCSharpPlugin.dll')
-      : getAbsolutePath(
-          '../bin/Release/netcoreapp3.1/publish/PrettierCSharpPlugin.dll'
-        );
+  const rosylnParserDllPath = getAbsolutePath(
+    './parser/PrettierCSharpPlugin.dll'
+  );
 
   const child = spawnSync('dotnet', [rosylnParserDllPath], {
     input: text,

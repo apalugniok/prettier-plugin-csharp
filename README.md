@@ -1,27 +1,65 @@
-# TSDX Bootstrap
+<p align="center">
+    :construction: Work in Progress! :construction:
+</p>
 
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
+<div align="center">
+<img alt="Prettier" height="210"
+  src="https://cdn.rawgit.com/prettier/prettier-logo/master/images/prettier-icon-light.svg">
+</div>
 
-## Local Development
+<h2 align="center">Prettier C# Plugin</h2>
 
-Below is a list of commands you will probably find useful.
+## What does it do?
 
-### `npm start` or `yarn start`
+**:warning: Warning :warning:** This plugin is still in development and in certain cases it may emit
+formatted code that does not compile or not format code in a sensible way. It is **not** ready to be used
+as part of a prettier pre-commit hook.
 
-Runs the project in development/watch mode. Your project will be rebuilt upon changes. TSDX has a special logger for you convenience. Error messages are pretty printed and formatted for compatibility VS Code's Problems tab.
+Before trying formatting with this plugin please commit your changes.
 
-<img src="https://user-images.githubusercontent.com/4060187/52168303-574d3a00-26f6-11e9-9f3b-71dbec9ebfcb.gif" width="600" />
+Prettier C# Plugin is a [Prettier plugin](https://prettier.io/docs/en/plugins.html)
+that uses the [Rosyln](https://github.com/dotnet/roslyn) API to provide
+Prettier with a syntax tree it can transform and print in a standardized way.
 
-Your library will be rebuilt if you make edits.
+## Prerequisites
 
-### `npm run build` or `yarn build`
+In order to run the plugin you need the following:
 
-Bundles the package to the `dist` folder.
-The package is optimized and bundled with Rollup into multiple formats (CommonJS, UMD, and ES Module).
+1. [.NET 5 Runtime or SDK](https://dotnet.microsoft.com/download/dotnet/5.0)
+2. [Prettier](https://prettier.io/)
 
-<img src="https://user-images.githubusercontent.com/4060187/52168322-a98e5b00-26f6-11e9-8cf6-222d716b75ef.gif" width="600" />
+## Install
 
-### `npm test` or `yarn test`
+###npm
 
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
+```bash
+npm install --save-dev prettier-csharp-plugin
+```
+
+### yarn
+
+```bash
+yarn add --dev prettier-csharp-plugin
+```
+
+## Use
+
+```bash
+prettier --write "**/*.cs"
+```
+
+## Maintainers
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/sirlantis">
+          <img width="150" height="150" src="https://github.com/apalugniok.png?v=3&s=150">
+          </br>
+          Andrew Palugniok
+        </a>
+      </td>
+    </tr>
+  <tbody>
+</table>

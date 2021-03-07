@@ -1,0 +1,26 @@
+diff --git a/node_modules/rollup-plugin-copy/dist/index.commonjs.js b/node_modules/rollup-plugin-copy/dist/index.commonjs.js
+index 477d73e..7ef0258 100644
+--- a/node_modules/rollup-plugin-copy/dist/index.commonjs.js
++++ b/node_modules/rollup-plugin-copy/dist/index.commonjs.js
+@@ -131,7 +131,7 @@ function copy(options = {}) {
+           if (transformed) {
+             await fs.outputFile(dest, contents, restPluginOptions);
+           } else {
+-            await fs.copy(src, dest, restPluginOptions);
++            fs.copySync(src, dest, restPluginOptions);
+           }
+ 
+           if (verbose) {
+diff --git a/node_modules/rollup-plugin-copy/dist/index.module.js b/node_modules/rollup-plugin-copy/dist/index.module.js
+index 64cad52..cbaad8b 100644
+--- a/node_modules/rollup-plugin-copy/dist/index.module.js
++++ b/node_modules/rollup-plugin-copy/dist/index.module.js
+@@ -127,7 +127,7 @@ function copy(options = {}) {
+           if (transformed) {
+             await fs.outputFile(dest, contents, restPluginOptions);
+           } else {
+-            await fs.copy(src, dest, restPluginOptions);
++            fs.copySync(src, dest, restPluginOptions);
+           }
+ 
+           if (verbose) {
