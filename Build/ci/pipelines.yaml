@@ -13,4 +13,4 @@ steps:
   - task: PowerShell@2
     displayName: "Build, Test and Publish"
     inputs:
-      filePath: '.\build.ps1'
+      filePath: './build.ps1'
