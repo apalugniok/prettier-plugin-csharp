@@ -434,6 +434,5 @@ export const printNode: Printer['print'] = (path, options, print) => {
     return '';
   }
 
-  console.log(node.nodeType);
   return printersByType[node.nodeType](path, options, print);
 };

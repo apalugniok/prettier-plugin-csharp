@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using PrettierCSharpPlugin.Parser.Serializers;
+using Plugin.Parser.Serializers;
 
-namespace PrettierCSharpPlugin.Parser
+namespace Plugin.Parser
 {
     public static class SerializerOptionsBuilder {
         public static  JsonSerializerOptions Build()

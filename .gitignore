@@ -6,3 +6,7 @@ obj/
 .DS_Store
 node_modules
 dist
+dist-parser
+publish/
+.tmp
+*.tgz

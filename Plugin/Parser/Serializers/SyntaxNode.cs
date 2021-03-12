@@ -4,9 +4,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using PrettierCSharpPlugin.Parser.Utils;
+using Plugin.Parser.Utils;
 
-namespace PrettierCSharpPlugin.Parser.Serializers
+namespace Plugin.Parser.Serializers
 {
     public class SyntaxNodeSerializer : JsonConverter<SyntaxNode>
     {

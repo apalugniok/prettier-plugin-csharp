@@ -1,4 +1,4 @@
-﻿namespace PrettierCSharpPlugin.Parser.Utils
+﻿namespace Plugin.Parser.Utils
 {
     public static class StringExtensions
     {

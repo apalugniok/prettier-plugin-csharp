@@ -2,16 +2,16 @@
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "dist-parser"
   ],
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "start": "dotnet publish -c Release && tsdx watch --target node --format cjs",
-    "build": "dotnet publish -c Release && cross-env NODE_ENV=production tsdx build --target node --format cjs",
+    "start": "dotnet publish -c Release -o ./publish && tsdx watch --target node --format cjs",
+    "build": "cross-env NODE_ENV=production tsdx build --target node --format cjs",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",

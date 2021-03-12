@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 
-namespace PrettierCSharpPlugin.Parser.Utils
+namespace Plugin.Parser.Utils
 {
     public static class Utf8JsonWriterExtensions
     {

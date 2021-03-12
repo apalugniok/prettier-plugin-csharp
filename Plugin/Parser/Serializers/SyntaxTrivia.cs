@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace PrettierCSharpPlugin.Parser.Serializers
+namespace Plugin.Parser.Serializers
 {
     public class SyntaxTriviaSerializer : JsonConverter<SyntaxTrivia>
     {
