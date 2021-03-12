@@ -14,16 +14,20 @@
     <ItemGroup>
       <Compile Remove="dist\**" />
       <Compile Remove="publish\**" />
+      <Compile Remove="dist-parser\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Remove="dist\**" />
       <EmbeddedResource Remove="publish\**" />
+      <EmbeddedResource Remove="dist-parser\**" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="dist\**" />
       <None Remove="publish\**" />
+      <None Remove="dist-parser\**" />
+      <None Remove="junit.xml" />
     </ItemGroup>
 
 </Project>

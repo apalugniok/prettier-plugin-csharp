@@ -14,7 +14,7 @@
     "build": "cross-env NODE_ENV=production tsdx build --target node --format cjs",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "postinstall": "patch-package"
+    "patch": "patch-package"
   },
   "peerDependencies": {},
   "husky": {
