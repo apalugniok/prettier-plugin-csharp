@@ -13,4 +13,10 @@ steps:
   - task: PowerShell@2
     displayName: "Build, Test and Publish"
     inputs:
-      filePath: './build.ps1'
+      filePath: "./build.ps1"
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "Plugin/junit.xml"
+      failTaskOnFailedTests: true

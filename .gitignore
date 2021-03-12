@@ -10,3 +10,4 @@ dist-parser
 publish/
 .tmp
 *.tgz
+junit.xml
