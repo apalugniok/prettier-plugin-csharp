@@ -20,3 +20,9 @@ steps:
       testResultsFormat: "JUnit"
       testResultsFiles: "Plugin/junit.xml"
       failTaskOnFailedTests: true
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'build-output'
+      artifact: 'prettier-csharp-plugin'
+      publishLocation: 'pipeline'
