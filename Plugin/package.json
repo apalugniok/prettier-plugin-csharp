@@ -14,7 +14,6 @@
     "build": "cross-env NODE_ENV=production tsdx build --target node --format cjs",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
     "postinstall": "patch-package"
   },
   "peerDependencies": {},
