@@ -1,0 +1,16 @@
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Use .NET 5"
+    inputs:
+      version: 5.x
+
+  - task: PowerShell@2
+    displayName: "Build, Test and Publish"
+    inputs:
+      filePath: '.\build.ps1'
