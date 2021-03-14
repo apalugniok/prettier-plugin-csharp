@@ -1,5 +1,5 @@
 {
-  "version": "0.0.3",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -10,8 +10,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "dotnet publish -c Release -o ./publish && tsdx watch --target node --format cjs",
-    "build": "cross-env NODE_ENV=production tsdx build --target node --format cjs",
+    "start": "dotnet publish -c Release -o ./dist-parser && tsdx watch --target node",
+    "build": "cross-env NODE_ENV=production tsdx build --target node",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "patch": "patch-package"
@@ -28,9 +28,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "prettier-csharp-plugin",
+  "name": "@apalugniok/prettier-plugin-csharp",
   "author": "apalugniok",
-  "module": "dist/prettier-csharp-plugin.esm.js",
+  "module": "dist/prettier-plugin-csharp.esm.js",
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
