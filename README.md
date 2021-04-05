@@ -54,7 +54,7 @@ prettier --write "**/*.cs"
   <tbody>
     <tr>
       <td align="center">
-        <a href="https://github.com/sirlantis">
+        <a href="https://github.com/apalugniok">
           <img width="150" height="150" src="https://github.com/apalugniok.png?v=3&s=150">
           </br>
           Andrew Palugniok

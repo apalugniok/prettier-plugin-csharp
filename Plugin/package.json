@@ -30,6 +30,10 @@
   },
   "name": "@apalugniok/prettier-plugin-csharp",
   "author": "apalugniok",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apalugniok/prettier-plugin-csharp"
+  },
   "module": "dist/prettier-plugin-csharp.esm.js",
   "devDependencies": {
     "@types/jest": "^26.0.0",
