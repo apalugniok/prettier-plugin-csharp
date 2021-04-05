@@ -72,8 +72,14 @@ class Build : NukeBuild
         .DependsOn(TestPlugin)
         .Executes(() =>
         {
+            FileSystemTasks.CopyFileToDirectory(RootDirectory / "README.md", PluginDirectory);
             ProcessTasks.StartProcess("yarn", $"pack --filename {PluginPackageName}.tgz", PluginDirectory).AssertZeroExitCode();
-            FileSystemTasks.CopyFileToDirectory(PluginDirectory / $"{PluginPackageName}.tgz", BuildOutputDirectory);
+            FileSystemTasks.CopyFileToDirectory(
+                PluginDirectory / $"{PluginPackageName}.tgz",
+                BuildOutputDirectory,
+                FileExistsPolicy.Overwrite
+            );
+            FileSystemTasks.DeleteFile(PluginDirectory / "README.md");
         });
 
 }
